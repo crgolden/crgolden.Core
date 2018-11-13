@@ -1,4 +1,4 @@
-﻿namespace Cef_Core.Relationships
+﻿namespace Cef.Core.Relationships
 {
     using System;
     using System.ComponentModel.DataAnnotations;

@@ -1,4 +1,4 @@
-﻿namespace Cef_Core.Models
+﻿namespace Cef.Core.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations;
