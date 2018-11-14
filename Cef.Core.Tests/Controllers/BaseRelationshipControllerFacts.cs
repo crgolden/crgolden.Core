@@ -1,12 +1,12 @@
-namespace Cef.API.Tests.v1.Controllers
+namespace Cef.Core.Tests.Controllers
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Cef.API.v1.Controllers;
-    using Core.Interfaces;
-    using Core.Models;
-    using Core.Relationships;
+    using Cef.Core.Controllers;
+    using Interfaces;
+    using Models;
+    using Relationships;
     using Kendo.Mvc.UI;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
