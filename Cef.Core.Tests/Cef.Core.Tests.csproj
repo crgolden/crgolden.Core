@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>Cef.Core</RootNamespace>
+    <RootNamespace>Cef.Core.Tests</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Description>Models, Relationships, and Interfaces</Description>
-    <Version>1.0.1</Version>
+    <Description>Tests for Controllers and Services</Description>
   </PropertyGroup>
 
   <ItemGroup>
