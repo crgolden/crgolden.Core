@@ -5,7 +5,7 @@
     <RootNamespace>Cef.Core</RootNamespace>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Description>Shared CEF functionalities</Description>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
