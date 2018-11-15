@@ -4,7 +4,7 @@
     using Newtonsoft.Json;
 
     [PublicAPI]
-    internal class FacebookUserData
+    public class FacebookUserData
     {
         public long Id { get; set; }
 
@@ -26,13 +26,13 @@
     }
 
     [PublicAPI]
-    internal class FacebookPictureData
+    public class FacebookPictureData
     {
         public FacebookPicture Data { get; set; }
     }
 
     [PublicAPI]
-    internal class FacebookPicture
+    public class FacebookPicture
     {
         public int Height { get; set; }
 
@@ -45,8 +45,7 @@
     }
 
     [PublicAPI]
-
-    internal class FacebookUserAccessTokenData
+    public class FacebookUserAccessTokenData
     {
         [JsonProperty("app_id")]
         public long AppId { get; set; }
@@ -66,14 +65,13 @@
     }
 
     [PublicAPI]
-
-    internal class FacebookUserAccessTokenValidation
+    public class FacebookUserAccessTokenValidation
     {
         public FacebookUserAccessTokenData Data { get; set; }
     }
 
     [PublicAPI]
-    internal class FacebookAppAccessToken
+    public class FacebookAppAccessToken
     {
         [JsonProperty("token_type")]
         public string TokenType { get; set; }
