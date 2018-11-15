@@ -3,7 +3,9 @@
     using System;
     using System.ComponentModel.DataAnnotations;
     using Models;
+    using JetBrains.Annotations;
 
+    [PublicAPI]
     public abstract class BaseRelationship<T1, T2> where T1 : BaseModel where T2 : BaseModel
     {
         [Required]

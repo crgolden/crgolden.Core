@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Models;
+    using JetBrains.Annotations;
 
+    [PublicAPI]
     public interface IModelService<T> where T : BaseModel
     {
         IEnumerable<T> Index();

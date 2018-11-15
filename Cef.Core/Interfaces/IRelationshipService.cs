@@ -5,7 +5,9 @@
     using System.Threading.Tasks;
     using Models;
     using Relationships;
+    using JetBrains.Annotations;
 
+    [PublicAPI]
     public interface IRelationshipService<T, T1, T2>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
