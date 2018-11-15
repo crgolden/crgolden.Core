@@ -1,4 +1,4 @@
-﻿namespace Cef.Core.Services.Tests
+﻿namespace Cef.Core.Tests.Services
 {
     using System.Collections.Generic;
     using System.Linq;

@@ -1,10 +1,8 @@
 ﻿namespace Cef.Core.Extensions
 {
-    using System.Runtime.InteropServices;
     using Filters;
     using Options;
     using JetBrains.Annotations;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Swashbuckle.AspNetCore.Swagger;
@@ -26,34 +24,6 @@
             if (corsOptions == null) { return; }
 
             services.Configure<CorsOptions>(options => options.Origins = corsOptions.Origins);
-        }
-
-        public static void AddDatabase<TContext>(this IServiceCollection services, IConfiguration configuration) where TContext : DbContext
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                var sqlServerOptions = configuration.GetOptions<SqlServerOptions>();
-                if (sqlServerOptions == null) { return; }
-
-                services.AddDbContext<TContext>(options =>
-                {
-                    options
-                        .UseSqlServer(sqlServerOptions.SqlServerConnectionString())
-                        .UseLazyLoadingProxies();
-                });
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                var sqLiteOptions = configuration.GetOptions<SqLiteOptions>();
-                if (sqLiteOptions == null) { return; }
-                
-                services.AddDbContext<TContext>(options =>
-                {
-                    options
-                        .UseSqlite(sqLiteOptions.SqLiteConnectionString)
-                        .UseLazyLoadingProxies();
-                });
-            }
         }
 
         public static void AddEmailOptions(this IServiceCollection services, IConfiguration configuration)
@@ -94,14 +64,6 @@
                 });
                 setup.OperationFilter<SecurityRequirementsOperationFilter>();
             });
-        }
-
-        public static void AddUserOptions(this IServiceCollection services, IConfiguration configuration)
-        {
-            var usersOptions = configuration.GetOptions<UserOptions>();
-            if (usersOptions == null) { return; }
-
-            services.Configure<UserOptions>(options => options.Users = usersOptions.Users);
         }
     }
 }

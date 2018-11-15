@@ -1,12 +1,13 @@
-﻿namespace Cef.Core.Services.Tests
+﻿namespace Cef.Core.Tests.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Models;
+    using Cef.Core.Services;
     using Microsoft.EntityFrameworkCore;
+    using Models;
     using Moq;
     using Xunit;
 

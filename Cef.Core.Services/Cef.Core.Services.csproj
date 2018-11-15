@@ -13,8 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cef.Core\Cef.Core.csproj" />
-    <ProjectReference Include="..\Cef.Core.Identity\Cef.Core.Identity.csproj" />
-    <ProjectReference Include="..\Cef.Core.Options\Cef.Core.Options.csproj" />
   </ItemGroup>
 
 </Project>

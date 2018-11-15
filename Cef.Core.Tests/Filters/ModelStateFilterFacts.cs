@@ -1,6 +1,7 @@
-namespace Cef.Core.Filters.Tests
+namespace Cef.Core.Tests.Filters
 {
     using System.Collections.Generic;
+    using Cef.Core.Filters;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Abstractions;

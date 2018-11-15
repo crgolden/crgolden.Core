@@ -1,8 +1,9 @@
-namespace Cef.Core.Controllers.Tests
+namespace Cef.Core.Tests.Controllers
 {
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Cef.Core.Controllers;
     using Interfaces;
     using Models;
     using Relationships;
