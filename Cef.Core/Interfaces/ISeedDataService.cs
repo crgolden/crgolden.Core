@@ -5,9 +5,9 @@
     using Microsoft.EntityFrameworkCore;
 
     [PublicAPI]
-    public interface ISeedDataService<TContext> where TContext : DbContext
+    public interface ISeedDataService<out TContext> where TContext : DbContext
     {
-        TContext Context { get; set; }
+        TContext Context { get; }
 
         Task SeedDatabase();
     }

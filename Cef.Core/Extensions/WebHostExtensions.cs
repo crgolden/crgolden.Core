@@ -19,15 +19,17 @@
             {
                 var services = scope.ServiceProvider;
                 var logger = services.GetRequiredService<ILogger<TContext>>();
-                var seedDataService = services.GetRequiredService<ISeedDataService<TContext>>();
+                var seedDataService = services.GetService<ISeedDataService<TContext>>();
                 using (var context = services.GetRequiredService<TContext>())
                 {
                     try
                     {
                         logger.LogInformation($"Migrating database associated with context {nameof(TContext)}");
                         await context.Database.MigrateAsync();
-                        await seedDataService.SeedDatabase();
-
+                        if (seedDataService != null)
+                        {
+                            await seedDataService.SeedDatabase();
+                        }
                     }
                     catch (Exception e)
                     {
