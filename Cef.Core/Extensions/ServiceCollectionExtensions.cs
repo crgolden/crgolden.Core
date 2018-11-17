@@ -1,5 +1,6 @@
 ﻿namespace Cef.Core.Extensions
 {
+    using System;
     using System.Runtime.InteropServices;
     using Filters;
     using JetBrains.Annotations;
@@ -30,15 +31,23 @@
             services.Configure<CorsOptions>(options => options.Origins = corsOptions.Origins);
         }
 
-        public static void AddDatabase<TContext>(this IServiceCollection services, IConfiguration configuration) where TContext : DbContext
+        public static void AddDatabase(this IServiceCollection services, IConfiguration configuration, string assemblyName = null)
         {
+            var dbContextOptionsBuilder = default(Action<DbContextOptionsBuilder>);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 var sqlServerOptionsSection = configuration.GetSection(nameof(SqlServerOptions));
                 if (!sqlServerOptionsSection.Exists()) { return; }
 
                 var sqlServerOptions = sqlServerOptionsSection.Get<SqlServerOptions>();
-                services.AddDbContext<TContext>(options => options.UseSqlServer(sqlServerOptions.SqlServerConnectionString()));
+                dbContextOptionsBuilder = options => options.UseSqlServer(
+                    connectionString: sqlServerOptions.SqlServerConnectionString(),
+                    sqlServerOptionsAction: action =>
+                    {
+                        if (string.IsNullOrEmpty(assemblyName)) { return; }
+
+                        action.MigrationsAssembly(assemblyName);
+                    });
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
@@ -46,8 +55,17 @@
                 if (!sqLiteOptionsSection.Exists()) { return; }
 
                 var sqLiteOptions = sqLiteOptionsSection.Get<SqLiteOptions>();
-                services.AddDbContext<TContext>(options => options.UseSqlite(sqLiteOptions.SqLiteConnectionString));
+                dbContextOptionsBuilder = options => options.UseSqlite(
+                    connectionString: sqLiteOptions.SqLiteConnectionString,
+                    sqliteOptionsAction: action =>
+                    {
+                        if (string.IsNullOrEmpty(assemblyName)) { return; }
+
+                        action.MigrationsAssembly(assemblyName);
+                    });
             }
+
+            services.AddDbContext<DbContext>(dbContextOptionsBuilder);
         }
 
         public static void AddEmailOptions(this IServiceCollection services, IConfiguration configuration)
