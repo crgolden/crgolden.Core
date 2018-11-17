@@ -12,26 +12,43 @@
     [PublicAPI]
     public static class WebHostExtensions
     {
-        public static async Task<IWebHost> SetupDatabaseAsync<TContext>(this IWebHost webHost) where TContext : DbContext
+        public static async Task<IWebHost> MigrateDatabaseAsync(this IWebHost webHost)
         {
             using (var scope = webHost.Services.CreateScope())
             {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<TContext>>();
-                var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
-                using (var context = scope.ServiceProvider.GetRequiredService<TContext>())
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<IWebHost>>();
+                var context = scope.ServiceProvider.GetRequiredService<DbContext>();
+                var message = $"the database associated with context {context.GetType().Name}";
+                try
                 {
-                    var message = $"the database associated with context {typeof(TContext).Name}";
-                    try
-                    {
-                        logger.LogInformation($"Migrating {message}");
-                        await context.Database.MigrateAsync();
-                        await seedService.SeedAsync();
-                        logger.LogInformation($"Migrated {message}");
-                    }
-                    catch (Exception e)
-                    {
-                        logger.LogError(e, $"An error occurred while migrating {message}");
-                    }
+                    logger.LogInformation($"Migrating {message}");
+                    await context.Database.MigrateAsync();
+                    logger.LogInformation($"Migrated {message}");
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, $"An error occurred while migrating {message}");
+                }
+            }
+
+            return webHost;
+        }
+
+        public static async Task<IWebHost> SeedDatabaseAsync(this IWebHost webHost)
+        {
+            using (var scope = webHost.Services.CreateScope())
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<IWebHost>>();
+                var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
+                try
+                {
+                    logger.LogInformation("Seeding tha database");
+                    await seedService.SeedAsync();
+                    logger.LogInformation("Seeded the database");
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, "An error occurred while seeding the database");
                 }
             }
 
