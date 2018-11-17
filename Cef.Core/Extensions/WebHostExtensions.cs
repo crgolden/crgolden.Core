@@ -12,28 +12,25 @@
     [PublicAPI]
     public static class WebHostExtensions
     {
-        public static async Task<IWebHost> MigrateDatabaseAsync<TContext>(this IWebHost webHost)
-            where TContext : DbContext
+        public static async Task<IWebHost> SetupDatabaseAsync<TContext>(this IWebHost webHost) where TContext : DbContext
         {
             using (var scope = webHost.Services.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                var logger = services.GetRequiredService<ILogger<TContext>>();
-                var seedDataService = services.GetService<ISeedDataService<TContext>>();
-                using (var context = services.GetRequiredService<TContext>())
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<TContext>>();
+                var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
+                using (var context = scope.ServiceProvider.GetRequiredService<TContext>())
                 {
+                    var message = $"the database associated with context {typeof(TContext).Name}";
                     try
                     {
-                        logger.LogInformation($"Migrating database associated with context {nameof(TContext)}");
+                        logger.LogInformation($"Migrating {message}");
                         await context.Database.MigrateAsync();
-                        if (seedDataService != null)
-                        {
-                            await seedDataService.SeedDatabase();
-                        }
+                        await seedService.SeedAsync();
+                        logger.LogInformation($"Migrated {message}");
                     }
                     catch (Exception e)
                     {
-                        logger.LogError(e, $"An error occurred while migrating the database used on context {nameof(TContext)}");
+                        logger.LogError(e, $"An error occurred while migrating {message}");
                     }
                 }
             }

@@ -14,17 +14,19 @@
     {
         public static void AddAuthenticationOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            var authenticationOptions = configuration.GetOptions<AuthenticationOptions>();
-            if (authenticationOptions == null) { return; }
+            var authenticationOptionsSection = configuration.GetSection(nameof(AuthenticationOptions));
+            if (!authenticationOptionsSection.Exists()) { return; }
 
+            var authenticationOptions = authenticationOptionsSection.Get<AuthenticationOptions>();
             services.Configure<AuthenticationOptions>(options => options.Facebook = authenticationOptions.Facebook);
         }
 
         public static void AddCorsOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            var corsOptions = configuration.GetOptions<CorsOptions>();
-            if (corsOptions == null) { return; }
+            var corsOptionsSection = configuration.GetSection(nameof(CorsOptions));
+            if (!corsOptionsSection.Exists()) { return; }
 
+            var corsOptions = corsOptionsSection.Get<CorsOptions>();
             services.Configure<CorsOptions>(options => options.Origins = corsOptions.Origins);
         }
 
@@ -32,35 +34,28 @@
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                var sqlServerOptions = configuration.GetOptions<SqlServerOptions>();
-                if (sqlServerOptions == null) { return; }
+                var sqlServerOptionsSection = configuration.GetSection(nameof(SqlServerOptions));
+                if (!sqlServerOptionsSection.Exists()) { return; }
 
-                services.AddDbContext<TContext>(options =>
-                {
-                    options
-                        .UseSqlServer(sqlServerOptions.SqlServerConnectionString())
-                        .UseLazyLoadingProxies();
-                });
+                var sqlServerOptions = sqlServerOptionsSection.Get<SqlServerOptions>();
+                services.AddDbContext<TContext>(options => options.UseSqlServer(sqlServerOptions.SqlServerConnectionString()));
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                var sqLiteOptions = configuration.GetOptions<SqLiteOptions>();
-                if (sqLiteOptions == null) { return; }
+                var sqLiteOptionsSection = configuration.GetSection(nameof(SqLiteOptions));
+                if (!sqLiteOptionsSection.Exists()) { return; }
 
-                services.AddDbContext<TContext>(options =>
-                {
-                    options
-                        .UseSqlite(sqLiteOptions.SqLiteConnectionString)
-                        .UseLazyLoadingProxies();
-                });
+                var sqLiteOptions = sqLiteOptionsSection.Get<SqLiteOptions>();
+                services.AddDbContext<TContext>(options => options.UseSqlite(sqLiteOptions.SqLiteConnectionString));
             }
         }
 
         public static void AddEmailOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            var emailOptions = configuration.GetOptions<EmailOptions>();
-            if (emailOptions == null) { return; }
+            var emailOptionsSection = configuration.GetSection(nameof(EmailOptions));
+            if (!emailOptionsSection.Exists()) { return; }
 
+            var emailOptions = emailOptionsSection.Get<EmailOptions>();
             services.Configure<EmailOptions>(options =>
             {
                 options.ApiKey = emailOptions.ApiKey;
@@ -98,9 +93,10 @@
 
         public static void AddUserOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            var userOptions = configuration.GetOptions<UserOptions>();
-            if (userOptions == null) { return; }
+            var userOptionsSection = configuration.GetSection(nameof(UserOptions));
+            if (!userOptionsSection.Exists()) { return; }
 
+            var userOptions = userOptionsSection.Get<UserOptions>();
             services.Configure<UserOptions>(options => options.Users = userOptions.Users);
         }
     }

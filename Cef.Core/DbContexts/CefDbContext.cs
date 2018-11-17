@@ -1,11 +1,13 @@
-﻿namespace Cef.Core.Contexts
+﻿namespace Cef.Core.DbContexts
 {
     using System;
+    using IdentityServer4.EntityFramework.Entities;
     using JetBrains.Annotations;
-    using Models;
-    using Relationships;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Models;
+    using Relationships;
+    using UserClaim = Relationships.UserClaim;
 
     [PublicAPI]
     public class CefDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
@@ -83,6 +85,93 @@
             modelBuilder.Entity<UserRole>(b =>
             {
                 b.ToTable("UserRoles");
+            });
+
+            // ConfigurationDbContext
+            modelBuilder.Entity<Client>(b =>
+            {
+                b.ToTable("Clients");
+            });
+
+            modelBuilder.Entity<ClientSecret>(b =>
+            {
+                b.ToTable("ClientSecrets");
+            });
+
+            modelBuilder.Entity<ClientGrantType>(b =>
+            {
+                b.ToTable("ClientGrantTypes");
+            });
+
+            modelBuilder.Entity<ClientRedirectUri>(b =>
+            {
+                b.ToTable("ClientRedirectUris");
+            });
+
+            modelBuilder.Entity<ClientPostLogoutRedirectUri>(b =>
+            {
+                b.ToTable("ClientPostLogoutRedirectUris");
+            });
+            
+            modelBuilder.Entity<ClientScope>(b =>
+            {
+                b.ToTable("ClientScopes");
+            });
+            
+            modelBuilder.Entity<ClientIdPRestriction>(b =>
+            {
+                b.ToTable("ClientIdPRestrictions");
+            });
+            
+            modelBuilder.Entity<ClientClaim>(b =>
+            {
+                b.ToTable("ClientClaims");
+            });
+            
+            modelBuilder.Entity<ClientCorsOrigin>(b =>
+            {
+                b.ToTable("ClientCorsOrigins");
+            });
+            
+            modelBuilder.Entity<ClientProperty>(b =>
+            {
+                b.ToTable("ClientProperties");
+            });
+            
+            modelBuilder.Entity<IdentityResource>(b =>
+            {
+                b.ToTable("IdentityResources");
+            });
+
+            modelBuilder.Entity<IdentityClaim>(b =>
+            {
+                b.ToTable("IdentityClaims");
+            });
+
+            modelBuilder.Entity<ApiResource>(b =>
+            {
+                b.ToTable("ApiResources");
+            });
+
+            modelBuilder.Entity<ApiSecret>(b =>
+            {
+                b.ToTable("ApiSecrets");
+            });
+
+            modelBuilder.Entity<ApiScope>(b =>
+            {
+                b.ToTable("ApiScopes");
+            });
+
+            modelBuilder.Entity<ApiResourceClaim>(b =>
+            {
+                b.ToTable("ApiResourceClaims");
+            });
+
+            // PersistedGrantDbContext
+            modelBuilder.Entity<PersistedGrant>(b =>
+            {
+                b.ToTable("PersistedGrants");
             });
         }
     }
