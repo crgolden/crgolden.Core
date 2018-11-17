@@ -2,6 +2,7 @@
 {
     using System;
     using System.Runtime.InteropServices;
+    using DbContexts;
     using Filters;
     using JetBrains.Annotations;
     using Microsoft.EntityFrameworkCore;
@@ -65,7 +66,7 @@
                     });
             }
 
-            services.AddDbContext<DbContext>(dbContextOptionsBuilder);
+            services.AddDbContext<CefDbContext>(dbContextOptionsBuilder);
         }
 
         public static void AddEmailOptions(this IServiceCollection services, IConfiguration configuration)
