@@ -12,28 +12,6 @@
     [PublicAPI]
     public static class WebHostExtensions
     {
-        public static async Task<IWebHost> MigrateDatabaseAsync(this IWebHost webHost)
-        {
-            using (var scope = webHost.Services.CreateScope())
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<IWebHost>>();
-                var context = scope.ServiceProvider.GetRequiredService<DbContext>();
-                var message = $"the database associated with context {context.GetType().Name}";
-                try
-                {
-                    logger.LogInformation($"Migrating {message}");
-                    await context.Database.MigrateAsync();
-                    logger.LogInformation($"Migrated {message}");
-                }
-                catch (Exception e)
-                {
-                    logger.LogError(e, $"An error occurred while migrating {message}");
-                }
-            }
-
-            return webHost;
-        }
-
         public static async Task<IWebHost> SeedDatabaseAsync(this IWebHost webHost)
         {
             using (var scope = webHost.Services.CreateScope())

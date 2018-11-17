@@ -20,7 +20,7 @@
     {
         /// <inheritdoc />
         /// <param name="options"></param>
-        public CefDbContext(DbContextOptions options) : base(options) { }
+        public CefDbContext(DbContextOptions<CefDbContext> options) : base(options) { }
 
         /// <inheritdoc />
         public virtual DbSet<Client> Clients { get; set; }
