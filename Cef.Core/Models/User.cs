@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Identity;
     using Relationships;
@@ -10,13 +9,13 @@
     [PublicAPI]
     public class User : IdentityUser<Guid>
     {
-        public string Name => $"{FirstName} {LastName}";
+        public User()
+        {
+        }
 
-        [Required]
-        public string FirstName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
+        public User(string userName) : base(userName)
+        {
+        }
 
         public virtual ICollection<UserClaim> Claims { get; set; }
 
