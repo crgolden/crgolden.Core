@@ -5,6 +5,7 @@
     using DbContexts;
     using Filters;
     using JetBrains.Annotations;
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +21,7 @@
             if (!authenticationOptionsSection.Exists()) { return; }
 
             var authenticationOptions = authenticationOptionsSection.Get<AuthenticationOptions>();
-            var authenticationBuilder = services.AddAuthentication();
+            var authenticationBuilder = services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
             services.Configure<AuthenticationOptions>(options =>
             {
                 if (authenticationOptions.Facebook == null) { return; }
