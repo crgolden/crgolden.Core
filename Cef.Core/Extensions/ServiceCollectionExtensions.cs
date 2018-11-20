@@ -14,13 +14,24 @@
     [PublicAPI]
     public static class ServiceCollectionExtensions
     {
-        public static void AddAuthenticationOptions(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var authenticationOptionsSection = configuration.GetSection(nameof(AuthenticationOptions));
             if (!authenticationOptionsSection.Exists()) { return; }
 
             var authenticationOptions = authenticationOptionsSection.Get<AuthenticationOptions>();
-            services.Configure<AuthenticationOptions>(options => options.Facebook = authenticationOptions.Facebook);
+            var authenticationBuilder = services.AddAuthentication();
+            services.Configure<AuthenticationOptions>(options =>
+            {
+                if (authenticationOptions.Facebook == null) { return; }
+
+                options.Facebook = authenticationOptions.Facebook;
+                authenticationBuilder.AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = authenticationOptions.Facebook.AppId;
+                    facebookOptions.AppSecret = authenticationOptions.Facebook.AppSecret;
+                });
+            });
         }
 
         public static void AddCorsOptions(this IServiceCollection services, IConfiguration configuration)
