@@ -4,6 +4,7 @@
     using System.Runtime.InteropServices;
     using DbContexts;
     using Filters;
+    using IdentityServer4.EntityFramework.Interfaces;
     using JetBrains.Annotations;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -14,15 +15,6 @@
     [PublicAPI]
     public static class ServiceCollectionExtensions
     {
-        public static void AddAuthenticationOptions(this IServiceCollection services, IConfiguration configuration)
-        {
-            var authenticationOptionsSection = configuration.GetSection(nameof(AuthenticationOptions));
-            if (!authenticationOptionsSection.Exists()) { return; }
-
-            var authenticationOptions = authenticationOptionsSection.Get<AuthenticationOptions>();
-            services.Configure<AuthenticationOptions>(options => options.Facebook = authenticationOptions.Facebook);
-        }
-
         public static void AddCorsOptions(this IServiceCollection services, IConfiguration configuration)
         {
             var corsOptionsSection = configuration.GetSection(nameof(CorsOptions));
@@ -67,6 +59,8 @@
             }
 
             services.AddDbContext<CefDbContext>(dbContextOptionsBuilder);
+            services.AddScoped<IConfigurationDbContext, CefDbContext>();
+            services.AddScoped<IPersistedGrantDbContext, CefDbContext>();
         }
 
         public static void AddEmailOptions(this IServiceCollection services, IConfiguration configuration)
