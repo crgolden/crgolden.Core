@@ -15,15 +15,6 @@
     [PublicAPI]
     public static class ServiceCollectionExtensions
     {
-        public static void AddCorsOptions(this IServiceCollection services, IConfiguration configuration)
-        {
-            var corsOptionsSection = configuration.GetSection(nameof(CorsOptions));
-            if (!corsOptionsSection.Exists()) { return; }
-
-            var corsOptions = corsOptionsSection.Get<CorsOptions>();
-            services.Configure<CorsOptions>(options => options.Origins = corsOptions.Origins);
-        }
-
         public static void AddDatabase(this IServiceCollection services, IConfiguration configuration, string assemblyName = null)
         {
             var dbContextOptionsBuilder = default(Action<DbContextOptionsBuilder>);
