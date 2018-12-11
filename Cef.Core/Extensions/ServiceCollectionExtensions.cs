@@ -50,29 +50,9 @@
             }
 
             services.AddDbContext<CefDbContext>(dbContextOptionsBuilder);
+            services.AddScoped<DbContext, CefDbContext>();
             services.AddScoped<IConfigurationDbContext, CefDbContext>();
             services.AddScoped<IPersistedGrantDbContext, CefDbContext>();
-        }
-
-        public static void AddEmailOptions(this IServiceCollection services, IConfiguration configuration)
-        {
-            var emailOptionsSection = configuration.GetSection(nameof(EmailOptions));
-            if (!emailOptionsSection.Exists()) { return; }
-
-            var emailOptions = emailOptionsSection.Get<EmailOptions>();
-            services.Configure<EmailOptions>(options =>
-            {
-                options.ApiKey = emailOptions.ApiKey;
-                options.Email = emailOptions.Email;
-                options.Name = emailOptions.Name;
-            });
-        }
-
-        public static void AddPolicies(this IServiceCollection services)
-        {
-            services.AddAuthorization(options =>
-            {
-            });
         }
 
         public static void AddSwagger(this IServiceCollection services, string title, string version)
@@ -93,15 +73,6 @@
                 });
                 setup.OperationFilter<SecurityRequirementsOperationFilter>();
             });
-        }
-
-        public static void AddUserOptions(this IServiceCollection services, IConfiguration configuration)
-        {
-            var userOptionsSection = configuration.GetSection(nameof(UserOptions));
-            if (!userOptionsSection.Exists()) { return; }
-
-            var userOptions = userOptionsSection.Get<UserOptions>();
-            services.Configure<UserOptions>(options => options.Users = userOptions.Users);
         }
     }
 }
