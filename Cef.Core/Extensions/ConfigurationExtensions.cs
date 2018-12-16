@@ -19,7 +19,7 @@
 
         public static Action<DbContextOptionsBuilder> GetDbContextOptions(this IConfiguration configuration)
         {
-            Action<DbContextOptionsBuilder> dbContextOptions = null;
+            var dbContextOptions = default(Action<DbContextOptionsBuilder>);
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 var sqlServerOptionsSection = configuration.GetSection(nameof(SqlServerOptions));
@@ -29,7 +29,6 @@
                 var connectionString = sqlServerOptions.SqlServerConnectionString();
                 dbContextOptions = builder => builder.UseSqlServer(connectionString, SqlServerOptionsAction);
             }
-
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 var sqLiteOptionsSection = configuration.GetSection(nameof(SqLiteOptions));
