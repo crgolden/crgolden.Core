@@ -51,6 +51,7 @@
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ConfigureIdentityContext();
+            modelBuilder.ConfigureECommerceContext();
 
             var configurationStoreOptions = new ConfigurationStoreOptions();
             modelBuilder.ConfigureClientContext(configurationStoreOptions);

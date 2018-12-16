@@ -24,5 +24,9 @@
         public virtual ICollection<UserToken> Tokens { get; set; }
 
         public virtual ICollection<UserRole> UserRoles { get; set; }
+
+        public virtual Cart Cart { get; set; }
+
+        public virtual ICollection<Order> Orders {get; set; }
     }
 }
