@@ -18,12 +18,12 @@
         where T : BaseModel
     {
         protected readonly IModelService<T> Service;
-        private readonly ILogger<BaseModelController<T>> _logger;
+        protected readonly ILogger<BaseModelController<T>> Logger;
 
         protected BaseModelController(IModelService<T> service, ILogger<BaseModelController<T>> logger)
         {
             Service = service;
-            _logger = logger;
+            Logger = logger;
         }
 
         [HttpGet]
@@ -48,7 +48,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(id);
             }
         }
@@ -68,7 +68,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(model);
             }
         }
@@ -83,7 +83,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(model);
             }
         }
@@ -98,7 +98,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(id);
             }
         }

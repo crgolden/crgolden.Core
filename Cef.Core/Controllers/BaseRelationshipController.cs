@@ -22,12 +22,12 @@
 
     {
         protected readonly IRelationshipService<T, T1, T2> Service;
-        private readonly ILogger<BaseRelationshipController<T, T1, T2>> _logger;
+        protected readonly ILogger<BaseRelationshipController<T, T1, T2>> Logger;
 
         protected BaseRelationshipController(IRelationshipService<T, T1, T2> service, ILogger<BaseRelationshipController<T, T1, T2>> logger)
         {
             Service = service;
-            _logger = logger;
+            Logger = logger;
         }
 
         [HttpGet]
@@ -52,7 +52,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(new { id1, id2 });
             }
         }
@@ -72,7 +72,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(relationship);
             }
         }
@@ -87,7 +87,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(relationship);
             }
         }
@@ -102,7 +102,7 @@
             }
             catch (Exception e)
             {
-                _logger.LogError(e, e.Message);
+                Logger.LogError(e, e.Message);
                 return BadRequest(new { id1, id2 });
             }
         }
