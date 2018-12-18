@@ -64,7 +64,7 @@
             // Assert
             Assert.IsType<Model>(create);
             Context.Verify(m => m.Add(It.Is<Model>(x => x.Name.Equals(model.Name))));
-            Context.Verify(m => m.SaveChangesAsync(default(CancellationToken)), Times.Once);
+            Context.Verify(m => m.SaveChangesAsync(default), Times.Once);
         }
 
         [Fact]
@@ -87,7 +87,7 @@
             Assert.NotNull(await Context.Object.Set<Model>().SingleOrDefaultAsync(x => 
                 x.Id.Equals(model.Id) &&
                 x.Name.Equals(newName)));
-            Context.Verify(m => m.SaveChangesAsync(default(CancellationToken)), Times.Once());
+            Context.Verify(m => m.SaveChangesAsync(default), Times.Once());
         }
 
         [Fact]
@@ -106,7 +106,7 @@
 
             // Assert
             Context.Verify(m => m.Remove(It.Is<Model>(x => x.Id.Equals(model.Id))), Times.Once());
-            Context.Verify(m => m.SaveChangesAsync(default(CancellationToken)), Times.Once());
+            Context.Verify(m => m.SaveChangesAsync(default), Times.Once());
         }
 
         public class Model : BaseModel
