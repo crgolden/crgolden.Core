@@ -21,19 +21,19 @@
         where T2 : BaseModel
 
     {
-        private readonly IRelationshipService<T, T1, T2> _service;
+        protected readonly IRelationshipService<T, T1, T2> Service;
         private readonly ILogger<BaseRelationshipController<T, T1, T2>> _logger;
 
         protected BaseRelationshipController(IRelationshipService<T, T1, T2> service, ILogger<BaseRelationshipController<T, T1, T2>> logger)
         {
-            _service = service;
+            Service = service;
             _logger = logger;
         }
 
         [HttpGet]
         public virtual async Task<IActionResult> Index([DataSourceRequest] DataSourceRequest request = null)
         {
-            var models = _service.Index();
+            var models = Service.Index();
             return request != null ? Ok(await models.ToDataSourceResultAsync(request)) : Ok(models);
         }
 
@@ -42,7 +42,7 @@
         {
             try
             {
-                var model = await _service.Details(id1, id2);
+                var model = await Service.Details(id1, id2);
                 if (model == null)
                 {
                     return NotFound(new { id1, id2 });
@@ -67,7 +67,7 @@
 
             try
             {
-                await _service.Edit(relationship);
+                await Service.Edit(relationship);
                 return NoContent();
             }
             catch (Exception e)
@@ -82,7 +82,7 @@
         {
             try
             {
-                var created = await _service.Create(relationship);
+                var created = await Service.Create(relationship);
                 return Ok(created);
             }
             catch (Exception e)
@@ -97,7 +97,7 @@
         {
             try
             {
-                await _service.Delete(id1, id2);
+                await Service.Delete(id1, id2);
                 return NoContent();
             }
             catch (Exception e)
