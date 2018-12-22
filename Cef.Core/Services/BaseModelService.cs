@@ -37,11 +37,7 @@
 
         public virtual async Task Edit(T model)
         {
-            var entity = await Context.Set<T>().SingleOrDefaultAsync(x => x.Id.Equals(model.Id));
-            if (entity != null)
-            {
-                entity.Name = model.Name;
-            }
+            Context.Entry(model).State = EntityState.Modified;
             await Context.SaveChangesAsync();
         }
 
