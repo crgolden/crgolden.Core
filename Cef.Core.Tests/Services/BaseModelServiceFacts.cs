@@ -66,29 +66,6 @@
             Context.Verify(m => m.SaveChangesAsync(default), Times.Once);
         }
 
-        [Fact(Skip = "")]
-        public async Task Edit()
-        {
-            // Arrange
-            Setup();
-            const string name = "Name";
-            const string newName = "New Name";
-            var model = new Model {Id = Guid.NewGuid(), Name = name};
-            var models = new List<Model>(1) {model};
-            var mockSet = GetMockDbSet(models.AsQueryable());
-            Context.Setup(x => x.Set<Model>()).Returns(mockSet.Object);
-            var service = new ModelService(Context.Object);
-            
-            // Act
-            await service.Edit(new Model {Id = model.Id, Name = newName});
-
-            // Assert
-            Assert.NotNull(await Context.Object.Set<Model>().SingleOrDefaultAsync(x => 
-                x.Id.Equals(model.Id) &&
-                x.Name.Equals(newName)));
-            Context.Verify(m => m.SaveChangesAsync(default), Times.Once());
-        }
-
         [Fact]
         public async Task Delete()
         {
