@@ -9,6 +9,7 @@
     using Microsoft.EntityFrameworkCore.Query.Internal;
     using Moq;
 
+    // https://docs.microsoft.com/en-us/aspnet/web-api/overview/testing-and-debugging/mocking-entity-framework-when-unit-testing-aspnet-web-api-2
     public abstract class BaseServiceFacts
     {
         protected Mock<DbContext> Context;
