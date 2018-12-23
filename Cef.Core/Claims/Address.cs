@@ -16,7 +16,7 @@
         /// or as a single line feed character ("\n").
         /// </summary>
         [JsonProperty("formatted")]
-        public string Formatted { get; set; }
+        public string Formatted => $"{StreetAddress}\r\n{Locality}\r\n{Region} {PostalCode}\r\n{Country}";
 
         /// <summary>
         /// Full street address component, which MAY include house number, street name,
