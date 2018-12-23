@@ -26,5 +26,10 @@
 
         [JsonIgnore]
         public T2 Model2 { get; set; }
+
+        [Required]
+        public DateTime Created { get; set; }
+
+        public DateTime Updated { get; set; }
     }
 }
