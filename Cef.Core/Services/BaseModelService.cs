@@ -30,6 +30,7 @@
 
         public virtual async Task<T> Create(T model)
         {
+            model.Created = DateTime.Now;
             Context.Add(model);
             await Context.SaveChangesAsync();
             return model;
@@ -37,6 +38,7 @@
 
         public virtual async Task Edit(T model)
         {
+            model.Updated = DateTime.Now;
             Context.Entry(model).State = EntityState.Modified;
             await Context.SaveChangesAsync();
         }

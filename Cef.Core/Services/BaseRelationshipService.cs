@@ -36,12 +36,18 @@
 
         public virtual async Task<T> Create(T relationship)
         {
+            relationship.Created = DateTime.Now;
             Context.Add(relationship);
             await Context.SaveChangesAsync();
             return relationship;
         }
 
-        public abstract Task Edit(T relationship);
+        public virtual async Task Edit(T relationship)
+        {
+            relationship.Updated = DateTime.Now;
+            Context.Entry(relationship).State = EntityState.Modified;
+            await Context.SaveChangesAsync();
+        }
 
         public virtual async Task Delete(Guid id1, Guid id2)
         {
