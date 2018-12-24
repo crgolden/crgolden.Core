@@ -29,9 +29,7 @@
 
         public virtual async Task<T> Details(Guid id1, Guid id2)
         {
-            return await Context.Set<T>().SingleOrDefaultAsync(x =>
-                x.Model1Id.Equals(id1) &&
-                x.Model2Id.Equals(id2));
+            return await Context.FindAsync<T>(id1, id2);
         }
 
         public virtual async Task<T> Create(T relationship)
@@ -51,9 +49,7 @@
 
         public virtual async Task Delete(Guid id1, Guid id2)
         {
-            var entity = await Context.Set<T>().SingleOrDefaultAsync(x =>
-                x.Model1Id.Equals(id1) &&
-                x.Model2Id.Equals(id2));
+            var entity = await Context.FindAsync<T>(id1, id2);
             if (entity != null)
             {
                 Context.Remove(entity);

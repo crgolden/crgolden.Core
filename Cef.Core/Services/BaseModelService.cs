@@ -25,7 +25,7 @@
 
         public virtual async Task<T> Details(Guid id)
         {
-            return await Context.Set<T>().SingleOrDefaultAsync(x => x.Id.Equals(id));
+            return await Context.FindAsync<T>(id);
         }
 
         public virtual async Task<T> Create(T model)
@@ -45,7 +45,7 @@
 
         public virtual async Task Delete(Guid id)
         {
-            var entity = await Context.Set<T>().SingleOrDefaultAsync(x => x.Id.Equals(id));
+            var entity = await Context.FindAsync<T>(id);
             if (entity != null)
             {
                 Context.Remove(entity);

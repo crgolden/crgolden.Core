@@ -36,9 +36,7 @@
             // Arrange
             Setup();
             var model = new Model {Id = Guid.NewGuid()};
-            var models = new List<Model>(1) {model};
-            var mockSet = GetMockDbSet(models.AsQueryable());
-            Context.Setup(x => x.Set<Model>()).Returns(mockSet.Object);
+            Context.Setup(x => x.FindAsync<Model>(model.Id)).ReturnsAsync(model);
             var service = new ModelService(Context.Object);
 
             // Act
@@ -62,9 +60,33 @@
 
             // Assert
             Assert.IsType<Model>(create);
+            Assert.InRange(model.Created, DateTime.MinValue, DateTime.Now);
             Context.Verify(m => m.Add(It.Is<Model>(x => x.Name.Equals(model.Name))));
             Context.Verify(m => m.SaveChangesAsync(default), Times.Once);
         }
+
+        // [Fact]
+        // public async Task Edit()
+        // {
+        //     // Arrange
+        //     Setup();
+        //     const string name = "Name";
+        //     const string newName = "New Name";
+        //     var model = new Model { Id = Guid.NewGuid(), Name = name };
+        //     var models = new List<Model>(1) { model };
+        //     var mockSet = GetMockDbSet(models.AsQueryable());
+        //     Context.Setup(x => x.Set<Model>()).Returns(mockSet.Object);
+        //     var service = new ModelService(Context.Object);
+
+        //     // Act
+        //     await service.Edit(new Model { Id = model.Id, Name = newName });
+
+        //     // Assert
+        //     Assert.NotNull(await Context.Object.Set<Model>().SingleOrDefaultAsync(x =>
+        //         x.Id.Equals(model.Id) &&
+        //         x.Name.Equals(newName)));
+        //     Context.Verify(m => m.SaveChangesAsync(default), Times.Once());
+        // }
 
         [Fact]
         public async Task Delete()
@@ -72,9 +94,7 @@
             // Arrange
             Setup();
             var model = new Model {Id = Guid.NewGuid()};
-            var models = new List<Model>(1) {model};
-            var mockSet = GetMockDbSet(models.AsQueryable());
-            Context.Setup(x => x.Set<Model>()).Returns(mockSet.Object);
+            Context.Setup(x => x.FindAsync<Model>(model.Id)).ReturnsAsync(model);
             var service = new ModelService(Context.Object);
 
             // Act

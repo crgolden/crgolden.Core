@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using Core.Services;
     using Microsoft.EntityFrameworkCore;
@@ -38,9 +37,8 @@
             // Arrange
             Setup();
             var relationship = new Relationship {Model1Id = Guid.NewGuid(), Model2Id = Guid.NewGuid()};
-            var relationships = new List<Relationship>(1) {relationship};
-            var mockSet = GetMockDbSet(relationships.AsQueryable());
-            Context.Setup(x => x.Set<Relationship>()).Returns(mockSet.Object);
+            Context.Setup(x => x.FindAsync<Relationship>(relationship.Model1Id, relationship.Model2Id))
+                .ReturnsAsync(relationship);
             var service = new RelationshipService(Context.Object);
 
             // Act
@@ -65,10 +63,11 @@
 
             // Assert
             Assert.IsType<Relationship>(create);
+            Assert.InRange(relationship.Created, DateTime.MinValue, DateTime.Now);
             Context.Verify(m => m.Add(It.Is<Relationship>(x =>
                 x.Model1Id.Equals(relationship.Model1Id) &&
                 x.Model2Id.Equals(relationship.Model2Id))));
-            Context.Verify(m => m.SaveChangesAsync(default(CancellationToken)), Times.Once);
+            Context.Verify(m => m.SaveChangesAsync(default), Times.Once);
         }
 
         [Fact]
@@ -77,9 +76,8 @@
             // Arrange
             Setup();
             var relationship = new Relationship {Model1Id = Guid.NewGuid(), Model2Id = Guid.NewGuid()};
-            var relationships = new List<Relationship>(1) { relationship };
-            var mockSet = GetMockDbSet(relationships.AsQueryable());
-            Context.Setup(x => x.Set<Relationship>()).Returns(mockSet.Object);
+            Context.Setup(x => x.FindAsync<Relationship>(relationship.Model1Id, relationship.Model2Id))
+                .ReturnsAsync(relationship);
             var service = new RelationshipService(Context.Object);
 
             // Act
@@ -89,7 +87,7 @@
             Context.Verify(m => m.Remove(It.Is<Relationship>(x =>
                 x.Model1Id .Equals(relationship.Model1Id) &&
                 x.Model2Id.Equals(relationship.Model2Id))), Times.Once());
-            Context.Verify(m => m.SaveChangesAsync(default(CancellationToken)), Times.Once());
+            Context.Verify(m => m.SaveChangesAsync(default), Times.Once());
         }
 
         public class Relationship : BaseRelationship<BaseModel, BaseModel>
