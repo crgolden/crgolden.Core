@@ -40,7 +40,19 @@
         {
             model.Updated = DateTime.Now;
             Context.Entry(model).State = EntityState.Modified;
-            await Context.SaveChangesAsync();
+            try
+            {
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await Context.FindAsync<T>(model.Id) == null)
+                {
+                    return;
+                }
+
+                throw;
+            }
         }
 
         public virtual async Task Delete(Guid id)
