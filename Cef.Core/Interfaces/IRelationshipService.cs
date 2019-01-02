@@ -15,10 +15,10 @@
     {
         IEnumerable<T> Index();
         Task<T> Details(Guid id1, Guid id2);
-        Task<T> Create(T relationship, DateTime? created = null);
-        Task<List<T>> Create(List<T> relationships, DateTime? created = null);
-        Task Edit(T relationship, DateTime? updated = null);
-        Task Edit(List<T> relationships, DateTime? updated = null);
+        Task<T> Create(T relationship);
+        Task<List<T>> CreateRange(List<T> relationships);
+        Task Edit(T relationship);
+        Task EditRange(List<T> relationships);
         Task Delete(Guid id1, Guid id2);
     }
 }

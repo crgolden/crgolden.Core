@@ -79,7 +79,7 @@
         {
             try
             {
-                await Service.Edit(models);
+                await Service.EditRange(models);
                 return NoContent();
             }
             catch (Exception e)
@@ -109,7 +109,7 @@
         {
             try
             {
-                var created = await Service.Create(models);
+                var created = await Service.CreateRange(models);
                 return Ok(created);
             }
             catch (Exception e)

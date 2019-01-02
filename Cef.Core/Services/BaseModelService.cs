@@ -28,20 +28,24 @@
             return await Context.FindAsync<T>(id);
         }
 
-        public virtual async Task<T> Create(T model, DateTime? created = null)
+        public virtual async Task<T> Create(T model)
         {
-            model.Created = created ?? DateTime.Now;
+            model.Created = model.Created > DateTime.MinValue
+                ? model.Created
+                : DateTime.Now;
             Context.Add(model);
             await Context.SaveChangesAsync();
             return model;
         }
 
-        public virtual async Task<List<T>> Create(List<T> models, DateTime? created = null)
+        public virtual async Task<List<T>> CreateRange(List<T> models)
         {
-            created = created ?? DateTime.Now;
+            var created = DateTime.Now;
             foreach (var model in models)
             {
-                model.Created = created.Value;
+                model.Created = model.Created > DateTime.MinValue
+                    ? model.Created
+                    : created;
                 Context.Add(model);
             }
 
@@ -49,9 +53,9 @@
             return models;
         }
 
-        public virtual async Task Edit(T model, DateTime? updated = null)
+        public virtual async Task Edit(T model)
         {
-            model.Updated = updated ?? DateTime.Now;
+            model.Updated = model.Updated ?? DateTime.Now;
             Context.Entry(model).State = EntityState.Modified;
             try
             {
@@ -66,12 +70,12 @@
             }
         }
 
-        public virtual async Task Edit(List<T> models, DateTime? updated = null)
+        public virtual async Task EditRange(List<T> models)
         {
-            updated = updated ?? DateTime.Now;
+            var updated = DateTime.Now;
             foreach (var model in models)
             {
-                model.Updated = updated.Value;
+                model.Updated = model.Updated ?? updated;
                 Context.Entry(model).State = EntityState.Modified;
             }
 

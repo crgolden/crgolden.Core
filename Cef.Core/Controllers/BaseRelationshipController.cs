@@ -83,7 +83,7 @@
         {
             try
             {
-                await Service.Edit(relationships);
+                await Service.EditRange(relationships);
                 return NoContent();
             }
             catch (Exception e)
@@ -113,7 +113,7 @@
         {
             try
             {
-                var created = await Service.Create(relationships);
+                var created = await Service.CreateRange(relationships);
                 return Ok(created);
             }
             catch (Exception e)

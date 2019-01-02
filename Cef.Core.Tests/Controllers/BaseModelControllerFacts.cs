@@ -78,7 +78,7 @@ namespace Cef.Core.Tests.Controllers
         {
             Setup();
             var model = new Model {Id = Guid.NewGuid()};
-            _service.Setup(x => x.Edit(model, null)).Returns(Task.FromResult(model));
+            _service.Setup(x => x.Edit(model)).Returns(Task.FromResult(model));
 
             var controller = new ModelController(_service.Object, _logger.Object);
             var edit = await controller.Edit(model.Id, model);
@@ -102,7 +102,7 @@ namespace Cef.Core.Tests.Controllers
         {
             Setup();
             var model = new Model {Id = Guid.NewGuid()};
-            _service.Setup(x => x.Edit(model, null)).Throws(new Exception());
+            _service.Setup(x => x.Edit(model)).Throws(new Exception());
 
             var controller = new ModelController(_service.Object, _logger.Object);
             var edit = await controller.Edit(model.Id, model);
@@ -115,7 +115,7 @@ namespace Cef.Core.Tests.Controllers
         {
             Setup();
             var model = new Model();
-            _service.Setup(x => x.Create(model, null)).Returns(Task.FromResult(model));
+            _service.Setup(x => x.Create(model)).Returns(Task.FromResult(model));
 
             var controller = new ModelController(_service.Object, _logger.Object);
             var create = await controller.Create(model);
@@ -128,7 +128,7 @@ namespace Cef.Core.Tests.Controllers
         {
             Setup();
             var model = new Model();
-            _service.Setup(x => x.Create(model, null)).Throws(new Exception());
+            _service.Setup(x => x.Create(model)).Throws(new Exception());
 
             var controller = new ModelController(_service.Object, _logger.Object);
             var create = await controller.Create(model);

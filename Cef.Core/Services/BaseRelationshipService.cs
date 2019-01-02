@@ -32,20 +32,24 @@
             return await Context.FindAsync<T>(id1, id2);
         }
 
-        public virtual async Task<T> Create(T relationship, DateTime? created = null)
+        public virtual async Task<T> Create(T relationship)
         {
-            relationship.Created = created ?? DateTime.Now;
+            relationship.Created = relationship.Created > DateTime.MinValue
+                ? relationship.Created
+                : DateTime.Now;
             Context.Add(relationship);
             await Context.SaveChangesAsync();
             return relationship;
         }
 
-        public virtual async Task<List<T>> Create(List<T> relationships, DateTime? created = null)
+        public virtual async Task<List<T>> CreateRange(List<T> relationships)
         {
-            created = created ?? DateTime.Now;
+            var created = DateTime.Now;
             foreach (var relationship in relationships)
             {
-                relationship.Created = created.Value;
+                relationship.Created = relationship.Created > DateTime.MinValue
+                    ? relationship.Created
+                    : created;
                 Context.Add(relationship);
             }
 
@@ -53,9 +57,9 @@
             return relationships;
         }
 
-        public virtual async Task Edit(T relationship, DateTime? updated = null)
+        public virtual async Task Edit(T relationship)
         {
-            relationship.Updated = updated ?? DateTime.Now;
+            relationship.Updated = relationship.Updated ?? DateTime.Now;
             Context.Entry(relationship).State = EntityState.Modified;
             try
             {
@@ -70,12 +74,12 @@
             }
         }
 
-        public virtual async Task Edit(List<T> relationships, DateTime? updated = null)
+        public virtual async Task EditRange(List<T> relationships)
         {
-            updated = updated ?? DateTime.Now;
+            var updated = DateTime.Now;
             foreach (var relationship in relationships)
             {
-                relationship.Updated = updated.Value;
+                relationship.Updated = relationship.Updated ?? updated;
                 Context.Entry(relationship).State = EntityState.Modified;
             }
 

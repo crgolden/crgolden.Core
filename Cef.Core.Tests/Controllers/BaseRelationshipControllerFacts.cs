@@ -87,7 +87,7 @@ namespace Cef.Core.Tests.Controllers
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            _service.Setup(x => x.Edit(relationship, null)).Returns(Task.FromResult(relationship));
+            _service.Setup(x => x.Edit(relationship)).Returns(Task.FromResult(relationship));
 
             var controller = new RelationshipController(_service.Object, _logger.Object);
             var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship);
@@ -135,7 +135,7 @@ namespace Cef.Core.Tests.Controllers
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            _service.Setup(x => x.Edit(relationship, null)).Throws(new Exception());
+            _service.Setup(x => x.Edit(relationship)).Throws(new Exception());
 
             var controller = new RelationshipController(_service.Object, _logger.Object);
             var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship);
@@ -148,7 +148,7 @@ namespace Cef.Core.Tests.Controllers
         {
             Setup();
             var relationship = new Relationship();
-            _service.Setup(x => x.Create(relationship, null)).Returns(Task.FromResult(relationship));
+            _service.Setup(x => x.Create(relationship)).Returns(Task.FromResult(relationship));
 
             var controller = new RelationshipController(_service.Object, _logger.Object);
             var create = await controller.Create(relationship);
@@ -161,7 +161,7 @@ namespace Cef.Core.Tests.Controllers
         {
             Setup();
             var relationship = new Relationship();
-            _service.Setup(x => x.Create(relationship, null)).Throws(new Exception());
+            _service.Setup(x => x.Create(relationship)).Throws(new Exception());
 
             var controller = new RelationshipController(_service.Object, _logger.Object);
             var create = await controller.Create(relationship);
