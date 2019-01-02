@@ -99,13 +99,6 @@
             public RelationshipService(DbContext context) : base(context)
             {
             }
-
-#pragma warning disable 1998
-            // Added to satisfy abstract method, but not implemented/tested as base level
-            public override async Task Edit(Relationship relationship)
-#pragma warning restore 1998
-            {
-            }
         }
     }
 }
