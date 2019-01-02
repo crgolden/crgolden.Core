@@ -32,17 +32,30 @@
             return await Context.FindAsync<T>(id1, id2);
         }
 
-        public virtual async Task<T> Create(T relationship)
+        public virtual async Task<T> Create(T relationship, DateTime? created = null)
         {
-            relationship.Created = DateTime.Now;
+            relationship.Created = created ?? DateTime.Now;
             Context.Add(relationship);
             await Context.SaveChangesAsync();
             return relationship;
         }
 
-        public virtual async Task Edit(T relationship)
+        public virtual async Task<List<T>> Create(List<T> relationships, DateTime? created = null)
         {
-            relationship.Updated = DateTime.Now;
+            created = created ?? DateTime.Now;
+            foreach (var relationship in relationships)
+            {
+                relationship.Created = created.Value;
+                Context.Add(relationship);
+            }
+
+            await Context.SaveChangesAsync();
+            return relationships;
+        }
+
+        public virtual async Task Edit(T relationship, DateTime? updated = null)
+        {
+            relationship.Updated = updated ?? DateTime.Now;
             Context.Entry(relationship).State = EntityState.Modified;
             try
             {
@@ -50,12 +63,36 @@
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (await Context.FindAsync<T>(relationship.Model1Id, relationship.Model2Id) == null)
+                if (await Context.FindAsync<T>(relationship.Model1Id, relationship.Model2Id) != null)
                 {
-                    return;
+                    throw;
                 }
+            }
+        }
 
-                throw;
+        public virtual async Task Edit(List<T> relationships, DateTime? updated = null)
+        {
+            updated = updated ?? DateTime.Now;
+            foreach (var relationship in relationships)
+            {
+                relationship.Updated = updated.Value;
+                Context.Entry(relationship).State = EntityState.Modified;
+            }
+
+            try
+            {
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                foreach (var entry in e.Entries)
+                {
+                    var entity = (BaseRelationship<T1, T2>) entry.Entity;
+                    if (await Context.FindAsync<T>(entity.Model1Id, entity.Model2Id) != null)
+                    {
+                        throw;
+                    }
+                }
             }
         }
 

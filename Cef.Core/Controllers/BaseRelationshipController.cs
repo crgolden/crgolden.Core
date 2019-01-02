@@ -1,6 +1,7 @@
 ﻿namespace Cef.Core.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Interfaces;
     using JetBrains.Annotations;
@@ -77,6 +78,21 @@
             }
         }
 
+        [HttpPut]
+        public virtual async Task<IActionResult> EditRange([FromBody] List<T> relationships)
+        {
+            try
+            {
+                await Service.Edit(relationships);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return BadRequest(relationships);
+            }
+        }
+
         [HttpPost]
         public virtual async Task<IActionResult> Create([FromBody] T relationship)
         {
@@ -89,6 +105,21 @@
             {
                 Logger.LogError(e, e.Message);
                 return BadRequest(relationship);
+            }
+        }
+
+        [HttpPost]
+        public virtual async Task<IActionResult> CreateRange([FromBody] List<T> relationships)
+        {
+            try
+            {
+                var created = await Service.Create(relationships);
+                return Ok(created);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, e.Message);
+                return BadRequest(relationships);
             }
         }
 

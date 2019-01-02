@@ -11,8 +11,10 @@
     {
         IEnumerable<T> Index();
         Task<T> Details(Guid id);
-        Task<T> Create(T model);
-        Task Edit(T model);
+        Task<T> Create(T model, DateTime? created = null);
+        Task<List<T>> Create(List<T> models, DateTime? created = null);
+        Task Edit(T model, DateTime? updated = null);
+        Task Edit(List<T> models, DateTime? updated = null);
         Task Delete(Guid id);
     }
 }

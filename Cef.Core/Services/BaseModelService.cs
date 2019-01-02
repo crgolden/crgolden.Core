@@ -28,17 +28,30 @@
             return await Context.FindAsync<T>(id);
         }
 
-        public virtual async Task<T> Create(T model)
+        public virtual async Task<T> Create(T model, DateTime? created = null)
         {
-            model.Created = DateTime.Now;
+            model.Created = created ?? DateTime.Now;
             Context.Add(model);
             await Context.SaveChangesAsync();
             return model;
         }
 
-        public virtual async Task Edit(T model)
+        public virtual async Task<List<T>> Create(List<T> models, DateTime? created = null)
         {
-            model.Updated = DateTime.Now;
+            created = created ?? DateTime.Now;
+            foreach (var model in models)
+            {
+                model.Created = created.Value;
+                Context.Add(model);
+            }
+
+            await Context.SaveChangesAsync();
+            return models;
+        }
+
+        public virtual async Task Edit(T model, DateTime? updated = null)
+        {
+            model.Updated = updated ?? DateTime.Now;
             Context.Entry(model).State = EntityState.Modified;
             try
             {
@@ -46,12 +59,36 @@
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (await Context.FindAsync<T>(model.Id) == null)
+                if (await Context.FindAsync<T>(model.Id) != null)
                 {
-                    return;
+                    throw;
                 }
+            }
+        }
 
-                throw;
+        public virtual async Task Edit(List<T> models, DateTime? updated = null)
+        {
+            updated = updated ?? DateTime.Now;
+            foreach (var model in models)
+            {
+                model.Updated = updated.Value;
+                Context.Entry(model).State = EntityState.Modified;
+            }
+
+            try
+            {
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                foreach (var entry in e.Entries)
+                {
+                    var entity = (BaseModel)entry.Entity;
+                    if (await Context.FindAsync<T>(entity.Id) != null)
+                    {
+                        throw;
+                    }
+                }
             }
         }
 
