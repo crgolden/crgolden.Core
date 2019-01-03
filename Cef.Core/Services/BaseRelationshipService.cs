@@ -22,10 +22,12 @@
             Context = context;
         }
 
-        public virtual IEnumerable<T> Index()
+#pragma warning disable 1998
+        public virtual async Task<IEnumerable<T>> Index()
         {
             return Context.Set<T>().AsNoTracking();
         }
+#pragma warning restore 1998
 
         public virtual async Task<T> Details(Guid id1, Guid id2)
         {

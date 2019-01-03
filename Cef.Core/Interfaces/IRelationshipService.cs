@@ -13,7 +13,7 @@
         where T1 : BaseModel
         where T2: BaseModel
     {
-        IEnumerable<T> Index();
+        Task<IEnumerable<T>> Index();
         Task<T> Details(Guid id1, Guid id2);
         Task<T> Create(T relationship);
         Task<List<T>> CreateRange(List<T> relationships);

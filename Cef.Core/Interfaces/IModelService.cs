@@ -9,7 +9,7 @@
     [PublicAPI]
     public interface IModelService<T> where T : BaseModel
     {
-        IEnumerable<T> Index();
+        Task<IEnumerable<T>> Index();
         Task<T> Details(Guid id);
         Task<T> Create(T model);
         Task<List<T>> CreateRange(List<T> models);

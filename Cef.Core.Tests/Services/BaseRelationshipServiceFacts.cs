@@ -14,7 +14,7 @@
     public class BaseRelationshipServiceFacts : BaseServiceFacts
     {
         [Fact]
-        public void Index()
+        public async Task Index()
         {
             // Arrange
             Setup();
@@ -24,7 +24,7 @@
             var service = new RelationshipService(Context.Object);
 
             // Act
-            var index = service.Index();
+            var index = await service.Index();
 
             // Assert
             var result = Assert.IsAssignableFrom<IEnumerable<Relationship>>(index);
