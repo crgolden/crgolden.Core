@@ -33,7 +33,7 @@
         public virtual async Task<IActionResult> Index([DataSourceRequest] DataSourceRequest request = null)
         {
             var models = await Service.Index();
-            return request != null ? Ok(await models.ToDataSourceResultAsync(request)) : Ok(models);
+            return request != null ? Ok(await models.ToDataSourceResultAsync(request, ModelState)) : Ok(models);
         }
 
         [HttpGet("{id1:guid}/{id2:guid}")]
