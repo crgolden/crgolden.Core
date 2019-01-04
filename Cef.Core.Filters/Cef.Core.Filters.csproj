@@ -1,14 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>Cef.Core</RootNamespace>
+    <RootNamespace>Cef.Core.Filters</RootNamespace>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" PrivateAssets="All" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>
