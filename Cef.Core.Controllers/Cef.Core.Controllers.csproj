@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
-    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2018.3.1017" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.115" />
   </ItemGroup>
 
   <ItemGroup>
