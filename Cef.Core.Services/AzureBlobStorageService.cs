@@ -23,7 +23,7 @@
             _options = options.Value.AzureBlobStorage;
         }
 
-        public async Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName, string containerName)
+        public async Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName)
         {
             using (var stream = file.OpenReadStream())
             {
@@ -34,14 +34,14 @@
                     storageCredentials: storageCredentials,
                     useHttps: true);
                 var blobClient = storageAccount.CreateCloudBlobClient();
-                var container = blobClient.GetContainerReference(containerName);
+                var container = blobClient.GetContainerReference(_options.ImageContainer);
                 var blockBlob = container.GetBlockBlobReference(fileName);
                 await blockBlob.UploadFromStreamAsync(stream);
                 return blockBlob.Uri;
             }
         }
 
-        public async Task<Uri> UploadByteArrayToStorageAsync(byte[] buffer, string fileName, string containerName)
+        public async Task<Uri> UploadByteArrayToStorageAsync(byte[] buffer, string fileName)
         {
             var storageCredentials = new StorageCredentials(
                 accountName: _options.AccountName,
@@ -50,7 +50,7 @@
                 storageCredentials: storageCredentials,
                 useHttps: true);
             var blobClient = storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(containerName);
+            var container = blobClient.GetContainerReference(_options.ImageContainer);
             var blockBlob = container.GetBlockBlobReference(fileName);
             await blockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length);
             return blockBlob.Uri;

@@ -8,11 +8,11 @@
     [PublicAPI]
     public interface IStorageService
     {
-        Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName, string containerName);
+        Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName);
 
-        Task<Uri> UploadByteArrayToStorageAsync(byte[] buffer, string fileName, string containerName);
+        Task<Uri> UploadByteArrayToStorageAsync(byte[] buffer, string fileName);
 
-        string GetSharedAccessSignature(string fileName, string containerName);
+        string GetSharedAccessSignature(string fileName, string uri);
 
         Task DeleteAllFromStorageAsync();
     }
