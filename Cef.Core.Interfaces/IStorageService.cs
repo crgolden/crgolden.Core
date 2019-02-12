@@ -1,7 +1,6 @@
 ﻿namespace Cef.Core.Interfaces
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Http;
@@ -15,6 +14,6 @@
 
         string GetSharedAccessSignature(string fileName, string containerName);
 
-        Task DeleteAllFromStorageAsync(IEnumerable<string> containerNames);
+        Task DeleteAllFromStorageAsync();
     }
 }

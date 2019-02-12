@@ -73,7 +73,7 @@
             });
         }
 
-        public async Task DeleteAllFromStorageAsync(IEnumerable<string> containerNames)
+        public async Task DeleteAllFromStorageAsync()
         {
             var storageCredentials = new StorageCredentials(
                 accountName: _options.AccountName,
@@ -82,6 +82,11 @@
                 storageCredentials: storageCredentials,
                 useHttps: true);
             var blobClient = storageAccount.CreateCloudBlobClient();
+            var containerNames = new List<string>
+            {
+                _options.ImageContainer,
+                _options.ThumbnailContainer
+            };
             foreach (var containerName in containerNames)
             {
                 foreach (var blob in blobClient
