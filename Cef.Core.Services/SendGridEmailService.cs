@@ -9,13 +9,13 @@
     using SendGrid.Helpers.Mail;
 
     [PublicAPI]
-    public class SendGridEmailSender : IEmailSender
+    public class SendGridEmailService : IEmailService
     {
-        private readonly EmailOptions _options;
+        private readonly SendGrid _options;
 
-        public SendGridEmailSender(IOptions<EmailOptions> optionsAccessor)
+        public SendGridEmailService(IOptions<EmailOptions> options)
         {
-            _options = optionsAccessor.Value;
+            _options = options.Value.SendGridOptions;
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)

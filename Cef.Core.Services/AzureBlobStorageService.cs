@@ -1,38 +1,38 @@
-﻿namespace Cef.Core.Utilities
+﻿namespace Cef.Core.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Interfaces;
     using JetBrains.Annotations;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Options;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Auth;
     using Microsoft.WindowsAzure.Storage.Blob;
+    using Options;
 
     [PublicAPI]
-    public static class AzureFilesUtility
+    public class AzureBlobStorageService : IStorageService
     {
-        public static bool IsImage(IFormFile file)
+        private readonly AzureBlobStorage _options;
+
+        public AzureBlobStorageService(IOptions<StorageOptions> options)
         {
-            var imageExtensions = new[] {".jpg", ".png", ".gif", ".jpeg"};
-            return file.ContentType.Contains("image") ||
-                   imageExtensions.Any(x => file.FileName.EndsWith(x, StringComparison.OrdinalIgnoreCase));
+            _options = options.Value.AzureBlobStorage;
         }
 
-        public static async Task<Uri> UploadFileToStorageAsync(
-            IFormFile file,
-            string fileName,
-            string accountName,
-            string accountKey,
-            string containerName)
+        public async Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName, string containerName)
         {
             using (var stream = file.OpenReadStream())
             {
                 var storageCredentials = new StorageCredentials(
-                    accountName: accountName,
-                    keyValue: accountKey);
-                var storageAccount = new CloudStorageAccount(storageCredentials, true);
+                    accountName: _options.AccountName,
+                    keyValue: _options.AccountKey);
+                var storageAccount = new CloudStorageAccount(
+                    storageCredentials: storageCredentials,
+                    useHttps: true);
                 var blobClient = storageAccount.CreateCloudBlobClient();
                 var container = blobClient.GetContainerReference(containerName);
                 var blockBlob = container.GetBlockBlobReference(fileName);
@@ -41,17 +41,14 @@
             }
         }
 
-        public static async Task<Uri> UploadByteArrayToStorageAsync(
-            byte[] buffer,
-            string fileName,
-            string accountName,
-            string accountKey,
-            string containerName)
+        public async Task<Uri> UploadByteArrayToStorageAsync(byte[] buffer, string fileName, string containerName)
         {
             var storageCredentials = new StorageCredentials(
-                accountName: accountName,
-                keyValue: accountKey);
-            var storageAccount = new CloudStorageAccount(storageCredentials, true);
+                accountName: _options.AccountName,
+                keyValue: _options.AccountKey);
+            var storageAccount = new CloudStorageAccount(
+                storageCredentials: storageCredentials,
+                useHttps: true);
             var blobClient = storageAccount.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference(containerName);
             var blockBlob = container.GetBlockBlobReference(fileName);
@@ -59,15 +56,11 @@
             return blockBlob.Uri;
         }
 
-        public static string GetSharedAccessSignature(
-            string accountName,
-            string accountKey,
-            string containerName,
-            string fileName)
+        public string GetSharedAccessSignature(string fileName, string containerName)
         {
             var storageCredentials = new StorageCredentials(
-                accountName: accountName,
-                keyValue: accountKey);
+                accountName: _options.AccountName,
+                keyValue: _options.AccountKey);
             var storageAccount = new CloudStorageAccount(storageCredentials, true);
             var blobClient = storageAccount.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference(containerName);
@@ -80,15 +73,14 @@
             });
         }
 
-        public static async Task DeleteAllFromStorageAsync(
-            string accountName,
-            string accountKey,
-            IEnumerable<string> containerNames)
+        public async Task DeleteAllFromStorageAsync(IEnumerable<string> containerNames)
         {
             var storageCredentials = new StorageCredentials(
-                accountName: accountName,
-                keyValue: accountKey);
-            var storageAccount = new CloudStorageAccount(storageCredentials, true);
+                accountName: _options.AccountName,
+                keyValue: _options.AccountKey);
+            var storageAccount = new CloudStorageAccount(
+                storageCredentials: storageCredentials,
+                useHttps: true);
             var blobClient = storageAccount.CreateCloudBlobClient();
             foreach (var containerName in containerNames)
             {

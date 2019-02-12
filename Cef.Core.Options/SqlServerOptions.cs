@@ -1,8 +1,10 @@
 ﻿namespace Cef.Core.Options
 {
+    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
 
     [PublicAPI]
+    [ExcludeFromCodeCoverage]
     public class SqlServerOptions
     {
         public int ConnectTimeout { get; set; }

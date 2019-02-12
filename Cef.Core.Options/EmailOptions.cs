@@ -1,9 +1,18 @@
 ﻿namespace Cef.Core.Options
 {
+    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
 
     [PublicAPI]
+    [ExcludeFromCodeCoverage]
     public class EmailOptions
+    {
+        public SendGrid SendGridOptions { get; set; }
+    }
+
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    public class SendGrid
     {
         public string ApiKey { get; set; }
 

@@ -34,8 +34,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cef.Core.Factories", "Cef.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cef.Core.Transformers", "Cef.Core.Transformers\Cef.Core.Transformers.csproj", "{6C28040A-B609-4E81-BE32-CE43EEFF9628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cef.Core.Utilities", "Cef.Core.Utilities\Cef.Core.Utilities.csproj", "{CD0EC030-C8CD-49F8-AD0A-A7D84377FB88}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,10 +88,6 @@ Global
 		{6C28040A-B609-4E81-BE32-CE43EEFF9628}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C28040A-B609-4E81-BE32-CE43EEFF9628}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C28040A-B609-4E81-BE32-CE43EEFF9628}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD0EC030-C8CD-49F8-AD0A-A7D84377FB88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD0EC030-C8CD-49F8-AD0A-A7D84377FB88}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD0EC030-C8CD-49F8-AD0A-A7D84377FB88}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD0EC030-C8CD-49F8-AD0A-A7D84377FB88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
