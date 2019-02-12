@@ -8,6 +8,10 @@
     public class EmailOptions
     {
         public SendGrid SendGridOptions { get; set; }
+
+        public string Email { get; set; }
+
+        public string Name { get; set; }
     }
 
     [PublicAPI]
@@ -15,9 +19,5 @@
     public class SendGrid
     {
         public string ApiKey { get; set; }
-
-        public string Email { get; set; }
-
-        public string Name { get; set; }
     }
 }

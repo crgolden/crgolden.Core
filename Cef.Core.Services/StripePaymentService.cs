@@ -10,35 +10,36 @@
     [PublicAPI]
     public class StripePaymentService : IPaymentService
     {
-        private readonly Stripe _options;
+        private readonly CustomerService _customerService;
+        private readonly ChargeService _chargeService;
 
         public StripePaymentService(IOptions<PaymentOptions> options)
         {
-            _options = options.Value.Stripe;
+            var secretKey = options.Value.Stripe.SecretKey;
+
+            _customerService = new CustomerService(secretKey);
+            _chargeService = new ChargeService(secretKey);
         }
 
-        public async Task<string> GetCustomerAsync(string customerId)
+        public virtual async Task<string> GetCustomerAsync(string customerId)
         {
-            var customerService = new CustomerService(_options.SecretKey);
-            var customer = await customerService.GetAsync(customerId);
+            var customer = await _customerService.GetAsync(customerId).ConfigureAwait(false);
             return customer.Id;
         }
 
-        public async Task<string> CreateCustomerAsync(string email, string tokenId)
+        public virtual async Task<string> CreateCustomerAsync(string email, string tokenId)
         {
-            var customerService = new CustomerService(_options.SecretKey);
             var customerCreateOptions = new CustomerCreateOptions
             {
                 Email = email,
                 SourceToken = tokenId
             };
-            var customer = await customerService.CreateAsync(customerCreateOptions);
+            var customer = await _customerService.CreateAsync(customerCreateOptions).ConfigureAwait(false);
             return customer.Id;
         }
 
-        public async Task<string> AuthorizeAsync(string customerId, decimal amount, string currency, string description = null)
+        public virtual async Task<string> AuthorizeAsync(string customerId, decimal amount, string currency, string description = null)
         {
-            var chargeService = new ChargeService(_options.SecretKey);
             var chargeCreateOptions = new ChargeCreateOptions
             {
                 Amount = (long?) amount * 100,
@@ -47,13 +48,12 @@
                 CustomerId = customerId,
                 Capture = false
             };
-            var charge = await chargeService.CreateAsync(chargeCreateOptions);
+            var charge = await _chargeService.CreateAsync(chargeCreateOptions).ConfigureAwait(false);
             return charge.Id;
         }
 
-        public async Task<string> CaptureAsync(string customerId, decimal amount, string currency, string description = null)
+        public virtual async Task<string> CaptureAsync(string customerId, decimal amount, string currency, string description = null)
         {
-            var chargeService = new ChargeService(_options.SecretKey);
             var chargeCreateOptions = new ChargeCreateOptions
             {
                 Amount = (long?)amount * 100,
@@ -62,18 +62,17 @@
                 CustomerId = customerId,
                 Capture = true
             };
-            var charge = await chargeService.CreateAsync(chargeCreateOptions);
+            var charge = await _chargeService.CreateAsync(chargeCreateOptions).ConfigureAwait(false);
             return charge.Id;
         }
 
-        public async Task UpdateAsync(string chargeId, string description)
+        public virtual async Task UpdateAsync(string chargeId, string description)
         {
-            var chargeService = new ChargeService(_options.SecretKey);
             var chargeUpdateOptions = new ChargeUpdateOptions
             {
                 Description = description
             };
-            await chargeService.UpdateAsync(chargeId, chargeUpdateOptions);
+            await _chargeService.UpdateAsync(chargeId, chargeUpdateOptions).ConfigureAwait(false);
         }
     }
 }

@@ -6,24 +6,28 @@
     using Options;
     using SmartyStreets;
     using UsLookup = SmartyStreets.USStreetApi.Lookup;
+    using UsClient = SmartyStreets.USStreetApi.Client;
     using InternationalLookup = SmartyStreets.InternationalStreetApi.Lookup;
+    using InternationalClient = SmartyStreets.InternationalStreetApi.Client;
 
     [PublicAPI]
     public class SmartyStreetsAddressService : IAddressService
     {
-        private readonly SmartyStreets _options;
+        private readonly UsClient _usClient;
+        private readonly InternationalClient _internationalClient;
 
         public SmartyStreetsAddressService(IOptions<AddressOptions> options)
         {
-            _options = options.Value.SmartyStreets;
+            var authId = options.Value.SmartyStreets.AuthId;
+            var authToken = options.Value.SmartyStreets.AuthToken;
+            var clientBuilder = new ClientBuilder(authId, authToken);
+
+            _usClient = clientBuilder.BuildUsStreetApiClient();
+            _internationalClient = clientBuilder.BuildInternationalStreetApiClient();
         }
 
-        public bool ValidateUsAddress(AddressClaim address)
+        public virtual bool ValidateUsAddress(AddressClaim address)
         {
-            var client = new ClientBuilder(
-                    authId: _options.AuthId,
-                    authToken: _options.AuthToken)
-                .BuildUsStreetApiClient();
             var lookup = new UsLookup
             {
                 Street = address.StreetAddress,
@@ -31,16 +35,12 @@
                 State = address.Region,
                 ZipCode = address.PostalCode
             };
-            client.Send(lookup);
+            _usClient.Send(lookup);
             return lookup.Result.Count > 0;
         }
 
-        public bool ValidateInternationalAddress(AddressClaim address)
+        public virtual bool ValidateInternationalAddress(AddressClaim address)
         {
-            var client = new ClientBuilder(
-                    authId: _options.AuthId,
-                    authToken: _options.AuthToken)
-                .BuildInternationalStreetApiClient();
             var lookup = new InternationalLookup
             {
                 Address1 = address.StreetAddress,
@@ -49,7 +49,7 @@
                 PostalCode = address.PostalCode,
                 Country = address.Country
             };
-            client.Send(lookup);
+            _internationalClient.Send(lookup);
             return lookup.Result.Count > 0;
         }
     }

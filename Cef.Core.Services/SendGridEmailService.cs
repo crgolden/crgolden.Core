@@ -11,19 +11,22 @@
     [PublicAPI]
     public class SendGridEmailService : IEmailService
     {
-        private readonly SendGrid _options;
+        private readonly SendGridClient _client;
+        private readonly string _email;
+        private readonly string _name;
 
         public SendGridEmailService(IOptions<EmailOptions> options)
         {
-            _options = options.Value.SendGridOptions;
+            _client = new SendGridClient(options.Value.SendGridOptions.ApiKey);
+            _email = options.Value.Email;
+            _name = options.Value.Name;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public virtual async Task SendEmailAsync(string email, string subject, string message)
         {
-            var client = new SendGridClient(_options.ApiKey);
             var msg = new SendGridMessage
             {
-                From = new EmailAddress(_options.Email, _options.Name),
+                From = new EmailAddress(_email, _name),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
@@ -34,7 +37,7 @@
             // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
             msg.SetClickTracking(false, false);
 
-            await client.SendEmailAsync(msg);
+            await _client.SendEmailAsync(msg).ConfigureAwait(false);
         }
     }
 }
