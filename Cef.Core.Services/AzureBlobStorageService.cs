@@ -17,10 +17,14 @@
     public class AzureBlobStorageService : IStorageService
     {
         private readonly AzureBlobStorage _options;
+        private readonly string _imagesContainer;
+        private readonly string _thumbnailsContainer;
 
         public AzureBlobStorageService(IOptions<StorageOptions> options)
         {
             _options = options.Value.AzureBlobStorage;
+            _imagesContainer = options.Value.ImageContainer;
+            _thumbnailsContainer = options.Value.ThumbnailContainer;
         }
 
         public async Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName)
@@ -34,7 +38,7 @@
                     storageCredentials: storageCredentials,
                     useHttps: true);
                 var blobClient = storageAccount.CreateCloudBlobClient();
-                var container = blobClient.GetContainerReference(_options.ImageContainer);
+                var container = blobClient.GetContainerReference(_imagesContainer);
                 var blockBlob = container.GetBlockBlobReference(fileName);
                 await blockBlob.UploadFromStreamAsync(stream);
                 return blockBlob.Uri;
@@ -50,7 +54,7 @@
                 storageCredentials: storageCredentials,
                 useHttps: true);
             var blobClient = storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(_options.ImageContainer);
+            var container = blobClient.GetContainerReference(_imagesContainer);
             var blockBlob = container.GetBlockBlobReference(fileName);
             await blockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length);
             return blockBlob.Uri;
@@ -59,13 +63,13 @@
         public string GetSharedAccessSignature(string fileName, string uri)
         {
             string containerName = null;
-            if (uri.Contains(_options.ImageContainer))
+            if (uri.Contains(_imagesContainer))
             {
-                containerName = _options.ImageContainer;
+                containerName = _imagesContainer;
             }
-            else if (uri.Contains(_options.ThumbnailContainer))
+            else if (uri.Contains(_thumbnailsContainer))
             {
-                containerName = _options.ThumbnailContainer;
+                containerName = _thumbnailsContainer;
             }
 
             if (string.IsNullOrEmpty(containerName))
@@ -102,8 +106,8 @@
             var blobClient = storageAccount.CreateCloudBlobClient();
             var containerNames = new List<string>
             {
-                _options.ImageContainer,
-                _options.ThumbnailContainer
+                _imagesContainer,
+                _thumbnailsContainer
             };
             foreach (var containerName in containerNames)
             {

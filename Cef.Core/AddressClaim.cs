@@ -1,5 +1,6 @@
 ﻿namespace Cef.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
     using Newtonsoft.Json;
 
@@ -7,6 +8,7 @@
     /// https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim
     /// </summary>
     [PublicAPI]
+    [ExcludeFromCodeCoverage]
     public class AddressClaim
     {
         /// <summary>
