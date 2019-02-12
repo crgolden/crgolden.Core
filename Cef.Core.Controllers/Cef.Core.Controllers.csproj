@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -8,11 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
+    <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
     <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.115" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cef.Core.Handlers\Cef.Core.Handlers.csproj" />
+    <ProjectReference Include="..\Cef.Core.Requests\Cef.Core.Requests.csproj" />
     <ProjectReference Include="..\Cef.Core\Cef.Core.csproj" />
     <ProjectReference Include="..\Cef.Core.Interfaces\Cef.Core.Interfaces.csproj" />
   </ItemGroup>

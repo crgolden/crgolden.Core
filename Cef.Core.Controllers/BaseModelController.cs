@@ -3,12 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Interfaces;
     using JetBrains.Annotations;
-    using Kendo.Mvc.Extensions;
     using Kendo.Mvc.UI;
+    using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Requests;
 
     [Produces("application/json")]
     [Route("v1/[controller]/[action]")]
@@ -17,20 +17,26 @@
     public abstract class BaseModelController<T> : ControllerBase
         where T : BaseModel
     {
-        protected readonly IModelService<T> Service;
+        protected readonly IMediator Mediator;
         protected readonly ILogger<BaseModelController<T>> Logger;
 
-        protected BaseModelController(IModelService<T> service, ILogger<BaseModelController<T>> logger)
+        protected BaseModelController(IMediator mediator, ILogger<BaseModelController<T>> logger)
         {
-            Service = service;
+            Mediator = mediator;
             Logger = logger;
         }
 
         [HttpGet]
         public virtual async Task<IActionResult> Index([DataSourceRequest] DataSourceRequest request = null)
         {
-            var models = await Service.Index();
-            return request != null ? Ok(await models.ToDataSourceResultAsync(request, ModelState)) : Ok(models);
+            var indexRequest = new BaseModelIndexRequest
+            {
+                ModelState = ModelState,
+                Request = request
+            };
+            var indexResponse = await Mediator.Send(indexRequest);
+
+            return Ok(indexResponse);
         }
 
         [HttpGet("{id:guid}")]
@@ -38,13 +44,17 @@
         {
             try
             {
-                var model = await Service.Details(id);
-                if (model == null)
+                var detailsRequest = new BaseModelDetailsRequest<T>
+                {
+                    Id = id
+                };
+                var detailsResponse = await Mediator.Send(detailsRequest);
+                if (detailsResponse == null)
                 {
                     return NotFound(id);
                 }
 
-                return Ok(model);
+                return Ok(detailsResponse);
             }
             catch (Exception e)
             {
@@ -63,7 +73,12 @@
 
             try
             {
-                await Service.Edit(model);
+                var editRequest = new BaseModelEditRequest<T>
+                {
+                    Id = id,
+                    Model = model
+                };
+                await Mediator.Send(editRequest);
                 return NoContent();
             }
             catch (Exception e)

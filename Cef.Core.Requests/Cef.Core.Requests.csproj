@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>Cef.Core.Requests</RootNamespace>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.115" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cef.Core\Cef.Core.csproj" />
+  </ItemGroup>
+
+</Project>
