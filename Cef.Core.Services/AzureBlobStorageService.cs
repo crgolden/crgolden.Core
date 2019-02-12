@@ -56,13 +56,31 @@
             return blockBlob.Uri;
         }
 
-        public string GetSharedAccessSignature(string fileName, string containerName)
+        public string GetSharedAccessSignature(string fileName, string uri)
         {
+            string containerName = null;
+            if (uri.Contains(_options.ImageContainer))
+            {
+                containerName = _options.ImageContainer;
+            }
+            else if (uri.Contains(_options.ThumbnailContainer))
+            {
+                containerName = _options.ThumbnailContainer;
+            }
+
+            if (string.IsNullOrEmpty(containerName))
+            {
+                return null;
+            }
+
             var storageCredentials = new StorageCredentials(
                 accountName: _options.AccountName,
                 keyValue: _options.AccountKey);
-            var storageAccount = new CloudStorageAccount(storageCredentials, true);
+            var storageAccount = new CloudStorageAccount(
+                storageCredentials: storageCredentials,
+                useHttps: true);
             var blobClient = storageAccount.CreateCloudBlobClient();
+
             var container = blobClient.GetContainerReference(containerName);
             var blockBlob = container.GetBlockBlobReference(fileName);
             return blockBlob.GetSharedAccessSignature(new SharedAccessBlobPolicy
