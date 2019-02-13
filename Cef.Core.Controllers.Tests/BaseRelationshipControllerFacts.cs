@@ -1,209 +1,263 @@
 namespace Cef.Core.Controllers.Tests
 {
     using System;
-    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Controllers;
-    using Interfaces;
     using Kendo.Mvc.UI;
+    using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
     using Moq;
+    using Requests.BaseRelationship;
     using Xunit;
 
-    public class BaseRelationshipControllerFacts
+    [ExcludeFromCodeCoverage]
+    public class BaseRelationshipControllerFacts : BaseControllerFacts<RelationshipController>
     {
-        private Mock<IRelationshipService<Relationship, BaseModel, BaseModel>> _service;
-        private Mock<ILogger<RelationshipController>> _logger;
-
         [Fact]
         public async Task Index_Ok()
         {
-            Setup();
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var index = await controller.Index();
-            var result = Assert.IsType<OkObjectResult>(index);
-            Assert.IsAssignableFrom<IEnumerable<Relationship>>(result.Value);
-        }
+            // Arrange
+            var dataSourceRequest = new DataSourceRequest();
+            var dataSourceResult = new DataSourceResult();
+            Mediator.Setup(x => x.Send(It.Is<IndexRequest<Relationship, BaseModel, BaseModel>>(y =>
+                    y.Request.Equals(dataSourceRequest)), default))
+                .ReturnsAsync(dataSourceResult);
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-        [Fact]
-        public async Task Index_DataSourceRequest_Ok()
-        {
-            Setup();
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var index = await controller.Index(new DataSourceRequest());
+            // Act
+            var index = await controller.Index(dataSourceRequest).ConfigureAwait(false);
+
+            // Assert
             var result = Assert.IsType<OkObjectResult>(index);
-            Assert.IsAssignableFrom<DataSourceResult>(result.Value);
+            Assert.Equal(dataSourceResult, result.Value);
         }
 
         [Fact]
         public async Task Details_Ok()
         {
-            Setup();
-            _service.Setup(x => x.Details(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(Task.FromResult(new Relationship()));
-
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var details = await controller.Details(Guid.NewGuid(), Guid.NewGuid());
-            var result = Assert.IsType<OkObjectResult>(details);
-            Assert.IsAssignableFrom<Relationship>(result.Value);
-        }
-
-        [Fact]
-        public async Task Details_Bad_Request_Id()
-        {
-            Setup();
-            var id1 = Guid.NewGuid();
-            var id2 = Guid.NewGuid();
-            _service.Setup(x => x.Details(It.IsAny<Guid>(), It.IsAny<Guid>())).Throws(new Exception());
-
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var details = await controller.Details(id1, id2);
-            var result = Assert.IsType<BadRequestObjectResult>(details);
-            Assert.Equal($"{{ id1 = {id1}, id2 = {id2} }}", $"{result.Value}");
-        }
-
-        [Fact]
-        public async Task Details_Not_Found_Id()
-        {
-            Setup();
-            var id1 = Guid.NewGuid();
-            var id2 = Guid.NewGuid();
-            _service.Setup(x => x.Details(It.IsAny<Guid>(), It.IsAny<Guid>())).Returns(Task.FromResult(default(Relationship)));
-
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var details = await controller.Details(id1, id2);
-            var result = Assert.IsType<NotFoundObjectResult>(details);
-            Assert.Equal($"{{ id1 = {id1}, id2 = {id2} }}", $"{result.Value}");
-        }
-
-        [Fact]
-        public async Task Edit_No_Content()
-        {
-            Setup();
+            // Arrange
             var relationship = new Relationship
             {
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            _service.Setup(x => x.Edit(relationship)).Returns(Task.FromResult(relationship));
+            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
+                    y.Id1.Equals(relationship.Model1Id) && y.Id2.Equals(relationship.Model2Id)), default))
+                .ReturnsAsync(relationship);
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship);
+            // Act
+            var details = await controller.Details(relationship.Model1Id, relationship.Model2Id).ConfigureAwait(false);
+
+            // Assert
+            var result = Assert.IsType<OkObjectResult>(details);
+            Assert.Equal(relationship, result.Value);
+        }
+
+        [Fact]
+        public async Task Details_Bad_Request_Id()
+        {
+            // Arrange
+            var relationship = new Relationship
+            {
+                Model1Id = Guid.NewGuid(),
+                Model2Id = Guid.NewGuid()
+            };
+            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
+                    y.Id1.Equals(relationship.Model1Id) && y.Id2.Equals(relationship.Model2Id)), default))
+                .ThrowsAsync(new Exception());
+            var controller = new RelationshipController(Mediator.Object, Logger);
+
+            // Act
+            var details = await controller.Details(relationship.Model1Id, relationship.Model2Id).ConfigureAwait(false);
+            
+            // Assert
+            var result = Assert.IsType<BadRequestObjectResult>(details);
+            Assert.Equal($"{{ id1 = {relationship.Model1Id}, id2 = {relationship.Model2Id} }}", $"{result.Value}");
+        }
+
+        [Fact]
+        public async Task Details_Not_Found_Id()
+        {
+            // Arrange
+            var relationship = new Relationship
+            {
+                Model1Id = Guid.NewGuid(),
+                Model2Id = Guid.NewGuid()
+            };
+            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
+                    y.Id1.Equals(relationship.Model1Id) && y.Id2.Equals(relationship.Model2Id)), default))
+                .ReturnsAsync(default(Relationship));
+            var controller = new RelationshipController(Mediator.Object, Logger);
+
+            // Act
+            var details = await controller.Details(relationship.Model1Id, relationship.Model2Id).ConfigureAwait(false);
+
+            // Assert
+            var result = Assert.IsType<NotFoundObjectResult>(details);
+            Assert.Equal($"{{ id1 = {relationship.Model1Id}, id2 = {relationship.Model2Id} }}", $"{result.Value}");
+        }
+
+        [Fact]
+        public async Task Edit_No_Content()
+        {
+            // Arrange
+            var relationship = new Relationship
+            {
+                Model1Id = Guid.NewGuid(),
+                Model2Id = Guid.NewGuid()
+            };
+            var controller = new RelationshipController(Mediator.Object, Logger);
+
+            // Act
+            var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship).ConfigureAwait(false);
+
+            // Assert
             Assert.IsType<NoContentResult>(edit);
         }
 
         [Fact]
         public async Task Edit_Bad_Request_Id1()
         {
-            Setup();
+            // Arrange
             var relationship = new Relationship
             {
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
+            var id1 = Guid.NewGuid();
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var edit = await controller.Edit(Guid.NewGuid(), relationship.Model2Id, relationship);
+            // Act
+            var edit = await controller.Edit(id1, relationship.Model2Id, relationship).ConfigureAwait(false);
+
+            // Assert
             var result = Assert.IsType<BadRequestObjectResult>(edit);
-            Assert.IsAssignableFrom<Relationship>(result.Value);
+            Assert.Equal($"{{ id1 = {id1}, Model1Id = {relationship.Model1Id} }}", $"{result.Value}");
         }
 
         [Fact]
         public async Task Edit_Bad_Request_Id2()
         {
-            Setup();
+            // Arrange
             var relationship = new Relationship
             {
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
+            var id2 = Guid.NewGuid();
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var edit = await controller.Edit(relationship.Model1Id, Guid.NewGuid(), relationship);
+            // Act
+            var edit = await controller.Edit(relationship.Model1Id, id2, relationship).ConfigureAwait(false);
+
+            // Assert
             var result = Assert.IsType<BadRequestObjectResult>(edit);
-            Assert.IsAssignableFrom<Relationship>(result.Value);
+            Assert.Equal($"{{ id2 = {id2}, Model2Id = {relationship.Model2Id} }}", $"{result.Value}");
         }
 
         [Fact]
         public async Task Edit_Bad_Request_Object()
         {
-            Setup();
+            // Arrange
             var relationship = new Relationship
             {
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            _service.Setup(x => x.Edit(relationship)).Throws(new Exception());
+            Mediator.Setup(x => x.Send(It.Is<EditRequest<Relationship, BaseModel, BaseModel>>(y =>
+                    y.Relationship.Equals(relationship)), default))
+                .ThrowsAsync(new Exception());
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship);
+            // Act
+            var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship).ConfigureAwait(false);
+
+            // Assert
             var result = Assert.IsType<BadRequestObjectResult>(edit);
-            Assert.IsAssignableFrom<Relationship>(result.Value);
+            Assert.Equal(relationship, result.Value);
         }
 
         [Fact]
         public async Task Create_Ok()
         {
-            Setup();
+            // Arrange
             var relationship = new Relationship();
-            _service.Setup(x => x.Create(relationship)).Returns(Task.FromResult(relationship));
+            Mediator.Setup(x => x.Send(It.Is<CreateRequest<Relationship, BaseModel, BaseModel>>(y =>
+                    y.Relationship.Equals(relationship)), default))
+                .ReturnsAsync(relationship);
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var create = await controller.Create(relationship);
+            // Act
+            var create = await controller.Create(relationship).ConfigureAwait(false);
+
+            // Assert
             var result = Assert.IsType<OkObjectResult>(create);
-            Assert.IsAssignableFrom<Relationship>(result.Value);
+            Assert.Equal(relationship, result.Value);
         }
 
         [Fact]
         public async Task Create_Bad_Request_Object()
         {
-            Setup();
+            // Arrange
             var relationship = new Relationship();
-            _service.Setup(x => x.Create(relationship)).Throws(new Exception());
+            Mediator.Setup(x => x.Send(It.Is<CreateRequest<Relationship, BaseModel, BaseModel>>(y =>
+                    y.Relationship.Equals(relationship)), default))
+                .ThrowsAsync(new Exception());
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var create = await controller.Create(relationship);
+            // Act
+            var create = await controller.Create(relationship).ConfigureAwait(false);
+
+            // Assert
             var result = Assert.IsType<BadRequestObjectResult>(create);
-            Assert.IsAssignableFrom<Relationship>(result.Value);
+            Assert.Equal(relationship, result.Value);
         }
 
         [Fact]
         public async Task Delete_No_Content()
         {
-            Setup();
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var delete = await controller.Delete(new Guid(), new Guid());
+            // Arrange
+            var controller = new RelationshipController(Mediator.Object, Logger);
+
+            // Act
+            var delete = await controller.Delete(Guid.NewGuid(), Guid.NewGuid()).ConfigureAwait(false);
+
+            // Assert
             Assert.IsType<NoContentResult>(delete);
         }
 
         [Fact]
         public async Task Delete_Bad_Request_Id()
         {
-            Setup();
+            // Arrange
             var id1 = Guid.NewGuid();
             var id2 = Guid.NewGuid();
-            _service.Setup(x => x.Delete(It.IsAny<Guid>(), It.IsAny<Guid>())).Throws(new Exception());
+            Mediator.Setup(x => x.Send(It.Is<DeleteRequest>(y =>
+                    y.Id1.Equals(id1) && y.Id2.Equals(id2)), default))
+                .ThrowsAsync(new Exception());
+            var controller = new RelationshipController(Mediator.Object, Logger);
 
-            var controller = new RelationshipController(_service.Object, _logger.Object);
-            var delete = await controller.Delete(id1, id2);
+            // Act
+            var delete = await controller.Delete(id1, id2).ConfigureAwait(false);
+
+            // Assert
             var result = Assert.IsType<BadRequestObjectResult>(delete);
             Assert.Equal($"{{ id1 = {id1}, id2 = {id2} }}", $"{result.Value}");
         }
+    }
 
-        public class Relationship : BaseRelationship<BaseModel, BaseModel>
-        {
-        }
+    [ExcludeFromCodeCoverage]
+    public class Relationship : BaseRelationship<BaseModel, BaseModel>
+    {
+    }
 
-        public class RelationshipController : BaseRelationshipController<Relationship, BaseModel, BaseModel>
-        {
-            public RelationshipController(IRelationshipService<Relationship, BaseModel, BaseModel> service, ILogger<RelationshipController> logger)
-                : base(service, logger) { }
-        }
-
-        private void Setup()
-        {
-            _service = new Mock<IRelationshipService<Relationship, BaseModel, BaseModel>>();
-            _logger = new Mock<ILogger<RelationshipController>>();
-        }
+    [ExcludeFromCodeCoverage]
+    public class RelationshipController : BaseRelationshipController<Relationship, BaseModel, BaseModel>
+    {
+        public RelationshipController(IMediator mediator, ILogger<RelationshipController> logger)
+            : base(mediator, logger) { }
     }
 }

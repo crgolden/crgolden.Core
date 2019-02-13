@@ -1,6 +1,7 @@
 ﻿namespace Cef.Core.Factories
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
     using Microsoft.ApplicationInsights.AspNetCore;
     using Microsoft.ApplicationInsights.Extensibility;
@@ -9,6 +10,7 @@
     using Microsoft.Extensions.Options;
 
     [PublicAPI]
+    [ExcludeFromCodeCoverage]
     public class SnapshotCollectorTelemetryProcessorFactory : ITelemetryProcessorFactory
     {
         private readonly IServiceProvider _serviceProvider;

@@ -1,6 +1,7 @@
 namespace Cef.Core.Filters.Tests
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Filters;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace Cef.Core.Filters.Tests
     using Moq;
     using Xunit;
 
+    [ExcludeFromCodeCoverage]
     public class ModelStatePageFilterFacts
     {
         [Fact]

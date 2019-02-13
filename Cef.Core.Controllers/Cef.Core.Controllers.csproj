@@ -14,10 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cef.Core.Handlers\Cef.Core.Handlers.csproj" />
     <ProjectReference Include="..\Cef.Core.Requests\Cef.Core.Requests.csproj" />
     <ProjectReference Include="..\Cef.Core\Cef.Core.csproj" />
-    <ProjectReference Include="..\Cef.Core.Interfaces\Cef.Core.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

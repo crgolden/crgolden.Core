@@ -2,10 +2,12 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Diagnostics.CodeAnalysis;
     using JetBrains.Annotations;
     using Newtonsoft.Json;
 
     [PublicAPI]
+    [ExcludeFromCodeCoverage]
     public abstract class BaseRelationship<T1, T2> where T1 : BaseModel where T2 : BaseModel
     {
         [Required]

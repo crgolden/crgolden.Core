@@ -2,13 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using JetBrains.Annotations;
     using Kendo.Mvc.UI;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-    using Requests;
+    using Requests.BaseModel;
 
     [Produces("application/json")]
     [Route("v1/[controller]/[action]")]
@@ -29,12 +30,12 @@
         [HttpGet]
         public virtual async Task<IActionResult> Index([DataSourceRequest] DataSourceRequest request = null)
         {
-            var indexRequest = new BaseModelIndexRequest
+            var indexRequest = new IndexRequest<T>
             {
                 ModelState = ModelState,
                 Request = request
             };
-            var indexResponse = await Mediator.Send(indexRequest);
+            var indexResponse = await Mediator.Send(indexRequest).ConfigureAwait(false);
 
             return Ok(indexResponse);
         }
@@ -44,11 +45,16 @@
         {
             try
             {
-                var detailsRequest = new BaseModelDetailsRequest<T>
+                if (id.Equals(Guid.Empty))
+                {
+                    return BadRequest(id);
+                }
+
+                var detailsRequest = new DetailsRequest<T>
                 {
                     Id = id
                 };
-                var detailsResponse = await Mediator.Send(detailsRequest);
+                var detailsResponse = await Mediator.Send(detailsRequest).ConfigureAwait(false);
                 if (detailsResponse == null)
                 {
                     return NotFound(id);
@@ -66,19 +72,18 @@
         [HttpPut("{id:guid}")]
         public virtual async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] T model)
         {
-            if (!id.Equals(model?.Id))
+            if (id.Equals(Guid.Empty) || !id.Equals(model?.Id))
             {
                 return BadRequest(id);
             }
 
             try
             {
-                var editRequest = new BaseModelEditRequest<T>
+                var editRequest = new EditRequest<T>
                 {
-                    Id = id,
                     Model = model
                 };
-                await Mediator.Send(editRequest);
+                await Mediator.Send(editRequest).ConfigureAwait(false);
                 return NoContent();
             }
             catch (Exception e)
@@ -93,7 +98,17 @@
         {
             try
             {
-                await Service.EditRange(models);
+                var invalidModels = models.Where(x => x.Id.Equals(Guid.Empty));
+                if (invalidModels.Any())
+                {
+                    return BadRequest(invalidModels);
+                }
+
+                var editRangeRequest = new EditRangeRequest<T>
+                {
+                    Models = models
+                };
+                await Mediator.Send(editRangeRequest).ConfigureAwait(false);
                 return NoContent();
             }
             catch (Exception e)
@@ -108,7 +123,11 @@
         {
             try
             {
-                var created = await Service.Create(model);
+                var createRequest = new CreateRequest<T>
+                {
+                    Model = model
+                };
+                var created = await Mediator.Send(createRequest).ConfigureAwait(false);
                 return Ok(created);
             }
             catch (Exception e)
@@ -123,7 +142,11 @@
         {
             try
             {
-                var created = await Service.CreateRange(models);
+                var createRangeRequest = new CreateRangeRequest<List<T>, T>
+                {
+                    Models = models
+                };
+                var created = await Mediator.Send(createRangeRequest).ConfigureAwait(false);
                 return Ok(created);
             }
             catch (Exception e)
@@ -138,7 +161,16 @@
         {
             try
             {
-                await Service.Delete(id);
+                if (id.Equals(Guid.Empty))
+                {
+                    return BadRequest(id);
+                }
+
+                var deleteRequest = new DeleteRequest
+                {
+                    Id = id
+                };
+                await Mediator.Send(deleteRequest).ConfigureAwait(false);
                 return NoContent();
             }
             catch (Exception e)
