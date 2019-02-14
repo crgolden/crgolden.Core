@@ -111,7 +111,8 @@
         {
             try
             {
-                var invalidRelationships = relationships.Where(x => x.Model1Id.Equals(Guid.Empty) || x.Model2Id.Equals(Guid.Empty));
+                var invalidRelationships = relationships.Where(x => x.Model1Id.Equals(Guid.Empty) ||
+                                                                    x.Model2Id.Equals(Guid.Empty));
                 if (invalidRelationships.Any())
                 {
                     return BadRequest(invalidRelationships);
@@ -136,6 +137,16 @@
         {
             try
             {
+                if (relationship.Model1Id.Equals(Guid.Empty))
+                {
+                    return BadRequest(relationship.Model1Id);
+                }
+
+                if (relationship.Model2Id.Equals(Guid.Empty))
+                {
+                    return BadRequest(relationship.Model2Id);
+                }
+
                 var createRequest = new CreateRequest<T, T1, T2>
                 {
                     Relationship = relationship
@@ -155,6 +166,13 @@
         {
             try
             {
+                var invalidRelationships = relationships.Where(x => x.Model1Id.Equals(Guid.Empty) ||
+                                                                    x.Model2Id.Equals(Guid.Empty));
+                if (invalidRelationships.Any())
+                {
+                    return BadRequest(invalidRelationships);
+                }
+
                 var createRangeRequest = new CreateRangeRequest<List<T>, T, T1, T2>
                 {
                     Relationships = relationships

@@ -1,10 +1,8 @@
 ﻿namespace Cef.Core.RequestHandlers.Tests.BaseModel
 {
-    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
     using RequestHandlers.BaseModel;
     using Requests.BaseModel;
     using Xunit;
@@ -12,17 +10,24 @@
     [ExcludeFromCodeCoverage]
     public class DeleteRequestHandlerFacts
     {
+        private static string DatabaseNamePrefix => typeof(DeleteRequestHandlerFacts).FullName;
+
         [Fact]
         public async Task Delete()
         {
             // Arrange
-            var model = new Model
+            var model = new Model();
+            var databaseName = $"{DatabaseNamePrefix}.{nameof(Delete)}";
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+            using (var context = new Context(options))
             {
-                Id = Guid.NewGuid()
-            };
-            var context = new Mock<DbContext>();
-            context.Setup(x => x.FindAsync<Model>(model.Id)).ReturnsAsync(model);
-            var requestHandler = new ModelDeleteRequestHandler(context.Object);
+                context.Add(model);
+                await context.SaveChangesAsync();
+            }
+
+            var requestHandler = new ModelDeleteRequestHandler(new Context(options));
             var request = new DeleteRequest
             {
                 Id = model.Id
@@ -32,11 +37,14 @@
             await requestHandler.Handle(request).ConfigureAwait(false);
 
             // Assert
-            context.Verify(m => m.Remove(It.Is<Model>(x => x.Id.Equals(model.Id))), Times.Once);
-            context.Verify(m => m.SaveChangesAsync(default), Times.Once);
+            using (var context = new Context(options))
+            {
+                model = await context.FindAsync<Model>(model.Id);
+                Assert.Null(model);
+            }
         }
 
-        private class ModelDeleteRequestHandler : DeleteHandler<Model>
+        private class ModelDeleteRequestHandler : DeleteRequestHandler<Model>
         {
             public ModelDeleteRequestHandler(DbContext context) : base(context)
             {

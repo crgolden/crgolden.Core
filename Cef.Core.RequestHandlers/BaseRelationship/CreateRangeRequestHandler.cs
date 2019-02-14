@@ -11,7 +11,7 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class CreateRangeHandler<T, TRelationship, T1, T2> : IRequestHandler<CreateRangeRequest<T, TRelationship, T1, T2>, T>
+    public abstract class CreateRangeRequestHandler<T, TRelationship, T1, T2> : IRequestHandler<CreateRangeRequest<T, TRelationship, T1, T2>, T>
         where T : IEnumerable<TRelationship>
         where TRelationship : BaseRelationship<T1, T2>
         where T1 : BaseModel
@@ -19,7 +19,7 @@
     {
         protected readonly DbContext Context;
 
-        protected CreateRangeHandler(DbContext context)
+        protected CreateRangeRequestHandler(DbContext context)
         {
             Context = context;
         }

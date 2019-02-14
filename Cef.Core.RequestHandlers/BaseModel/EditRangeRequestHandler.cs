@@ -11,12 +11,12 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class EditRangeHandler<T> : IRequestHandler<EditRangeRequest<T>>
+    public abstract class EditRangeRequestHandler<T> : IRequestHandler<EditRangeRequest<T>>
         where T : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected EditRangeHandler(DbContext context)
+        protected EditRangeRequestHandler(DbContext context)
         {
             Context = context;
         }

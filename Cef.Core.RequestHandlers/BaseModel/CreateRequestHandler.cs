@@ -10,12 +10,12 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class CreateHandler<T> : IRequestHandler<CreateRequest<T>, T>
+    public abstract class CreateRequestHandler<T> : IRequestHandler<CreateRequest<T>, T>
         where T : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected CreateHandler(DbContext context)
+        protected CreateRequestHandler(DbContext context)
         {
             Context = context;
         }

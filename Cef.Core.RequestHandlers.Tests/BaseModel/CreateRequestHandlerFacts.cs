@@ -4,7 +4,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
     using RequestHandlers.BaseModel;
     using Requests.BaseModel;
     using Xunit;
@@ -12,6 +11,8 @@
     [ExcludeFromCodeCoverage]
     public class CreateRequestHandlerFacts
     {
+        private static string DatabaseNamePrefix => typeof(CreateRequestHandlerFacts).FullName;
+
         [Fact]
         public async Task Create()
         {
@@ -20,8 +21,11 @@
             {
                 Name = "Name"
             };
-            var context = new Mock<DbContext>();
-            var requestHandler = new ModelCreateRequestHandler(context.Object);
+            var databaseName = $"{DatabaseNamePrefix}.{nameof(Create)}";
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+            var requestHandler = new ModelCreateRequestHandler(new Context(options));
             var request = new CreateRequest<Model>
             {
                 Model = model
@@ -33,11 +37,14 @@
             // Assert
             var result = Assert.IsType<Model>(create);
             Assert.InRange(result.Created, DateTime.MinValue, DateTime.Now);
-            context.Verify(m => m.Add(It.Is<Model>(x => x.Name.Equals(model.Name))), Times.Once);
-            context.Verify(m => m.SaveChangesAsync(default), Times.Once);
+            using (var context = new Context(options))
+            {
+                model = await context.Set<Model>().SingleOrDefaultAsync(x => x.Name.Equals(model.Name));
+                Assert.NotNull(model);
+            }
         }
 
-        private class ModelCreateRequestHandler : CreateHandler<Model>
+        private class ModelCreateRequestHandler : CreateRequestHandler<Model>
         {
             public ModelCreateRequestHandler(DbContext context) : base(context)
             {

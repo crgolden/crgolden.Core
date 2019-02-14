@@ -11,12 +11,12 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class IndexHandler<T> : IRequestHandler<IndexRequest<T>, DataSourceResult>
+    public abstract class IndexRequestHandler<T> : IRequestHandler<IndexRequest<T>, DataSourceResult>
         where T : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected IndexHandler(DbContext context)
+        protected IndexRequestHandler(DbContext context)
         {
             Context = context;
         }

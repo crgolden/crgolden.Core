@@ -4,10 +4,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.ChangeTracking;
-    using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-    using Microsoft.EntityFrameworkCore.Metadata;
-    using Moq;
     using RequestHandlers.BaseRelationship;
     using Requests.BaseRelationship;
     using Xunit;
@@ -15,7 +11,9 @@
     [ExcludeFromCodeCoverage]
     public class EditRequestHandlerFacts
     {
-        [Fact(Skip = "Can't mock `Entry`")]
+        private static string DatabaseNamePrefix => typeof(EditRequestHandlerFacts).FullName;
+
+        [Fact]
         public async Task Edit()
         {
             // Arrange
@@ -27,14 +25,18 @@
                 Model2Id = Guid.NewGuid(),
                 Name = name
             };
-            var context = new Mock<DbContext>();
-            var stateManager = Mock.Of<IStateManager>();
-            var entityType = Mock.Of<IEntityType>();
-            var internalEntityEntry = new Mock<InternalEntityEntry>(stateManager, entityType);
-            var entry = new Mock<EntityEntry<Relationship>>(internalEntityEntry);
-            context.Setup(x => x.Entry(relationship)).Returns(entry.Object);
-            // Unable to cast object of type 'Castle.Proxies.IEntityTypeProxy' to type 'Microsoft.EntityFrameworkCore.Metadata.Internal.EntityType'.
-            var requestHandler = new RelationshipEditRequestHandler(context.Object);
+            var databaseName = $"{DatabaseNamePrefix}.{nameof(Edit)}";
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+
+            using (var context = new Context(options))
+            {
+                context.Add(relationship);
+                await context.SaveChangesAsync();
+            }
+
+            var requestHandler = new RelationshipEditRequestHandler(new Context(options));
             var request = new EditRequest<Relationship, Model, Model>
             {
                 Relationship = new Relationship
@@ -49,11 +51,14 @@
             await requestHandler.Handle(request).ConfigureAwait(false);
 
             // Assert
-            context.Verify(x => x.Entry(It.Is<Relationship>(y => y.Name.Equals(newName))), Times.Once);
-            context.Verify(x => x.SaveChangesAsync(default), Times.Once);
+            using (var context = new Context(options))
+            {
+                relationship = await context.FindAsync<Relationship>(relationship.Model1Id, relationship.Model2Id);
+                Assert.Equal(newName, relationship.Name);
+            }
         }
 
-        private class RelationshipEditRequestHandler : EditHandler<Relationship, Model, Model>
+        private class RelationshipEditRequestHandler : EditRequestHandler<Relationship, Model, Model>
         {
             public RelationshipEditRequestHandler(DbContext context) : base(context)
             {

@@ -123,6 +123,11 @@
         {
             try
             {
+                if (!model.Id.Equals(Guid.Empty))
+                {
+                    return BadRequest(model.Id);
+                }
+
                 var createRequest = new CreateRequest<T>
                 {
                     Model = model
@@ -142,6 +147,12 @@
         {
             try
             {
+                var invalidModels = models.Where(x => !x.Id.Equals(Guid.Empty));
+                if (invalidModels.Any())
+                {
+                    return BadRequest(invalidModels);
+                }
+
                 var createRangeRequest = new CreateRangeRequest<List<T>, T>
                 {
                     Models = models

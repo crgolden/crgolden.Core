@@ -8,7 +8,9 @@
 
     [PublicAPI]
     [ExcludeFromCodeCoverage]
-    public abstract class BaseRelationship<T1, T2> where T1 : BaseModel where T2 : BaseModel
+    public abstract class BaseRelationship<T1, T2>
+        where T1 : BaseModel
+        where T2 : BaseModel
     {
         [Required]
         [JsonProperty("model1Id")]

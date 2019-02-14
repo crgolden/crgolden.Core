@@ -1,6 +1,9 @@
 ﻿namespace Cef.Core.RequestHandlers.Tests
 {
-    public class Model : Core.BaseModel
+    using System.Diagnostics.CodeAnalysis;
+
+    [ExcludeFromCodeCoverage]
+    internal class Model : Core.BaseModel
     {
     }
 }

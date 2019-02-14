@@ -11,14 +11,14 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class EditRangeHandler<T, T1, T2> : IRequestHandler<EditRangeRequest<T, T1, T2>>
+    public abstract class EditRangeRequestHandler<T, T1, T2> : IRequestHandler<EditRangeRequest<T, T1, T2>>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected EditRangeHandler(DbContext context)
+        protected EditRangeRequestHandler(DbContext context)
         {
             Context = context;
         }

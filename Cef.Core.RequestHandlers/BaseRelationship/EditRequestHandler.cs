@@ -10,14 +10,14 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class EditHandler<T, T1, T2> : IRequestHandler<EditRequest<T, T1, T2>>
+    public abstract class EditRequestHandler<T, T1, T2> : IRequestHandler<EditRequest<T, T1, T2>>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected EditHandler(DbContext context)
+        protected EditRequestHandler(DbContext context)
         {
             Context = context;
         }

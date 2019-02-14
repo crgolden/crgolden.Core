@@ -9,14 +9,14 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class DetailsHandler<T, T1, T2> : IRequestHandler<DetailsRequest<T, T1, T2>, T>
+    public abstract class DetailsRequestHandler<T, T1, T2> : IRequestHandler<DetailsRequest<T, T1, T2>, T>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected DetailsHandler(DbContext context)
+        protected DetailsRequestHandler(DbContext context)
         {
             Context = context;
         }

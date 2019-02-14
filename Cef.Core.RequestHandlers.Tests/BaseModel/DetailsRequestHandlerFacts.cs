@@ -1,10 +1,8 @@
 ﻿namespace Cef.Core.RequestHandlers.Tests.BaseModel
 {
-    using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
     using RequestHandlers.BaseModel;
     using Requests.BaseModel;
     using Xunit;
@@ -12,17 +10,24 @@
     [ExcludeFromCodeCoverage]
     public class DetailsRequestHandlerFacts
     {
+        private static string DatabaseNamePrefix => typeof(DetailsRequestHandlerFacts).FullName;
+
         [Fact]
         public async Task Details()
         {
             // Arrange
-            var model = new Model
+            var model = new Model();
+            var databaseName = $"{DatabaseNamePrefix}.{nameof(Details)}";
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+            using (var context = new Context(options))
             {
-                Id = Guid.NewGuid()
-            };
-            var context = new Mock<DbContext>();
-            context.Setup(x => x.FindAsync<Model>(model.Id)).ReturnsAsync(model);
-            var requestHandler = new ModelDetailsRequestHandler(context.Object);
+                context.Add(model);
+                await context.SaveChangesAsync();
+            }
+
+            var requestHandler = new ModelDetailsRequestHandler(new Context(options));
             var request = new DetailsRequest<Model>
             {
                 Id = model.Id
@@ -36,7 +41,7 @@
             Assert.Equal(model.Id, result.Id);
         }
 
-        private class ModelDetailsRequestHandler : DetailsHandler<Model>
+        private class ModelDetailsRequestHandler : DetailsRequestHandler<Model>
         {
             public ModelDetailsRequestHandler(DbContext context) : base(context)
             {

@@ -11,14 +11,14 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class IndexHandler<T, T1, T2> : IRequestHandler<IndexRequest<T, T1, T2>, DataSourceResult>
+    public abstract class IndexRequestHandler<T, T1, T2> : IRequestHandler<IndexRequest<T, T1, T2>, DataSourceResult>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected IndexHandler(DbContext context)
+        protected IndexRequestHandler(DbContext context)
         {
             Context = context;
         }

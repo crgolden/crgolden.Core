@@ -11,13 +11,13 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class CreateRangeHandler<T, TModel> : IRequestHandler<CreateRangeRequest<T, TModel>, T>
+    public abstract class CreateRangeRequestHandler<T, TModel> : IRequestHandler<CreateRangeRequest<T, TModel>, T>
         where T : IEnumerable<TModel>
         where TModel : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected CreateRangeHandler(DbContext context)
+        protected CreateRangeRequestHandler(DbContext context)
         {
             Context = context;
         }

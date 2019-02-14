@@ -9,12 +9,12 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class DetailsHandler<T> : IRequestHandler<DetailsRequest<T>, T>
+    public abstract class DetailsRequestHandler<T> : IRequestHandler<DetailsRequest<T>, T>
         where T : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected DetailsHandler(DbContext context)
+        protected DetailsRequestHandler(DbContext context)
         {
             Context = context;
         }

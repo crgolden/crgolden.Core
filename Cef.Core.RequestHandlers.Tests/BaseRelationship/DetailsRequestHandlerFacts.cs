@@ -4,7 +4,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
     using RequestHandlers.BaseRelationship;
     using Requests.BaseRelationship;
     using Xunit;
@@ -12,6 +11,8 @@
     [ExcludeFromCodeCoverage]
     public class DetailsRequestHandlerFacts
     {
+        private static string DatabaseNamePrefix => typeof(DetailsRequestHandlerFacts).FullName;
+
         [Fact]
         public async Task Details()
         {
@@ -21,10 +22,17 @@
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            var context = new Mock<DbContext>();
-            context.Setup(x => x.FindAsync<Relationship>(relationship.Model1Id, relationship.Model2Id))
-                .ReturnsAsync(relationship);
-            var requestHandler = new RelationshipDetailsRequestHandler(context.Object);
+            var databaseName = $"{DatabaseNamePrefix}.{nameof(Details)}";
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+            using (var context = new Context(options))
+            {
+                context.Add(relationship);
+                await context.SaveChangesAsync();
+            }
+
+            var requestHandler = new RelationshipDetailsRequestHandler(new Context(options));
             var request = new DetailsRequest<Relationship, Model, Model>
             {
                 Id1 = relationship.Model1Id,
@@ -40,7 +48,7 @@
             Assert.Equal(relationship.Model2Id, result.Model2Id);
         }
 
-        private class RelationshipDetailsRequestHandler : DetailsHandler<Relationship, Model, Model>
+        private class RelationshipDetailsRequestHandler : DetailsRequestHandler<Relationship, Model, Model>
         {
             public RelationshipDetailsRequestHandler(DbContext context) : base(context)
             {

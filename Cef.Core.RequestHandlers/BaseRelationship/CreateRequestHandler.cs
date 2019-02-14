@@ -10,14 +10,14 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class CreateHandler<T, T1, T2> : IRequestHandler<CreateRequest<T, T1, T2>, T>
+    public abstract class CreateRequestHandler<T, T1, T2> : IRequestHandler<CreateRequest<T, T1, T2>, T>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected CreateHandler(DbContext context)
+        protected CreateRequestHandler(DbContext context)
         {
             Context = context;
         }

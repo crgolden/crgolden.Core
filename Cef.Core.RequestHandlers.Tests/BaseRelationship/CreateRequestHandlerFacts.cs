@@ -4,7 +4,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
     using RequestHandlers.BaseRelationship;
     using Requests.BaseRelationship;
     using Xunit;
@@ -12,6 +11,8 @@
     [ExcludeFromCodeCoverage]
     public class CreateRequestHandlerFacts
     {
+        private static string DatabaseNamePrefix => typeof(CreateRequestHandlerFacts).FullName;
+
         [Fact]
         public async Task Create()
         {
@@ -21,8 +22,11 @@
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            var context = new Mock<DbContext>();
-            var requestHandler = new RelationshipCreateRequestHandler(context.Object);
+            var databaseName = $"{DatabaseNamePrefix}.{nameof(Create)}";
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+            var requestHandler = new RelationshipCreateRequestHandler(new Context(options));
             var request = new CreateRequest<Relationship, Model, Model>
             {
                 Relationship = relationship
@@ -34,13 +38,14 @@
             // Assert
             var result = Assert.IsType<Relationship>(create);
             Assert.InRange(result.Created, DateTime.MinValue, DateTime.Now);
-            context.Verify(m => m.Add(It.Is<Relationship>(x =>
-                x.Model1Id.Equals(relationship.Model1Id) &&
-                x.Model2Id.Equals(relationship.Model2Id))), Times.Once);
-            context.Verify(m => m.SaveChangesAsync(default), Times.Once);
+            using (var context = new Context(options))
+            {
+                relationship = await context.FindAsync<Relationship>(relationship.Model1Id, relationship.Model2Id);
+                Assert.NotNull(relationship);
+            }
         }
 
-        private class RelationshipCreateRequestHandler : CreateHandler<Relationship, Model, Model>
+        private class RelationshipCreateRequestHandler : CreateRequestHandler<Relationship, Model, Model>
         {
             public RelationshipCreateRequestHandler(DbContext context) : base(context)
             {

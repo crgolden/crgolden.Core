@@ -4,7 +4,6 @@
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
     using RequestHandlers.BaseRelationship;
     using Requests.BaseRelationship;
     using Xunit;
@@ -12,6 +11,8 @@
     [ExcludeFromCodeCoverage]
     public class DeleteRequestHandlerFacts
     {
+        private static string DatabaseNamePrefix => typeof(DeleteRequestHandlerFacts).FullName;
+
         [Fact]
         public async Task Delete()
         {
@@ -21,10 +22,17 @@
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            var context = new Mock<DbContext>();
-            context.Setup(x => x.FindAsync<Relationship>(relationship.Model1Id, relationship.Model2Id))
-                .ReturnsAsync(relationship);
-            var requestHandler = new RelationshipDeleteRequestHandler(context.Object);
+            var databaseName = $"{DatabaseNamePrefix}.{nameof(Delete)}";
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName)
+                .Options;
+            using (var context = new Context(options))
+            {
+                context.Add(relationship);
+                await context.SaveChangesAsync();
+            }
+
+            var requestHandler = new RelationshipDeleteRequestHandler(new Context(options));
             var request = new DeleteRequest
             {
                 Id1 = relationship.Model1Id,
@@ -35,13 +43,14 @@
             await requestHandler.Handle(request).ConfigureAwait(false);
 
             // Assert
-            context.Verify(m => m.Remove(It.Is<Relationship>(x =>
-                x.Model1Id .Equals(relationship.Model1Id) &&
-                x.Model2Id.Equals(relationship.Model2Id))), Times.Once);
-            context.Verify(m => m.SaveChangesAsync(default), Times.Once);
+            using (var context = new Context(options))
+            {
+                relationship = await context.FindAsync<Relationship>(relationship.Model1Id, relationship.Model2Id);
+                Assert.Null(relationship);
+            }
         }
 
-        private class RelationshipDeleteRequestHandler : DeleteHandler<Relationship, Model, Model>
+        private class RelationshipDeleteRequestHandler : DeleteRequestHandler<Relationship, Model, Model>
         {
             public RelationshipDeleteRequestHandler(DbContext context) : base(context)
             {

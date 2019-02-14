@@ -1,9 +1,11 @@
 ﻿namespace Cef.Core.Controllers.Tests
 {
+    using System.Diagnostics.CodeAnalysis;
     using MediatR;
     using Microsoft.Extensions.Logging;
     using Moq;
 
+    [ExcludeFromCodeCoverage]
     public abstract class BaseControllerFacts<T>
     {
         protected readonly Mock<IMediator> Mediator;

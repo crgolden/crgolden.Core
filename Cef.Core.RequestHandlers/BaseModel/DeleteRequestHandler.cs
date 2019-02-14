@@ -1,4 +1,4 @@
-﻿namespace Cef.Core.RequestHandlers.BaseRelationship
+﻿namespace Cef.Core.RequestHandlers.BaseModel
 {
     using System.Threading;
     using System.Threading.Tasks;
@@ -6,27 +6,25 @@
     using JetBrains.Annotations;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
-    using Requests.BaseRelationship;
+    using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class DeleteHandler<T, T1, T2> : IRequestHandler<DeleteRequest>
-        where T : BaseRelationship<T1, T2>
-        where T1 : BaseModel
-        where T2 : BaseModel
+    public abstract class DeleteRequestHandler<T> : IRequestHandler<DeleteRequest>
+        where T : BaseModel
     {
         protected readonly DbContext Context;
 
-        protected DeleteHandler(DbContext context)
+        protected DeleteRequestHandler(DbContext context)
         {
             Context = context;
         }
 
         public virtual async Task<Unit> Handle(DeleteRequest request, CancellationToken cancellationToken = default)
         {
-            var relationship = await Context.FindAsync<T>(request.Id1, request.Id2);
-            if (relationship == null) return default;
+            var model = await Context.FindAsync<T>(request.Id);
+            if (model == null) return default;
 
-            Context.Remove(relationship);
+            Context.Remove(model);
             await Context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             return default;
         }
