@@ -22,7 +22,7 @@
                 .UseInMemoryDatabase(databaseName)
                 .Options;
             var requestHandler = new RelationshipIndexRequestHandler(new Context(options));
-            var request = new IndexRequest<Relationship, Model, Model>();
+            var request = new IndexRequest();
 
             // Act
             var index = await requestHandler.Handle(request).ConfigureAwait(false);
@@ -32,7 +32,7 @@
         }
 
         private class RelationshipIndexRequestHandler
-            : IndexRequestHandler<IndexRequest<Relationship, Model, Model>, Relationship, Model, Model>
+            : IndexRequestHandler<IndexRequest, Relationship, Model, Model>
         {
             public RelationshipIndexRequestHandler(DbContext context) : base(context)
             {

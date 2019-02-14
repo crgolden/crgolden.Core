@@ -22,7 +22,7 @@
                 .UseInMemoryDatabase(databaseName)
                 .Options;
             var requestHandler = new ModelIndexRequestHandler(new Context(options));
-            var request = new IndexRequest<Model>();
+            var request = new IndexRequest();
 
             // Act
             var index = await requestHandler.Handle(request).ConfigureAwait(false);
@@ -32,7 +32,7 @@
         }
 
         private class ModelIndexRequestHandler
-            : IndexRequestHandler<IndexRequest<Model>, Model>
+            : IndexRequestHandler<IndexRequest, Model>
         {
             public ModelIndexRequestHandler(DbContext context) : base(context)
             {

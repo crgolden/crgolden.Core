@@ -33,7 +33,7 @@
         [HttpGet]
         public virtual async Task<IActionResult> Index([DataSourceRequest] DataSourceRequest request = null)
         {
-            var indexRequest = new IndexRequest<T, T1, T2>
+            var indexRequest = new IndexRequest
             {
                 ModelState = ModelState,
                 Request = request

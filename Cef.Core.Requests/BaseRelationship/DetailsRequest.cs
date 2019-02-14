@@ -11,7 +11,6 @@
         where TResponse : BaseRelationship<T1, T2>
         where T1 : Core.BaseModel
         where T2 : Core.BaseModel
-
     {
         public Guid Id1 { get; set; }
 

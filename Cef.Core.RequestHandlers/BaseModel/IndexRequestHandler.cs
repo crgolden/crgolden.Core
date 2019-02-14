@@ -12,7 +12,7 @@
 
     [PublicAPI]
     public abstract class IndexRequestHandler<TRequest, T> : IRequestHandler<TRequest, DataSourceResult>
-        where TRequest : IndexRequest<T>
+        where TRequest : IndexRequest
         where T : BaseModel
     {
         protected readonly DbContext Context;
@@ -24,11 +24,10 @@
 
         public virtual async Task<DataSourceResult> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
-            var models = Context.Set<T>().AsNoTracking();
-            return await models.ToDataSourceResultAsync(
-                request: request.Request,
-                modelState: request.ModelState,
-                selector: request.Selector).ConfigureAwait(false);
+            return await Context.Set<T>()
+                .AsNoTracking()
+                .ToDataSourceResultAsync(request.Request, request.ModelState)
+                .ConfigureAwait(false);
         }
     }
 }

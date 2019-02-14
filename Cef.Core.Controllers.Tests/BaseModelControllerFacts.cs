@@ -29,7 +29,7 @@ namespace Cef.Core.Controllers.Tests
             // Arrange
             var dataSourceRequest = new DataSourceRequest();
             var dataSourceResult = new DataSourceResult();
-            _mediator.Setup(x => x.Send(It.Is<IndexRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<IndexRequest>(y =>
                     y.Request.Equals(dataSourceRequest)), default))
                 .ReturnsAsync(dataSourceResult);
             var controller = new ModelController(_mediator.Object, Logger);
