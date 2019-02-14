@@ -7,9 +7,9 @@
 
     [PublicAPI]
     [ExcludeFromCodeCoverage]
-    public class CreateRequest<T> : IRequest<T>
-        where T : BaseModel
+    public class CreateRequest<TResponse> : IRequest<TResponse>
+        where TResponse : BaseModel
     {
-        public T Model { get; set; }
+        public TResponse Model { get; set; }
     }
 }

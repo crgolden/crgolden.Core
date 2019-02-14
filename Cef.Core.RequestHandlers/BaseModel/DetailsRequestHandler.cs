@@ -9,8 +9,9 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class DetailsRequestHandler<T> : IRequestHandler<DetailsRequest<T>, T>
-        where T : BaseModel
+    public abstract class DetailsRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
+        where TRequest : DetailsRequest<TResponse>
+        where TResponse : BaseModel
     {
         protected readonly DbContext Context;
 
@@ -19,9 +20,9 @@
             Context = context;
         }
 
-        public virtual async Task<T> Handle(DetailsRequest<T> request, CancellationToken cancellationToken = default)
+        public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
-            return await Context.FindAsync<T>(request.Id).ConfigureAwait(false);
+            return await Context.FindAsync<TResponse>(request.Id).ConfigureAwait(false);
         }
     }
 }

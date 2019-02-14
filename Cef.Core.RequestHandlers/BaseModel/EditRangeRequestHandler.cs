@@ -11,7 +11,8 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class EditRangeRequestHandler<T> : IRequestHandler<EditRangeRequest<T>>
+    public abstract class EditRangeRequestHandler<TRequest, T> : IRequestHandler<TRequest>
+        where TRequest : EditRangeRequest<T>
         where T : BaseModel
     {
         protected readonly DbContext Context;
@@ -21,7 +22,7 @@
             Context = context;
         }
 
-        public virtual async Task<Unit> Handle(EditRangeRequest<T> request, CancellationToken cancellationToken = default)
+        public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             var updated = DateTime.UtcNow;
             foreach (var model in request.Models)

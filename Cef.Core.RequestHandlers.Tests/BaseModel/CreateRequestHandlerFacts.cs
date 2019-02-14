@@ -44,7 +44,8 @@
             }
         }
 
-        private class ModelCreateRequestHandler : CreateRequestHandler<Model>
+        private class ModelCreateRequestHandler
+            : CreateRequestHandler<CreateRequest<Model>, Model>
         {
             public ModelCreateRequestHandler(DbContext context) : base(context)
             {

@@ -11,7 +11,8 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class IndexRequestHandler<T, T1, T2> : IRequestHandler<IndexRequest<T, T1, T2>, DataSourceResult>
+    public abstract class IndexRequestHandler<TRequest, T, T1, T2> : IRequestHandler<TRequest, DataSourceResult>
+        where TRequest : IndexRequest<T, T1, T2>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
@@ -23,7 +24,7 @@
             Context = context;
         }
 
-        public virtual async Task<DataSourceResult> Handle(IndexRequest<T, T1, T2> request, CancellationToken cancellationToken = default)
+        public virtual async Task<DataSourceResult> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             var models = Context.Set<T>().AsNoTracking();
             return await models.ToDataSourceResultAsync(

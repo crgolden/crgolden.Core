@@ -19,6 +19,6 @@
 
         public DataSourceRequest Request { get; set; } = new DataSourceRequest();
 
-        public Func<T, object> Selector { get; set; } = model => model;
+        public Func<T, object> Selector { get; set; } = relationship => relationship;
     }
 }

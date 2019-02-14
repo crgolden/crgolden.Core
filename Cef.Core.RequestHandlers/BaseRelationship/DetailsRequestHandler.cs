@@ -9,8 +9,9 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class DetailsRequestHandler<T, T1, T2> : IRequestHandler<DetailsRequest<T, T1, T2>, T>
-        where T : BaseRelationship<T1, T2>
+    public abstract class DetailsRequestHandler<TRequest, TResponse, T1, T2> : IRequestHandler<TRequest, TResponse>
+        where TRequest : DetailsRequest<TResponse, T1, T2>
+        where TResponse : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
@@ -21,9 +22,9 @@
             Context = context;
         }
 
-        public virtual async Task<T> Handle(DetailsRequest<T, T1, T2> request, CancellationToken cancellationToken = default)
+        public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
-            return await Context.FindAsync<T>(request.Id1, request.Id2).ConfigureAwait(false);
+            return await Context.FindAsync<TResponse>(request.Id1, request.Id2).ConfigureAwait(false);
         }
     }
 }

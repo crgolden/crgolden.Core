@@ -8,12 +8,12 @@
 
     [PublicAPI]
     [ExcludeFromCodeCoverage]
-    public class CreateRangeRequest<T, TRelationship, T1, T2> : IRequest<T>
-        where T : IEnumerable<TRelationship>
+    public class CreateRangeRequest<TResponse, TRelationship, T1, T2> : IRequest<TResponse>
+        where TResponse : IEnumerable<TRelationship>
         where TRelationship : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
-        public T Relationships { get; set; }
+        public TResponse Relationships { get; set; }
     }
 }

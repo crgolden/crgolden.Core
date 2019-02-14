@@ -11,7 +11,8 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class IndexRequestHandler<T> : IRequestHandler<IndexRequest<T>, DataSourceResult>
+    public abstract class IndexRequestHandler<TRequest, T> : IRequestHandler<TRequest, DataSourceResult>
+        where TRequest : IndexRequest<T>
         where T : BaseModel
     {
         protected readonly DbContext Context;
@@ -21,7 +22,7 @@
             Context = context;
         }
 
-        public virtual async Task<DataSourceResult> Handle(IndexRequest<T> request, CancellationToken cancellationToken = default)
+        public virtual async Task<DataSourceResult> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             var models = Context.Set<T>().AsNoTracking();
             return await models.ToDataSourceResultAsync(

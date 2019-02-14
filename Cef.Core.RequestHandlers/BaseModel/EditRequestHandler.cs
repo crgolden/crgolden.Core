@@ -10,7 +10,8 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class EditRequestHandler<T> : IRequestHandler<EditRequest<T>>
+    public abstract class EditRequestHandler<TRequest, T> : IRequestHandler<TRequest>
+        where TRequest : EditRequest<T>
         where T : BaseModel
     {
         protected readonly DbContext Context;
@@ -20,7 +21,7 @@
             Context = context;
         }
 
-        public virtual async Task<Unit> Handle(EditRequest<T> request, CancellationToken cancellationToken = default)
+        public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             request.Model.Updated = request.Model.Updated ?? DateTime.UtcNow;
             Context.Entry(request.Model).State = EntityState.Modified;

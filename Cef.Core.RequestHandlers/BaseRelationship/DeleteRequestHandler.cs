@@ -9,7 +9,8 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class DeleteRequestHandler<T, T1, T2> : IRequestHandler<DeleteRequest>
+    public abstract class DeleteRequestHandler<TRequest, T, T1, T2> : IRequestHandler<TRequest>
+        where TRequest : DeleteRequest
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
@@ -21,7 +22,7 @@
             Context = context;
         }
 
-        public virtual async Task<Unit> Handle(DeleteRequest request, CancellationToken cancellationToken = default)
+        public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             var relationship = await Context.FindAsync<T>(request.Id1, request.Id2);
             if (relationship == null) return default;

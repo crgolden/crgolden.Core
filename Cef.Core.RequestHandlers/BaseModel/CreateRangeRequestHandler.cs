@@ -11,8 +11,9 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class CreateRangeRequestHandler<T, TModel> : IRequestHandler<CreateRangeRequest<T, TModel>, T>
-        where T : IEnumerable<TModel>
+    public abstract class CreateRangeRequestHandler<TRequest, TResponse, TModel> : IRequestHandler<TRequest, TResponse>
+        where TRequest : CreateRangeRequest<TResponse, TModel>
+        where TResponse : IEnumerable<TModel>
         where TModel : BaseModel
     {
         protected readonly DbContext Context;
@@ -22,7 +23,7 @@
             Context = context;
         }
 
-        public virtual async Task<T> Handle(CreateRangeRequest<T, TModel> request, CancellationToken cancellationToken = default)
+        public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             var created = DateTime.UtcNow;
             foreach (var model in request.Models)

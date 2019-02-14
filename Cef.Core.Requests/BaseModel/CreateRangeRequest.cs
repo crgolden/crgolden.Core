@@ -8,10 +8,10 @@
 
     [PublicAPI]
     [ExcludeFromCodeCoverage]
-    public class CreateRangeRequest<T, TModel> : IRequest<T>
-        where T : IEnumerable<TModel>
+    public class CreateRangeRequest<TResponse, TModel> : IRequest<TResponse>
+        where TResponse : IEnumerable<TModel>
         where TModel : BaseModel
     {
-        public T Models { get; set; }
+        public TResponse Models { get; set; }
     }
 }

@@ -48,7 +48,8 @@
             Assert.Equal(relationship.Model2Id, result.Model2Id);
         }
 
-        private class RelationshipDetailsRequestHandler : DetailsRequestHandler<Relationship, Model, Model>
+        private class RelationshipDetailsRequestHandler
+            : DetailsRequestHandler<DetailsRequest<Relationship, Model, Model>, Relationship, Model, Model>
         {
             public RelationshipDetailsRequestHandler(DbContext context) : base(context)
             {

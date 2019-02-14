@@ -10,8 +10,9 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class CreateRequestHandler<T, T1, T2> : IRequestHandler<CreateRequest<T, T1, T2>, T>
-        where T : BaseRelationship<T1, T2>
+    public abstract class CreateRequestHandler<TRequest, TResponse, T1, T2> : IRequestHandler<TRequest, TResponse>
+        where TRequest : CreateRequest<TResponse, T1, T2>
+        where TResponse : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
@@ -22,7 +23,7 @@
             Context = context;
         }
 
-        public virtual async Task<T> Handle(CreateRequest<T, T1, T2> request, CancellationToken cancellationToken = default)
+        public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             request.Relationship.Created = request.Relationship.Created > DateTime.MinValue
                 ? request.Relationship.Created

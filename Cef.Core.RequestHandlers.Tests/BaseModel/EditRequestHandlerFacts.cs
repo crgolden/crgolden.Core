@@ -54,7 +54,8 @@
             }
         }
 
-        private class ModelEditRequestHandler : EditRequestHandler<Model>
+        private class ModelEditRequestHandler
+            : EditRequestHandler<EditRequest<Model>, Model>
         {
             public ModelEditRequestHandler(DbContext context) : base(context)
             {

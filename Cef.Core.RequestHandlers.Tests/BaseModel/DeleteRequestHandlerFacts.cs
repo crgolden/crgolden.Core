@@ -44,7 +44,8 @@
             }
         }
 
-        private class ModelDeleteRequestHandler : DeleteRequestHandler<Model>
+        private class ModelDeleteRequestHandler
+            : DeleteRequestHandler<DeleteRequest, Model>
         {
             public ModelDeleteRequestHandler(DbContext context) : base(context)
             {

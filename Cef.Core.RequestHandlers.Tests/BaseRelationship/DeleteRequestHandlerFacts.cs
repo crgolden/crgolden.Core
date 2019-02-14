@@ -50,7 +50,8 @@
             }
         }
 
-        private class RelationshipDeleteRequestHandler : DeleteRequestHandler<Relationship, Model, Model>
+        private class RelationshipDeleteRequestHandler
+            : DeleteRequestHandler<DeleteRequest, Relationship, Model, Model>
         {
             public RelationshipDeleteRequestHandler(DbContext context) : base(context)
             {

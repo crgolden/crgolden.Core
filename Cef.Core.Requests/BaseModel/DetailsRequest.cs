@@ -8,8 +8,8 @@
 
     [PublicAPI]
     [ExcludeFromCodeCoverage]
-    public class DetailsRequest<T> : IRequest<T>
-        where T : BaseModel
+    public class DetailsRequest<TResponse> : IRequest<TResponse>
+        where TResponse : BaseModel
     {
         public Guid Id { get; set; }
     }

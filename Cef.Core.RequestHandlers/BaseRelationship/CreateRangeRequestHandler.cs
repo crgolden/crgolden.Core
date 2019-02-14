@@ -11,9 +11,10 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class CreateRangeRequestHandler<T, TRelationship, T1, T2> : IRequestHandler<CreateRangeRequest<T, TRelationship, T1, T2>, T>
-        where T : IEnumerable<TRelationship>
-        where TRelationship : BaseRelationship<T1, T2>
+    public abstract class CreateRangeRequestHandler<TRequest, TResponse, T, T1, T2> : IRequestHandler<TRequest, TResponse>
+        where TRequest : CreateRangeRequest<TResponse, T, T1, T2>
+        where TResponse : IEnumerable<T>
+        where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
     {
@@ -24,7 +25,7 @@
             Context = context;
         }
 
-        public virtual async Task<T> Handle(CreateRangeRequest<T, TRelationship, T1, T2> request, CancellationToken cancellationToken = default)
+        public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             var created = DateTime.UtcNow;
             foreach (var relationship in request.Relationships)

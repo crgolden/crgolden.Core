@@ -31,7 +31,8 @@
             Assert.IsType<DataSourceResult>(index);
         }
 
-        private class RelationshipIndexRequestHandler : IndexRequestHandler<Relationship, Model, Model>
+        private class RelationshipIndexRequestHandler
+            : IndexRequestHandler<IndexRequest<Relationship, Model, Model>, Relationship, Model, Model>
         {
             public RelationshipIndexRequestHandler(DbContext context) : base(context)
             {

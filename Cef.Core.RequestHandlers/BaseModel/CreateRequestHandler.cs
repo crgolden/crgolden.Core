@@ -10,8 +10,9 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class CreateRequestHandler<T> : IRequestHandler<CreateRequest<T>, T>
-        where T : BaseModel
+    public abstract class CreateRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
+        where TRequest : CreateRequest<TResponse>
+        where TResponse : BaseModel
     {
         protected readonly DbContext Context;
 
@@ -20,7 +21,7 @@
             Context = context;
         }
 
-        public virtual async Task<T> Handle(CreateRequest<T> request, CancellationToken cancellationToken = default)
+        public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             request.Model.Created = request.Model.Created > DateTime.MinValue
                 ? request.Model.Created

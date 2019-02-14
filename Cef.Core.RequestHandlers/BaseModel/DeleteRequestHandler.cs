@@ -9,7 +9,8 @@
     using Requests.BaseModel;
 
     [PublicAPI]
-    public abstract class DeleteRequestHandler<T> : IRequestHandler<DeleteRequest>
+    public abstract class DeleteRequestHandler<TRequest, T> : IRequestHandler<TRequest>
+        where TRequest : DeleteRequest
         where T : BaseModel
     {
         protected readonly DbContext Context;
@@ -19,7 +20,7 @@
             Context = context;
         }
 
-        public virtual async Task<Unit> Handle(DeleteRequest request, CancellationToken cancellationToken = default)
+        public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             var model = await Context.FindAsync<T>(request.Id);
             if (model == null) return default;

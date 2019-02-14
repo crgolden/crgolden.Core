@@ -58,7 +58,8 @@
             }
         }
 
-        private class RelationshipEditRequestHandler : EditRequestHandler<Relationship, Model, Model>
+        private class RelationshipEditRequestHandler
+            : EditRequestHandler<EditRequest<Relationship, Model, Model>, Relationship, Model, Model>
         {
             public RelationshipEditRequestHandler(DbContext context) : base(context)
             {

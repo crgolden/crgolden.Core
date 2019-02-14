@@ -10,7 +10,8 @@
     using Requests.BaseRelationship;
 
     [PublicAPI]
-    public abstract class EditRequestHandler<T, T1, T2> : IRequestHandler<EditRequest<T, T1, T2>>
+    public abstract class EditRequestHandler<TRequest, T, T1, T2> : IRequestHandler<TRequest>
+        where TRequest : EditRequest<T, T1, T2>
         where T : BaseRelationship<T1, T2>
         where T1 : BaseModel
         where T2 : BaseModel
@@ -22,7 +23,7 @@
             Context = context;
         }
 
-        public virtual async Task<Unit> Handle(EditRequest<T, T1, T2> request, CancellationToken cancellationToken = default)
+        public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken = default)
         {
             request.Relationship.Updated = request.Relationship.Updated ?? DateTime.UtcNow;
             Context.Entry(request.Relationship).State = EntityState.Modified;

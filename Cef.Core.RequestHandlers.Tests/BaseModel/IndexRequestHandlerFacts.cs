@@ -31,7 +31,8 @@
             Assert.IsType<DataSourceResult>(index);
         }
 
-        private class ModelIndexRequestHandler : IndexRequestHandler<Model>
+        private class ModelIndexRequestHandler
+            : IndexRequestHandler<IndexRequest<Model>, Model>
         {
             public ModelIndexRequestHandler(DbContext context) : base(context)
             {

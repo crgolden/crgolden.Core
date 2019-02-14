@@ -41,7 +41,8 @@
             Assert.Equal(model.Id, result.Id);
         }
 
-        private class ModelDetailsRequestHandler : DetailsRequestHandler<Model>
+        private class ModelDetailsRequestHandler
+            : DetailsRequestHandler<DetailsRequest<Model>, Model>
         {
             public ModelDetailsRequestHandler(DbContext context) : base(context)
             {
