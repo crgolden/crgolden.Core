@@ -13,18 +13,26 @@ namespace Cef.Core.Controllers.Tests
     using Xunit;
 
     [ExcludeFromCodeCoverage]
-    public class BaseRelationshipControllerFacts : BaseControllerFacts<RelationshipController>
+    public class BaseRelationshipControllerFacts
     {
+        private readonly Mock<IMediator> _mediator;
+        private static ILogger<RelationshipController> Logger => Mock.Of<ILogger<RelationshipController>>();
+
+        public BaseRelationshipControllerFacts()
+        {
+            _mediator = new Mock<IMediator>();
+        }
+
         [Fact]
         public async Task Index_Ok()
         {
             // Arrange
             var dataSourceRequest = new DataSourceRequest();
             var dataSourceResult = new DataSourceResult();
-            Mediator.Setup(x => x.Send(It.Is<IndexRequest<Relationship, BaseModel, BaseModel>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<IndexRequest<Relationship, BaseModel, BaseModel>>(y =>
                     y.Request.Equals(dataSourceRequest)), default))
                 .ReturnsAsync(dataSourceResult);
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var index = await controller.Index(dataSourceRequest).ConfigureAwait(false);
@@ -43,10 +51,10 @@ namespace Cef.Core.Controllers.Tests
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
                     y.Id1.Equals(relationship.Model1Id) && y.Id2.Equals(relationship.Model2Id)), default))
                 .ReturnsAsync(relationship);
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var details = await controller.Details(relationship.Model1Id, relationship.Model2Id).ConfigureAwait(false);
@@ -65,10 +73,10 @@ namespace Cef.Core.Controllers.Tests
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
                     y.Id1.Equals(relationship.Model1Id) && y.Id2.Equals(relationship.Model2Id)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var details = await controller.Details(relationship.Model1Id, relationship.Model2Id).ConfigureAwait(false);
@@ -87,10 +95,10 @@ namespace Cef.Core.Controllers.Tests
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<DetailsRequest<Relationship, BaseModel, BaseModel>>(y =>
                     y.Id1.Equals(relationship.Model1Id) && y.Id2.Equals(relationship.Model2Id)), default))
                 .ReturnsAsync(default(Relationship));
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var details = await controller.Details(relationship.Model1Id, relationship.Model2Id).ConfigureAwait(false);
@@ -109,7 +117,7 @@ namespace Cef.Core.Controllers.Tests
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship).ConfigureAwait(false);
@@ -128,7 +136,7 @@ namespace Cef.Core.Controllers.Tests
                 Model2Id = Guid.NewGuid()
             };
             var id1 = Guid.NewGuid();
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var edit = await controller.Edit(id1, relationship.Model2Id, relationship).ConfigureAwait(false);
@@ -148,7 +156,7 @@ namespace Cef.Core.Controllers.Tests
                 Model2Id = Guid.NewGuid()
             };
             var id2 = Guid.NewGuid();
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var edit = await controller.Edit(relationship.Model1Id, id2, relationship).ConfigureAwait(false);
@@ -167,10 +175,10 @@ namespace Cef.Core.Controllers.Tests
                 Model1Id = Guid.NewGuid(),
                 Model2Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<EditRequest<Relationship, BaseModel, BaseModel>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<EditRequest<Relationship, BaseModel, BaseModel>>(y =>
                     y.Relationship.Equals(relationship)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var edit = await controller.Edit(relationship.Model1Id, relationship.Model2Id, relationship).ConfigureAwait(false);
@@ -184,11 +192,15 @@ namespace Cef.Core.Controllers.Tests
         public async Task Create_Ok()
         {
             // Arrange
-            var relationship = new Relationship();
-            Mediator.Setup(x => x.Send(It.Is<CreateRequest<Relationship, BaseModel, BaseModel>>(y =>
+            var relationship = new Relationship
+            {
+                Model1Id = Guid.NewGuid(),
+                Model2Id = Guid.NewGuid()
+            };
+            _mediator.Setup(x => x.Send(It.Is<CreateRequest<Relationship, BaseModel, BaseModel>>(y =>
                     y.Relationship.Equals(relationship)), default))
                 .ReturnsAsync(relationship);
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var create = await controller.Create(relationship).ConfigureAwait(false);
@@ -202,11 +214,15 @@ namespace Cef.Core.Controllers.Tests
         public async Task Create_Bad_Request_Object()
         {
             // Arrange
-            var relationship = new Relationship();
-            Mediator.Setup(x => x.Send(It.Is<CreateRequest<Relationship, BaseModel, BaseModel>>(y =>
+            var relationship = new Relationship
+            {
+                Model1Id = Guid.NewGuid(),
+                Model2Id = Guid.NewGuid()
+            };
+            _mediator.Setup(x => x.Send(It.Is<CreateRequest<Relationship, BaseModel, BaseModel>>(y =>
                     y.Relationship.Equals(relationship)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var create = await controller.Create(relationship).ConfigureAwait(false);
@@ -220,7 +236,7 @@ namespace Cef.Core.Controllers.Tests
         public async Task Delete_No_Content()
         {
             // Arrange
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var delete = await controller.Delete(Guid.NewGuid(), Guid.NewGuid()).ConfigureAwait(false);
@@ -235,10 +251,10 @@ namespace Cef.Core.Controllers.Tests
             // Arrange
             var id1 = Guid.NewGuid();
             var id2 = Guid.NewGuid();
-            Mediator.Setup(x => x.Send(It.Is<DeleteRequest>(y =>
+            _mediator.Setup(x => x.Send(It.Is<DeleteRequest>(y =>
                     y.Id1.Equals(id1) && y.Id2.Equals(id2)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new RelationshipController(Mediator.Object, Logger);
+            var controller = new RelationshipController(_mediator.Object, Logger);
 
             // Act
             var delete = await controller.Delete(id1, id2).ConfigureAwait(false);

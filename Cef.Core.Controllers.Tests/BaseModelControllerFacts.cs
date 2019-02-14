@@ -13,18 +13,26 @@ namespace Cef.Core.Controllers.Tests
     using Xunit;
 
     [ExcludeFromCodeCoverage]
-    public class BaseModelControllerFacts : BaseControllerFacts<ModelController>
+    public class BaseModelControllerFacts
     {
+        private readonly Mock<IMediator> _mediator;
+        private static ILogger<ModelController> Logger => Mock.Of<ILogger<ModelController>>();
+
+        public BaseModelControllerFacts()
+        {
+            _mediator = new Mock<IMediator>();
+        }
+
         [Fact]
         public async Task Index_Ok()
         {
             // Arrange
             var dataSourceRequest = new DataSourceRequest();
             var dataSourceResult = new DataSourceResult();
-            Mediator.Setup(x => x.Send(It.Is<IndexRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<IndexRequest<Model>>(y =>
                     y.Request.Equals(dataSourceRequest)), default))
                 .ReturnsAsync(dataSourceResult);
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var index = await controller.Index(dataSourceRequest).ConfigureAwait(false);
@@ -42,10 +50,10 @@ namespace Cef.Core.Controllers.Tests
             {
                 Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<DetailsRequest<Model>>(y =>
                     y.Id.Equals(model.Id)), default))
                 .ReturnsAsync(model);
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var details = await controller.Details(model.Id).ConfigureAwait(false);
@@ -63,10 +71,10 @@ namespace Cef.Core.Controllers.Tests
             {
                 Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<DetailsRequest<Model>>(y =>
                     y.Id.Equals(model.Id)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var details = await controller.Details(model.Id).ConfigureAwait(false);
@@ -84,10 +92,10 @@ namespace Cef.Core.Controllers.Tests
             {
                 Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<DetailsRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<DetailsRequest<Model>>(y =>
                     y.Id.Equals(model.Id)), default))
                 .ReturnsAsync(default(Model));
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var details = await controller.Details(model.Id).ConfigureAwait(false);
@@ -105,7 +113,7 @@ namespace Cef.Core.Controllers.Tests
             {
                 Id = Guid.NewGuid()
             };
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var edit = await controller.Edit(model.Id, model).ConfigureAwait(false);
@@ -123,7 +131,7 @@ namespace Cef.Core.Controllers.Tests
                 Id = Guid.NewGuid()
             };
             var id = Guid.NewGuid();
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var edit = await controller.Edit(id, model).ConfigureAwait(false);
@@ -141,10 +149,10 @@ namespace Cef.Core.Controllers.Tests
             {
                 Id = Guid.NewGuid()
             };
-            Mediator.Setup(x => x.Send(It.Is<EditRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<EditRequest<Model>>(y =>
                     y.Model.Equals(model)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var edit = await controller.Edit(model.Id, model).ConfigureAwait(false);
@@ -159,10 +167,10 @@ namespace Cef.Core.Controllers.Tests
         {
             // Arrange
             var model = new Model();
-            Mediator.Setup(x => x.Send(It.Is<CreateRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<CreateRequest<Model>>(y =>
                     y.Model.Equals(model)), default))
                 .ReturnsAsync(model);
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var create = await controller.Create(model).ConfigureAwait(false);
@@ -177,10 +185,10 @@ namespace Cef.Core.Controllers.Tests
         {
             // Arrange
             var model = new Model();
-            Mediator.Setup(x => x.Send(It.Is<CreateRequest<Model>>(y =>
+            _mediator.Setup(x => x.Send(It.Is<CreateRequest<Model>>(y =>
                     y.Model.Equals(model)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var create = await controller.Create(model).ConfigureAwait(false);
@@ -194,7 +202,7 @@ namespace Cef.Core.Controllers.Tests
         public async Task Delete_No_Content()
         {
             // Arrange
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var delete = await controller.Delete(Guid.NewGuid());
@@ -208,10 +216,10 @@ namespace Cef.Core.Controllers.Tests
         {
             // Arrange
             var id = Guid.NewGuid();
-            Mediator.Setup(x => x.Send(It.Is<DeleteRequest>(y => 
+            _mediator.Setup(x => x.Send(It.Is<DeleteRequest>(y => 
                     y.Id.Equals(id)), default))
                 .ThrowsAsync(new Exception());
-            var controller = new ModelController(Mediator.Object, Logger);
+            var controller = new ModelController(_mediator.Object, Logger);
 
             // Act
             var delete = await controller.Delete(id).ConfigureAwait(false);
