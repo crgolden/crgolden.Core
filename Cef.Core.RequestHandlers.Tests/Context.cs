@@ -12,10 +12,24 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Model>(entity =>
+            {
+                entity.Property(model => model.Id);
+                entity.Property(model => model.Name);
+                entity.Property(model => model.TestName);
+            });
+            modelBuilder.Entity<Relationship>(entity =>
+            {
+                entity.HasKey(relationship => new
+                {
+                    relationship.Model1Id,
+                    relationship.Model2Id
+                });
+                entity.Property(relationship => relationship.Model1Name);
+                entity.Property(relationship => relationship.Model2Name);
+            });
 
-            modelBuilder.Entity<Model>();
-            modelBuilder.Entity<Relationship>().HasKey(p => new { p.Model1Id, p.Model2Id });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
