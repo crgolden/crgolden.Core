@@ -1,0 +1,83 @@
+namespace Clarity.Core.Filters.Tests
+{
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
+    using Microsoft.AspNetCore.Routing;
+    using Microsoft.Extensions.Logging;
+    using Moq;
+    using Xunit;
+
+    public class ModelStatePageFilterFacts
+    {
+        private static Mock<ILogger<ModelStatePageFilter>> Logger => new Mock<ILogger<ModelStatePageFilter>>();
+
+        private readonly ModelStatePageFilter _filter;
+        private readonly PageContext _context;
+
+        public ModelStatePageFilterFacts()
+        {
+            _filter = new ModelStatePageFilter(Logger.Object);
+            _context = new PageContext(new ActionContext(
+                httpContext: new DefaultHttpContext(),
+                routeData: new RouteData(),
+                actionDescriptor: new PageActionDescriptor(),
+                modelState: new ModelStateDictionary()));
+        }
+
+        [Fact]
+        public void OnPageHandlerExecuting_Valid()
+        {
+            // Arrange
+            var pageHandlerExecutingContext = new PageHandlerExecutingContext(
+                pageContext: _context,
+                filters: new List<IFilterMetadata>(),
+                handlerMethod: new HandlerMethodDescriptor(),
+                handlerArguments: new Dictionary<string, object>(),
+                handlerInstance: new { });
+
+            // Act
+            _filter.OnPageHandlerExecuting(pageHandlerExecutingContext);
+
+            // Assert
+            Assert.Null(pageHandlerExecutingContext.Result);
+        }
+
+        [Fact]
+        public void OnPageHandlerExecuting_Invalid()
+        {
+            // Arrange
+            const string errorKey = "Error Key";
+            const string errorMessage = "Error Message";
+
+            _context.ModelState.AddModelError(errorKey, errorMessage);
+
+            var pageHandlerExecutingContext = new PageHandlerExecutingContext(
+                pageContext: _context,
+                filters: new List<IFilterMetadata>(),
+                handlerMethod: new HandlerMethodDescriptor(),
+                handlerArguments: new Dictionary<string, object>(),
+                handlerInstance: new {});
+
+            // Act
+            _filter.OnPageHandlerExecuting(pageHandlerExecutingContext);
+
+            // Assert
+            var result = Assert.IsType<BadRequestObjectResult>(pageHandlerExecutingContext.Result);
+            var error = Assert.IsType<SerializableError>(result.Value);
+            Assert.Collection(error, collection =>
+            {
+                var (key, values) = collection;
+                var messages = Assert.IsType<string[]>(values);
+
+                Assert.Single(messages);
+                Assert.Equal(errorKey, key);
+                Assert.Equal(errorMessage, messages[0]);
+            });
+        }
+    }
+}
