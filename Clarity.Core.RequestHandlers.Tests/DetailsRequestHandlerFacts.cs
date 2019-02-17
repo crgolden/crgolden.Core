@@ -27,7 +27,7 @@
             }
 
             var keyValues = new object[] { entity.Id };
-            var request = new Mock<DetailsRequest<FakeEntity>>(keyValues);
+            var request = new Mock<DetailsRequest<FakeEntity>>(new object[] { keyValues });
             object details;
 
             // Act

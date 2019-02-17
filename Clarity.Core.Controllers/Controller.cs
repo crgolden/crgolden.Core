@@ -18,11 +18,13 @@
 
         protected readonly IMediator Mediator;
         protected readonly ILogger<Controller<T>> Logger;
+        protected readonly Guid? UserId;
 
         protected Controller(IMediator mediator, ILogger<Controller<T>> logger)
         {
             Mediator = mediator;
             Logger = logger;
+            if (Guid.TryParse(User?.FindFirst("sub")?.Value, out var userId)) UserId = userId;
         }
 
         public abstract Task<IActionResult> Index(DataSourceRequest request = null);
@@ -35,7 +37,7 @@
             return Ok(result);
         }
 
-        public abstract Task<IActionResult> Details(params object[] keyValues);
+        public abstract Task<IActionResult> Details(object[] keyValues);
 
         protected virtual async Task<IActionResult> Details(DetailsRequest<T> request)
         {
@@ -130,7 +132,7 @@
             }
         }
 
-        public abstract Task<IActionResult> Delete(params object[] keyValues);
+        public abstract Task<IActionResult> Delete(object[] keyValues);
 
         protected virtual async Task<IActionResult> Delete(DeleteRequest request)
         {

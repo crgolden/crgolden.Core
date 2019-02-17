@@ -6,7 +6,7 @@
     {
         public readonly object[] KeyValues;
 
-        protected DeleteRequest(params object[] keyValues)
+        protected DeleteRequest(object[] keyValues)
         {
             KeyValues = keyValues;
         }

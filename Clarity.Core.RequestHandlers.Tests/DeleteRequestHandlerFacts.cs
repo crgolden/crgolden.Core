@@ -27,7 +27,7 @@
             }
 
             var keyValues = new object[] { entity.Id };
-            var request = new Mock<DeleteRequest>(keyValues);
+            var request = new Mock<DeleteRequest>(new object[] { keyValues });
 
             // Act
             using (var context = new FakeContext(options))

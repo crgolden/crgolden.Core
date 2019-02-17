@@ -20,9 +20,9 @@
             return await Index(new Mock<IndexRequest>(new ModelStateDictionary(), request).Object);
         }
 
-        public override async Task<IActionResult> Details(params object[] keyValues)
+        public override async Task<IActionResult> Details(object[] keyValues)
         {
-            return await Details(new Mock<DetailsRequest<object>>(keyValues).Object);
+            return await Details(new Mock<DetailsRequest<object>>(new object[] { keyValues }).Object);
         }
 
         public override async Task<IActionResult> Edit(object entity)
@@ -45,9 +45,9 @@
             return await CreateRange(new Mock<CreateRangeRequest<IEnumerable<object>, object>>(entities).Object);
         }
 
-        public override async Task<IActionResult> Delete(params object[] keyValues)
+        public override async Task<IActionResult> Delete(object[] keyValues)
         {
-            return await Delete(new Mock<DeleteRequest>(keyValues).Object);
+            return await Delete(new Mock<DeleteRequest>(new object[] { keyValues }).Object);
         }
     }
 }

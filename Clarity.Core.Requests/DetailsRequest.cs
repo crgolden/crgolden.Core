@@ -6,7 +6,7 @@
     {
         public readonly object[] KeyValues;
 
-        protected DetailsRequest(params object[] keyValues)
+        protected DetailsRequest(object[] keyValues)
         {
             KeyValues = keyValues;
         }
