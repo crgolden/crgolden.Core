@@ -5,7 +5,7 @@
     /// <summary>
     /// https://openid.net/specs/openid-connect-core-1_0.html#AddressClaim
     /// </summary>
-    public class AddressClaim
+    public class Address
     {
         /// <summary>
         /// Full mailing address, formatted for display or use on a mailing label.

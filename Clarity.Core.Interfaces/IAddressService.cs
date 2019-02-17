@@ -2,8 +2,8 @@
 {
     public interface IAddressService
     {
-        bool ValidateUsAddress(AddressClaim address);
+        bool ValidateUsAddress(Address address);
 
-        bool ValidateInternationalAddress(AddressClaim address);
+        bool ValidateInternationalAddress(Address address);
     }
 }

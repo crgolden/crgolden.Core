@@ -22,7 +22,7 @@
             _internationalClient = clientBuilder.BuildInternationalStreetApiClient();
         }
 
-        public virtual bool ValidateUsAddress(AddressClaim address)
+        public virtual bool ValidateUsAddress(Address address)
         {
             var lookup = new UsLookup
             {
@@ -35,7 +35,7 @@
             return lookup.Result.Count > 0;
         }
 
-        public virtual bool ValidateInternationalAddress(AddressClaim address)
+        public virtual bool ValidateInternationalAddress(Address address)
         {
             var lookup = new InternationalLookup
             {
