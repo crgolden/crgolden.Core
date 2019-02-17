@@ -7,7 +7,7 @@
 
     public static class ConfigurationExtensions
     {
-        public static Action<DbContextOptionsBuilder> GetDbContextOptions(this IConfiguration configuration)
+        public static Action<DbContextOptionsBuilder> GetDbContextOptions(this IConfiguration configuration, string assemblyName = null)
         {
             var section = configuration.GetSection(nameof(DatabaseOptions));
             if (!section.Exists()) return null;
@@ -21,10 +21,15 @@
                     ? default(Action<DbContextOptionsBuilder>)
                     : builder => builder.UseSqlServer(
                         connectionString: options.SqlServerOptions.SqlServerConnectionString(),
-                        sqlServerOptionsAction: sqlOptions => sqlOptions.EnableRetryOnFailure(
-                            maxRetryCount: 15,
-                            maxRetryDelay: TimeSpan.FromSeconds(30),
-                            errorNumbersToAdd: null));
+                        sqlServerOptionsAction: sqlOptions =>
+                        {
+                            sqlOptions.EnableRetryOnFailure(
+                                maxRetryCount: 15,
+                                maxRetryDelay: TimeSpan.FromSeconds(30),
+                                errorNumbersToAdd: null);
+                            if (string.IsNullOrEmpty(assemblyName)) return;
+                            sqlOptions.MigrationsAssembly(assemblyName);
+                        });
             }
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) return null;
