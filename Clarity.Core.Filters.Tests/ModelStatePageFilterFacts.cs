@@ -8,20 +8,16 @@ namespace Clarity.Core.Filters.Tests
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
     using Microsoft.AspNetCore.Routing;
-    using Microsoft.Extensions.Logging;
-    using Moq;
     using Xunit;
 
     public class ModelStatePageFilterFacts
     {
-        private static Mock<ILogger<ModelStatePageFilter>> Logger => new Mock<ILogger<ModelStatePageFilter>>();
-
         private readonly ModelStatePageFilter _filter;
         private readonly PageContext _context;
 
         public ModelStatePageFilterFacts()
         {
-            _filter = new ModelStatePageFilter(Logger.Object);
+            _filter = new ModelStatePageFilter();
             _context = new PageContext(new ActionContext(
                 httpContext: new DefaultHttpContext(),
                 routeData: new RouteData(),

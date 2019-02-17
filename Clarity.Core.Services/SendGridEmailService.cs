@@ -1,12 +1,10 @@
 ﻿namespace Clarity.Core
 {
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using Microsoft.Extensions.Options;
     using SendGrid;
     using SendGrid.Helpers.Mail;
 
-    [PublicAPI]
     public class SendGridEmailService : IEmailService
     {
         private readonly SendGridClient _client;

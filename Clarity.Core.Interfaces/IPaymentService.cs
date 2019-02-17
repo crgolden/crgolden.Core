@@ -1,9 +1,7 @@
 ﻿namespace Clarity.Core
 {
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
 
-    [PublicAPI]
     public interface IPaymentService
     {
         Task<string> GetCustomerAsync(string customerId);

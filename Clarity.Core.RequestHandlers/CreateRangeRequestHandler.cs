@@ -3,11 +3,9 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    [PublicAPI]
     public abstract class CreateRangeRequestHandler<TRequest, TResponse, T> : IRequestHandler<TRequest, TResponse>
         where TRequest : CreateRangeRequest<TResponse, T>
         where TResponse : IEnumerable<T>

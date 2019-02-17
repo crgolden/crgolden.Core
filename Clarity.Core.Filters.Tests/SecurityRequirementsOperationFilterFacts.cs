@@ -5,7 +5,6 @@ namespace Clarity.Core.Filters.Tests
     using System.Reflection;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.ApiExplorer;
-    using Moq;
     using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Xunit;
@@ -132,7 +131,7 @@ namespace Clarity.Core.Filters.Tests
                 bindingAttr: BindingFlags.NonPublic | BindingFlags.Static);
             return new OperationFilterContext(
                 apiDescription: new ApiDescription(),
-                schemaRegistry: Mock.Of<ISchemaRegistry>(),
+                schemaRegistry: default,
                 methodInfo: methodInfo);
         }
 

@@ -2,12 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using JetBrains.Annotations;
     using Microsoft.AspNetCore.Authorization;
     using Swashbuckle.AspNetCore.Swagger;
     using Swashbuckle.AspNetCore.SwaggerGen;
 
-    [PublicAPI]
     public class SecurityRequirementsOperationFilter : IOperationFilter
     {
         public void Apply(Operation operation, OperationFilterContext context)

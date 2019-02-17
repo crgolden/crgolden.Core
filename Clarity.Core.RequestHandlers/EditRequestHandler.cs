@@ -2,11 +2,9 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    [PublicAPI]
     public abstract class EditRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest>
         where TRequest : EditRequest<TResponse>
         where TResponse : class

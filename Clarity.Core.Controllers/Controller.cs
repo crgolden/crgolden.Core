@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using Kendo.Mvc.UI;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,6 @@
     [Produces("application/json")]
     [Route("v1/[controller]/[action]")]
     [ApiController]
-    [PublicAPI]
     public abstract class Controller<T> : ControllerBase where T : class
     {
         protected static CancellationTokenSource CancellationTokenSource => new CancellationTokenSource();

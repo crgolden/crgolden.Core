@@ -7,20 +7,16 @@ namespace Clarity.Core.Filters.Tests
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.AspNetCore.Routing;
-    using Microsoft.Extensions.Logging;
-    using Moq;
     using Xunit;
 
     public class ModelStateActionFilterFacts
     {
-        private static Mock<ILogger<ModelStateActionFilter>> Logger => new Mock<ILogger<ModelStateActionFilter>>();
-
         private readonly ModelStateActionFilter _filter;
         private readonly ActionContext _context;
 
         public ModelStateActionFilterFacts()
         {
-            _filter = new ModelStateActionFilter(Logger.Object);
+            _filter = new ModelStateActionFilter();
             _context = new ActionContext(
                 httpContext: new DefaultHttpContext(),
                 routeData: new RouteData(),
@@ -36,7 +32,7 @@ namespace Clarity.Core.Filters.Tests
                 actionContext: _context,
                 filters: new List<IFilterMetadata>(),
                 actionArguments: new Dictionary<string, object>(),
-                controller: Mock.Of<ControllerBase>());
+                controller: default);
 
             // Act
             _filter.OnActionExecuting(actionExecutingContext);
@@ -58,7 +54,7 @@ namespace Clarity.Core.Filters.Tests
                 actionContext: _context,
                 filters: new List<IFilterMetadata>(),
                 actionArguments: new Dictionary<string, object>(),
-                controller: Mock.Of<ControllerBase>());
+                controller: default);
 
             // Act
             _filter.OnActionExecuting(actionExecutingContext);

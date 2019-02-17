@@ -1,14 +1,10 @@
 ﻿namespace Clarity.Core
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
-    using JetBrains.Annotations;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
 
-    [PublicAPI]
-    [ExcludeFromCodeCoverage]
     public static class ConfigurationExtensions
     {
         public static Action<DbContextOptionsBuilder> GetDbContextOptions(this IConfiguration configuration)

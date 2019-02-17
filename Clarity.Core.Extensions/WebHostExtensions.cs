@@ -1,12 +1,10 @@
 ﻿namespace Clarity.Core
 {
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
 
-    [PublicAPI]
     public static class WebHostExtensions
     {
         public static async Task<IWebHost> MigrateDatabaseAsync(this IWebHost webHost)

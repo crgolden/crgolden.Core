@@ -2,11 +2,9 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    [PublicAPI]
     public abstract class DeleteRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest>
         where TRequest : DeleteRequest
         where TResponse : class

@@ -1,11 +1,9 @@
 ﻿namespace Clarity.Core
 {
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using Microsoft.Extensions.Options;
     using Stripe;
 
-    [PublicAPI]
     public class StripePaymentService : IPaymentService
     {
         private readonly CustomerService _customerService;

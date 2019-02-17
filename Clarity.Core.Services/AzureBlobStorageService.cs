@@ -4,14 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Auth;
     using Microsoft.WindowsAzure.Storage.Blob;
 
-    [PublicAPI]
     public class AzureBlobStorageService : IStorageService
     {
         private readonly string _imagesContainer;

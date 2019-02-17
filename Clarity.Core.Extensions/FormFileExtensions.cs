@@ -2,10 +2,8 @@
 {
     using System;
     using System.Linq;
-    using JetBrains.Annotations;
     using Microsoft.AspNetCore.Http;
 
-    [PublicAPI]
     public static class FormFileExtensions
     {
         public static bool IsImage(this IFormFile file)

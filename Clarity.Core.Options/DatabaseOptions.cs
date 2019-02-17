@@ -1,8 +1,5 @@
 ﻿namespace Clarity.Core
 {
-    using JetBrains.Annotations;
-
-    [PublicAPI]
     public class DatabaseOptions
     {
         public SqlServerOptions SqlServerOptions { get; set; }
@@ -10,7 +7,6 @@
         public SqLiteOptions SqLiteOptions { get; set; }
     }
 
-    [PublicAPI]
     public class SqlServerOptions
     {
         public int ConnectTimeout { get; set; }
@@ -34,7 +30,6 @@
         public string UserId { get; set; }
     }
 
-    [PublicAPI]
     public class SqLiteOptions
     {
         public string Name { get; set; }

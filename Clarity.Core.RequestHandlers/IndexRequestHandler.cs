@@ -2,13 +2,11 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using Kendo.Mvc.Extensions;
     using Kendo.Mvc.UI;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    [PublicAPI]
     public abstract class IndexRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, DataSourceResult>
         where TRequest : IndexRequest
         where TResponse : class

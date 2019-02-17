@@ -2,11 +2,9 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    [PublicAPI]
     public abstract class CreateRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
         where TRequest : CreateRequest<TResponse>
         where TResponse : class

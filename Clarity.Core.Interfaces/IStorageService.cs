@@ -2,10 +2,8 @@
 {
     using System;
     using System.Threading.Tasks;
-    using JetBrains.Annotations;
     using Microsoft.AspNetCore.Http;
 
-    [PublicAPI]
     public interface IStorageService
     {
         Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName);

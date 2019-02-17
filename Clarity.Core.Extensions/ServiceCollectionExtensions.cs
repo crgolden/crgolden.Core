@@ -1,15 +1,11 @@
 ﻿namespace Clarity.Core
 {
-    using System.Diagnostics.CodeAnalysis;
     using System.Security.Claims;
-    using JetBrains.Annotations;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Swashbuckle.AspNetCore.Swagger;
 
-    [PublicAPI]
-    [ExcludeFromCodeCoverage]
     public static class ServiceCollectionExtensions
     {
         public static void AddIdentityServerAuthentication(

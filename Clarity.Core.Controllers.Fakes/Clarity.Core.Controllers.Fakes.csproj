@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" Version="4.10.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Clarity.Core.Controllers\Clarity.Core.Controllers.csproj" />
   </ItemGroup>
 

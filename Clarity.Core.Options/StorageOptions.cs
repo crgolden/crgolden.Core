@@ -1,8 +1,5 @@
 ﻿namespace Clarity.Core
 {
-    using JetBrains.Annotations;
-
-    [PublicAPI]
     public class StorageOptions
     {
         public string ImageContainer { get; set; }
@@ -12,7 +9,6 @@
         public AzureBlobStorageOptions AzureBlobStorageOptions { get; set; }
     }
 
-    [PublicAPI]
     public class AzureBlobStorageOptions
     {
         public string AccountName { get; set; }

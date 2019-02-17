@@ -1,6 +1,5 @@
 ﻿namespace Clarity.Core
 {
-    using JetBrains.Annotations;
     using Microsoft.Extensions.Options;
     using SmartyStreets;
     using UsLookup = SmartyStreets.USStreetApi.Lookup;
@@ -8,7 +7,6 @@
     using InternationalLookup = SmartyStreets.InternationalStreetApi.Lookup;
     using InternationalClient = SmartyStreets.InternationalStreetApi.Client;
 
-    [PublicAPI]
     public class SmartyStreetsAddressService : IAddressService
     {
         private readonly UsClient _usClient;
