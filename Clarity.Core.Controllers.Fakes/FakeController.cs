@@ -9,7 +9,7 @@
     using Microsoft.Extensions.Logging;
     using Moq;
 
-    internal class FakeController : Controller<object>
+    internal class FakeController : Controller<object, object>
     {
         public FakeController(IMediator mediator, ILogger<FakeController> logger) : base(mediator, logger)
         {

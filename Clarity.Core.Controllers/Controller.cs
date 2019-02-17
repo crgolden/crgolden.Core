@@ -12,15 +12,15 @@
     [Produces("application/json")]
     [Route("v1/[controller]/[action]")]
     [ApiController]
-    public abstract class Controller<T> : ControllerBase where T : class
+    public abstract class Controller<TClass, TKey> : ControllerBase where TClass : class
     {
         protected static CancellationTokenSource CancellationTokenSource => new CancellationTokenSource();
 
         protected readonly IMediator Mediator;
-        protected readonly ILogger<Controller<T>> Logger;
+        protected readonly ILogger<Controller<TClass, TKey>> Logger;
         protected readonly Guid? UserId;
 
-        protected Controller(IMediator mediator, ILogger<Controller<T>> logger)
+        protected Controller(IMediator mediator, ILogger<Controller<TClass, TKey>> logger)
         {
             Mediator = mediator;
             Logger = logger;
@@ -37,9 +37,9 @@
             return Ok(result);
         }
 
-        public abstract Task<IActionResult> Details(object[] keyValues);
+        public abstract Task<IActionResult> Details(TKey[] keyValues);
 
-        protected virtual async Task<IActionResult> Details(DetailsRequest<T> request)
+        protected virtual async Task<IActionResult> Details(DetailsRequest<TClass> request)
         {
             try
             {
@@ -60,9 +60,9 @@
             }
         }
 
-        public abstract Task<IActionResult> Edit(T model);
+        public abstract Task<IActionResult> Edit(TClass model);
 
-        protected virtual async Task<IActionResult> Edit(EditRequest<T> request)
+        protected virtual async Task<IActionResult> Edit(EditRequest<TClass> request)
         {
             try
             {
@@ -78,9 +78,9 @@
             }
         }
 
-        public abstract Task<IActionResult> EditRange(IEnumerable<T> entities);
+        public abstract Task<IActionResult> EditRange(IEnumerable<TClass> entities);
 
-        protected virtual async Task<IActionResult> EditRange(EditRangeRequest<T> request)
+        protected virtual async Task<IActionResult> EditRange(EditRangeRequest<TClass> request)
         {
             try
             {
@@ -96,9 +96,9 @@
             }
         }
 
-        public abstract Task<IActionResult> Create(T entity);
+        public abstract Task<IActionResult> Create(TClass entity);
 
-        protected virtual async Task<IActionResult> Create(CreateRequest<T> request)
+        protected virtual async Task<IActionResult> Create(CreateRequest<TClass> request)
         {
             try
             {
@@ -114,9 +114,9 @@
             }
         }
 
-        public abstract Task<IActionResult> CreateRange(IEnumerable<T> entities);
+        public abstract Task<IActionResult> CreateRange(IEnumerable<TClass> entities);
 
-        protected virtual async Task<IActionResult> CreateRange(CreateRangeRequest<IEnumerable<T>, T> request)
+        protected virtual async Task<IActionResult> CreateRange(CreateRangeRequest<IEnumerable<TClass>, TClass> request)
         {
             try
             {
@@ -132,7 +132,7 @@
             }
         }
 
-        public abstract Task<IActionResult> Delete(object[] keyValues);
+        public abstract Task<IActionResult> Delete(TKey[] keyValues);
 
         protected virtual async Task<IActionResult> Delete(DeleteRequest request)
         {
