@@ -14,7 +14,6 @@
             {
                 x.HasKey(entity => entity.Id);
                 x.Property(entity => entity.Name);
-                x.Property(entity => entity.Description);
             });
 
             base.OnModelCreating(modelBuilder);

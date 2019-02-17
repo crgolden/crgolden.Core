@@ -18,9 +18,9 @@
             // Arrange
             var entities = new []
             {
-                new FakeEntity("Name 1") { Description = "Description 1" },
-                new FakeEntity("Name 2") { Description = "Description 2" },
-                new FakeEntity("Name 3") { Description = "Description 3" }
+                new FakeEntity("Name 1"),
+                new FakeEntity("Name 2"),
+                new FakeEntity("Name 3")
             };
             var databaseName = $"{DatabaseNamePrefix}.{nameof(EditRange)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
@@ -35,7 +35,7 @@
 
             for (var i = 0; i < entities.Length; i++)
             {
-                entities[i].Description = $"New Description {i}";
+                entities[i].Name = $"New Name {i}";
             }
 
             var request = new Mock<EditRangeRequest<FakeEntity>>(entities.AsEnumerable());
@@ -52,8 +52,8 @@
             {
                 for (var i = 0; i < entities.Length; i++)
                 {
-                    var description = $"New Description {i}";
-                    Assert.NotNull(await context.Set<FakeEntity>().SingleOrDefaultAsync(x => x.Description.Equals(description)));
+                    var name = $"New Name {i}";
+                    Assert.NotNull(await context.Set<FakeEntity>().SingleOrDefaultAsync(x => x.Name.Equals(name)));
                 }
             }
         }

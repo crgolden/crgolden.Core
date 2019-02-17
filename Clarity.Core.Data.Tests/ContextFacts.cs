@@ -13,7 +13,7 @@
         public void SaveChanges()
         {
             // Arrange
-            var entity = new FakeEntity("Name") { Description = "Description" };
+            var entity = new FakeEntity("Name");
             var databaseName = $"{DatabaseNamePrefix}.{nameof(SaveChanges)}";
             var options = new DbContextOptionsBuilder<DbContext>()
                 .UseInMemoryDatabase(databaseName)
@@ -44,7 +44,7 @@
         public async Task SaveChangesAsync()
         {
             // Arrange
-            var entity = new FakeEntity("Name") { Description = "Description" };
+            var entity = new FakeEntity("Name");
             var databaseName = $"{DatabaseNamePrefix}.{nameof(SaveChangesAsync)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)

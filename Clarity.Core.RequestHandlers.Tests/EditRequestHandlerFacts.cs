@@ -15,8 +15,8 @@
         public async Task Edit()
         {
             // Arrange
-            const string newDescription = "New Description";
-            var entity = new FakeEntity("Name") { Description = "Description" };
+            const string newName = "New Name";
+            var entity = new FakeEntity("Name");
             var databaseName = $"{DatabaseNamePrefix}.{nameof(Edit)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
@@ -29,7 +29,7 @@
             }
 
             var keyValues = new object[] { entity.Id };
-            entity.Description = newDescription;
+            entity.Name = newName;
             var request = new Mock<EditRequest<FakeEntity>>(entity);
 
             // Act
@@ -43,7 +43,7 @@
             using (var context = new FakeContext(options))
             {
                 entity = await context.FindAsync<FakeEntity>(keyValues);
-                Assert.Equal(newDescription, entity.Description);
+                Assert.Equal(newName, entity.Name);
             }
         }
     }

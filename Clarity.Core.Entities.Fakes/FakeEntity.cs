@@ -6,15 +6,11 @@
     {
         internal Guid Id { get; private set; }
 
-        internal string Description { get; set; }
+        internal string Name { get; set; }
 
-        internal FakeEntity(string name) : base(name)
+        internal FakeEntity(string name)
         {
-        }
-
-        internal FakeEntity(string name, Guid id) : this(name)
-        {
-            Id = id;
+            Name = name;
         }
     }
 }
