@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="3.10.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Clarity.Core.Enums\Clarity.Core.Enums.csproj" />
     <ProjectReference Include="..\Clarity.Core.Requests\Clarity.Core.Requests.csproj" />
   </ItemGroup>
 

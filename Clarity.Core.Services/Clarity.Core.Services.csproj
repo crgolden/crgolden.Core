@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Sendgrid" Version="9.10.0" />
     <PackageReference Include="smartystreets-dotnet-sdk" Version="8.0.15" />
-    <PackageReference Include="Stripe.net" Version="23.0.0" />
+    <PackageReference Include="Stripe.net" Version="23.1.0" />
   </ItemGroup>
 
   <ItemGroup>
