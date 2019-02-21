@@ -18,6 +18,7 @@
 
         public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             Context.Add(request.Entity);
             await Context
                 .SaveChangesAsync(cancellationToken)

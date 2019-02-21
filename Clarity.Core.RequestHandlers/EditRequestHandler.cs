@@ -18,6 +18,7 @@
 
         public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             Context.Entry(request.Entity).State = EntityState.Modified;
             await Context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             return Unit.Value;

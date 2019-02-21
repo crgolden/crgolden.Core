@@ -18,6 +18,7 @@
 
         public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var entity = await Context
                 .FindAsync<TResponse>(request.KeyValues, cancellationToken)
                 .ConfigureAwait(false);

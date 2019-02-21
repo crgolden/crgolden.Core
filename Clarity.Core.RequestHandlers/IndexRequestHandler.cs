@@ -20,6 +20,7 @@
 
         public virtual async Task<DataSourceResult> Handle(TRequest request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await Context.Set<TResponse>()
                 .AsNoTracking()
                 .ToDataSourceResultAsync(request.Request, request.ModelState)

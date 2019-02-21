@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
+    <ApplicationIcon>clarity.ico</ApplicationIcon>
   </PropertyGroup>
 
 </Project>
