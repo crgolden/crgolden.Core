@@ -4,11 +4,12 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <ApplicationIcon>clarity.ico</ApplicationIcon>
+    <PackageId>Clarity.Core.Claims</PackageId>
+    <Version>1.1.0</Version>
+    <Company>Clarity</Company>
+    <Authors>Chris Golden</Authors>
+    <IncludeSource>true</IncludeSource>
+    <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-  </ItemGroup>
 
 </Project>

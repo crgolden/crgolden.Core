@@ -4,17 +4,19 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <ApplicationIcon>clarity.ico</ApplicationIcon>
+    <PackageId>Clarity.Core.Controllers</PackageId>
+    <Version>1.0.0</Version>
+    <Company>Clarity</Company>
+    <Authors>Chris Golden</Authors>
+    <IncludeSource>true</IncludeSource>
+    <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Clarity.Core.Enums" Version="1.0.0" />
+    <PackageReference Include="Clarity.Core.Requests" Version="1.0.0" />
     <PackageReference Include="IdentityModel" Version="3.10.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Clarity.Core.Enums\Clarity.Core.Enums.csproj" />
-    <ProjectReference Include="..\Clarity.Core.Requests\Clarity.Core.Requests.csproj" />
   </ItemGroup>
 
 </Project>
