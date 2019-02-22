@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="6.0.0" />
-    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.115" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.220" />
   </ItemGroup>
 
 </Project>
