@@ -106,7 +106,7 @@
 
         public abstract Task<IActionResult> Edit(TEntity model);
 
-        protected virtual async Task<IActionResult> Edit(EditRequest<TEntity> request)
+        protected virtual async Task<IActionResult> Edit(EditRequest<TEntity, TModel> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -115,14 +115,14 @@
                     Logger.LogInformation(
                         eventId: new EventId((int)EventIds.EditStart, $"{EventIds.EditStart}"),
                         message: "Editing entity {Entity} at {Time}",
-                        args: new object[] { request.Entity, DateTime.UtcNow });
+                        args: new object[] { request.Model, DateTime.UtcNow });
                     await Mediator
                         .Send(request, cancellationTokenSource.Token)
                         .ConfigureAwait(false);
                     Logger.LogInformation(
                         eventId: new EventId((int)EventIds.EditEnd, $"{EventIds.EditEnd}"),
                         message: "Edited entity {Entity} at {Time}",
-                        args: new object[] { request.Entity, DateTime.UtcNow });
+                        args: new object[] { request.Model, DateTime.UtcNow });
                     return NoContent();
                 }
                 catch (Exception e)
@@ -131,15 +131,15 @@
                         eventId: new EventId((int)EventIds.EditError, $"{EventIds.EditError}"),
                         exception: e,
                         message: "Error editing entity {Entity} at {Time}",
-                        args: new object[] { request.Entity, DateTime.UtcNow });
-                    return BadRequest(request.Entity);
+                        args: new object[] { request.Model, DateTime.UtcNow });
+                    return BadRequest(request.Model);
                 }
             }
         }
 
         public abstract Task<IActionResult> EditRange(IEnumerable<TEntity> entities);
 
-        protected virtual async Task<IActionResult> EditRange(EditRangeRequest<TEntity> request)
+        protected virtual async Task<IActionResult> EditRange(EditRangeRequest<TEntity, TModel> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -148,14 +148,14 @@
                     Logger.LogInformation(
                         eventId: new EventId((int)EventIds.EditRangeStart, $"{EventIds.EditRangeStart}"),
                         message: "Editing entities {Entities} at {Time}",
-                        args: new object[] { request.Entities, DateTime.UtcNow });
+                        args: new object[] { request.Models, DateTime.UtcNow });
                     await Mediator
                         .Send(request, cancellationTokenSource.Token)
                         .ConfigureAwait(false);
                     Logger.LogInformation(
                         eventId: new EventId((int)EventIds.EditRangeEnd, $"{EventIds.EditRangeEnd}"),
                         message: "Edited entities {Entities} at {Time}",
-                        args: new object[] { request.Entities, DateTime.UtcNow });
+                        args: new object[] { request.Models, DateTime.UtcNow });
                     return NoContent();
                 }
                 catch (Exception e)
@@ -164,8 +164,8 @@
                         eventId: new EventId((int)EventIds.EditRangeError, $"{EventIds.EditRangeError}"),
                         exception: e,
                         message: "Error editing entities {Entities} at {Time}",
-                        args: new object[] { request.Entities, DateTime.UtcNow });
-                    return BadRequest(request.Entities);
+                        args: new object[] { request.Models, DateTime.UtcNow });
+                    return BadRequest(request.Models);
                 }
             }
         }
@@ -181,7 +181,7 @@
                     Logger.LogInformation(
                         eventId: new EventId((int)EventIds.CreateStart, $"{EventIds.CreateStart}"),
                         message: "Creating entity {Entity} at {Time}",
-                        args: new object[] { request.Entity, DateTime.UtcNow });
+                        args: new object[] { request.Model, DateTime.UtcNow });
                     var entity = await Mediator
                         .Send(request, cancellationTokenSource.Token)
                         .ConfigureAwait(false);
@@ -197,8 +197,8 @@
                         eventId: new EventId((int)EventIds.CreateError, $"{EventIds.CreateError}"),
                         exception: e,
                         message: "Error creating entity {Entity} at {Time}",
-                        args: new object[] { request.Entity, DateTime.UtcNow });
-                    return BadRequest(request.Entity);
+                        args: new object[] { request.Model, DateTime.UtcNow });
+                    return BadRequest(request.Model);
                 }
             }
         }
@@ -214,7 +214,7 @@
                     Logger.LogInformation(
                         eventId: new EventId((int)EventIds.CreateRangeStart, $"{EventIds.CreateRangeStart}"),
                         message: "Creating entities {Entities} at {Time}",
-                        args: new object[] { request.Entities, DateTime.UtcNow });
+                        args: new object[] { request.Models, DateTime.UtcNow });
                     var entities = await Mediator
                         .Send(request, cancellationTokenSource.Token)
                         .ConfigureAwait(false);
@@ -230,8 +230,8 @@
                         eventId: new EventId((int)EventIds.CreateRangeError, $"{EventIds.CreateRangeError}"),
                         exception: e,
                         message: "Error creating entities {Entities} at {Time}",
-                        args: new object[] { request.Entities, DateTime.UtcNow });
-                    return BadRequest(request.Entities);
+                        args: new object[] { request.Models, DateTime.UtcNow });
+                    return BadRequest(request.Models);
                 }
             }
         }

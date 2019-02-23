@@ -5,11 +5,11 @@
     public abstract class CreateRequest<TEntity, TModel> : IRequest<TModel>
         where TEntity : class
     {
-        public readonly TEntity Entity;
+        public readonly TModel Model;
 
-        protected CreateRequest(TEntity entity)
+        protected CreateRequest(TModel model)
         {
-            Entity = entity;
+            Model = model;
         }
     }
 }

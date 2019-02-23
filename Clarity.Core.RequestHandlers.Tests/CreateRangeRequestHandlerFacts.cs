@@ -26,7 +26,7 @@
                 entity1,
                 entity2,
                 entity3
-            }.AsEnumerable();
+            };
             var models = new object[]
             {
                 new { entity1.Name },
@@ -37,8 +37,9 @@
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
                 .Options;
-            var request = new Mock<CreateRangeRequest<IEnumerable<object>, FakeEntity, object>>(entities);
+            var request = new Mock<CreateRangeRequest<IEnumerable<object>, FakeEntity, object>>(models.AsEnumerable());
             var mapper = new Mock<IMapper>();
+            mapper.Setup(x => x.Map<IEnumerable<FakeEntity>>(It.IsAny<IEnumerable<object>>())).Returns(entities);
             mapper.Setup(x => x.Map<IEnumerable<object>>(It.IsAny<IEnumerable<FakeEntity>>())).Returns(models);
             IEnumerable<object> createRange;
 

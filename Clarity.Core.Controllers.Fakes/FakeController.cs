@@ -27,12 +27,12 @@
 
         public override async Task<IActionResult> Edit(object entity)
         {
-            return await Edit(new Mock<EditRequest<object>>(entity).Object);
+            return await Edit(new Mock<EditRequest<object, object>>(entity).Object);
         }
 
         public override async Task<IActionResult> EditRange(IEnumerable<object> entities)
         {
-            return await EditRange(new Mock<EditRangeRequest<object>>(entities).Object);
+            return await EditRange(new Mock<EditRangeRequest<object, object>>(entities).Object);
         }
 
         public override async Task<IActionResult> Create(object entity)

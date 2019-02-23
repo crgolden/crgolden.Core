@@ -25,11 +25,12 @@
         public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            Context.AddRange(request.Entities);
+            var entities = Mapper.Map<IEnumerable<TEntity>>(request.Models);
+            Context.AddRange(entities);
             await Context
                 .SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
-            return Mapper.Map<TResponse>(request.Entities);
+            return Mapper.Map<TResponse>(entities);
         }
     }
 }

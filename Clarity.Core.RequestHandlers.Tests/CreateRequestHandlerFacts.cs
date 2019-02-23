@@ -22,8 +22,9 @@
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
                 .Options;
-            var request = new Mock<CreateRequest<FakeEntity, object>>(entity);
+            var request = new Mock<CreateRequest<FakeEntity, object>>(model);
             var mapper = new Mock<IMapper>();
+            mapper.Setup(x => x.Map<FakeEntity>(model)).Returns(entity);
             mapper.Setup(x => x.Map<object>(It.Is<FakeEntity>(y => y.Name == entity.Name))).Returns(model);
             object create;
 

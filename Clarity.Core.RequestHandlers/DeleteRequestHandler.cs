@@ -5,9 +5,9 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public abstract class DeleteRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest>
+    public abstract class DeleteRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest>
         where TRequest : DeleteRequest
-        where TResponse : class
+        where TEntity : class
     {
         protected readonly DbContext Context;
 
@@ -20,7 +20,7 @@
         {
             cancellationToken.ThrowIfCancellationRequested();
             var entity = await Context
-                .FindAsync<TResponse>(request.KeyValues, cancellationToken)
+                .FindAsync<TEntity>(request.KeyValues, cancellationToken)
                 .ConfigureAwait(false);
             Context.Remove(entity);
             await Context

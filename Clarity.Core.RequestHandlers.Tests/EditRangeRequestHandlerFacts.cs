@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core.RequestHandlers.Tests
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Fakes;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -22,6 +24,12 @@
                 new FakeEntity("Name 2"),
                 new FakeEntity("Name 3")
             };
+            var models = new object[]
+            {
+                new { entities[0].Name },
+                new { entities[1].Name },
+                new { entities[2].Name }
+            }.AsEnumerable();
             var databaseName = $"{DatabaseNamePrefix}.{nameof(EditRange)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
@@ -38,12 +46,14 @@
                 entities[i].Name = $"New Name {i}";
             }
 
-            var request = new Mock<EditRangeRequest<FakeEntity>>(entities.AsEnumerable());
+            var request = new Mock<EditRangeRequest<FakeEntity, object>>(models);
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(x => x.Map<IEnumerable<FakeEntity>>(It.IsAny<IEnumerable<object>>())).Returns(entities);
 
             // Act
             using (var context = new FakeContext(options))
             {
-                var requestHandler = new FakeEditRangeRequestHandler(context);
+                var requestHandler = new FakeEditRangeRequestHandler(context, mapper.Object);
                 await requestHandler.Handle(request.Object, CancellationToken.None);
             }
 

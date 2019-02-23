@@ -1,25 +1,31 @@
 ﻿namespace Clarity.Core
 {
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public abstract class EditRangeRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest>
-        where TRequest : EditRangeRequest<TResponse>
-        where TResponse : class
+    public abstract class EditRangeRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest>
+        where TRequest : EditRangeRequest<TEntity, TModel>
+        where TEntity : class
     {
         protected readonly DbContext Context;
 
-        protected EditRangeRequestHandler(DbContext context)
+        protected readonly IMapper Mapper;
+
+        protected EditRangeRequestHandler(DbContext context, IMapper mapper)
         {
             Context = context;
+            Mapper = mapper;
         }
 
         public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            foreach (var entity in request.Entities) Context.Entry(entity).State = EntityState.Modified;
+            var entities = Mapper.Map<IEnumerable<TEntity>>(request.Models);
+            foreach (var entity in entities) Context.Entry(entity).State = EntityState.Modified;
             await Context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             return Unit.Value;
         }

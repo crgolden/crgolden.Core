@@ -2,6 +2,7 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Fakes;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -28,14 +29,16 @@
                 await context.SaveChangesAsync();
             }
 
-            var keyValues = new object[] { entity.Id };
             entity.Name = newName;
-            var request = new Mock<EditRequest<FakeEntity>>(entity);
+            var keyValues = new object[] { entity.Id };
+            var request = new Mock<EditRequest<FakeEntity, object>>(new {});
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(x => x.Map<FakeEntity>(It.IsAny<object>())).Returns(entity);
 
             // Act
             using (var context = new FakeContext(options))
             {
-                var requestHandler = new FakeEditRequestHandler(context);
+                var requestHandler = new FakeEditRequestHandler(context, mapper.Object);
                 await requestHandler.Handle(request.Object, CancellationToken.None);
             }
 

@@ -7,11 +7,11 @@
         where TEntity : class
         where TResponse : IEnumerable<TModel>
     {
-        public readonly IEnumerable<TEntity> Entities;
+        public readonly IEnumerable<TModel> Models;
 
-        protected CreateRangeRequest(IEnumerable<TEntity> entities)
+        protected CreateRangeRequest(IEnumerable<TModel> models)
         {
-            Entities = entities;
+            Models = models;
         }
     }
 }
