@@ -2,6 +2,8 @@
 {
     public class DatabaseOptions
     {
+        public bool SeedData { get; set; }
+
         public SqlServerOptions SqlServerOptions { get; set; }
 
         public SqLiteOptions SqLiteOptions { get; set; }
