@@ -9,5 +9,7 @@
         public string SecondaryKey { get; set; }
 
         public string Endpoint { get; set; }
+
+        public string EmailQueueName { get; set; }
     }
 }
