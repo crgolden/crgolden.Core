@@ -13,14 +13,15 @@
     [Produces("application/json")]
     [Route("v1/[controller]/[action]")]
     [ApiController]
-    public abstract class Controller<TClass, TKey> : ControllerBase where TClass : class
+    public abstract class Controller<TEntity, TModel, TKey> : ControllerBase
+        where TEntity : class
     {
         protected readonly IMediator Mediator;
-        protected readonly ILogger<Controller<TClass, TKey>> Logger;
+        protected readonly ILogger<Controller<TEntity, TModel, TKey>> Logger;
         protected readonly Guid? UserId;
         protected readonly string UserEmail;
 
-        protected Controller(IMediator mediator, ILogger<Controller<TClass, TKey>> logger)
+        protected Controller(IMediator mediator, ILogger<Controller<TEntity, TModel, TKey>> logger)
         {
             Mediator = mediator;
             Logger = logger;
@@ -30,7 +31,7 @@
 
         public abstract Task<IActionResult> Index(DataSourceRequest request = null);
 
-        protected virtual async Task<IActionResult> Index(IndexRequest request)
+        protected virtual async Task<IActionResult> Index(IndexRequest<TEntity, TModel> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -63,7 +64,7 @@
 
         public abstract Task<IActionResult> Details(TKey[] keyValues);
 
-        protected virtual async Task<IActionResult> Details(DetailsRequest<TClass> request)
+        protected virtual async Task<IActionResult> Details(DetailsRequest<TEntity, TModel> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -103,9 +104,9 @@
             }
         }
 
-        public abstract Task<IActionResult> Edit(TClass model);
+        public abstract Task<IActionResult> Edit(TEntity model);
 
-        protected virtual async Task<IActionResult> Edit(EditRequest<TClass> request)
+        protected virtual async Task<IActionResult> Edit(EditRequest<TEntity> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -136,9 +137,9 @@
             }
         }
 
-        public abstract Task<IActionResult> EditRange(IEnumerable<TClass> entities);
+        public abstract Task<IActionResult> EditRange(IEnumerable<TEntity> entities);
 
-        protected virtual async Task<IActionResult> EditRange(EditRangeRequest<TClass> request)
+        protected virtual async Task<IActionResult> EditRange(EditRangeRequest<TEntity> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -169,9 +170,9 @@
             }
         }
 
-        public abstract Task<IActionResult> Create(TClass entity);
+        public abstract Task<IActionResult> Create(TEntity entity);
 
-        protected virtual async Task<IActionResult> Create(CreateRequest<TClass> request)
+        protected virtual async Task<IActionResult> Create(CreateRequest<TEntity, TModel> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {
@@ -202,9 +203,9 @@
             }
         }
 
-        public abstract Task<IActionResult> CreateRange(IEnumerable<TClass> entities);
+        public abstract Task<IActionResult> CreateRange(IEnumerable<TEntity> entities);
 
-        protected virtual async Task<IActionResult> CreateRange(CreateRangeRequest<IEnumerable<TClass>, TClass> request)
+        protected virtual async Task<IActionResult> CreateRange(CreateRangeRequest<IEnumerable<TModel>, TEntity, TModel> request)
         {
             using (var cancellationTokenSource = new CancellationTokenSource())
             {

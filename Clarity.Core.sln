@@ -52,7 +52,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clarity.Core.Controllers.Fa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clarity.Core.Controllers.Tests", "Clarity.Core.Controllers.Tests\Clarity.Core.Controllers.Tests.csproj", "{5EFB9025-838F-4062-9F9C-9EBC5151D69F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clarity.Core.Enums", "Clarity.Core.Enums\Clarity.Core.Enums.csproj", "{4AD1AF77-84CC-4132-8D64-A5420AB84CA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clarity.Core.Enums", "Clarity.Core.Enums\Clarity.Core.Enums.csproj", "{4AD1AF77-84CC-4132-8D64-A5420AB84CA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clarity.Core.Models", "Clarity.Core.Models\Clarity.Core.Models.csproj", "{CA4F26EA-1A75-4315-A512-AC24311C4262}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -148,6 +150,10 @@ Global
 		{4AD1AF77-84CC-4132-8D64-A5420AB84CA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AD1AF77-84CC-4132-8D64-A5420AB84CA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AD1AF77-84CC-4132-8D64-A5420AB84CA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA4F26EA-1A75-4315-A512-AC24311C4262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA4F26EA-1A75-4315-A512-AC24311C4262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA4F26EA-1A75-4315-A512-AC24311C4262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA4F26EA-1A75-4315-A512-AC24311C4262}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

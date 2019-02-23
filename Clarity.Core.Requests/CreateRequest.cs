@@ -2,11 +2,12 @@
 {
     using MediatR;
 
-    public abstract class CreateRequest<TResponse> : IRequest<TResponse> where TResponse : class
+    public abstract class CreateRequest<TEntity, TModel> : IRequest<TModel>
+        where TEntity : class
     {
-        public readonly TResponse Entity;
+        public readonly TEntity Entity;
 
-        protected CreateRequest(TResponse entity)
+        protected CreateRequest(TEntity entity)
         {
             Entity = entity;
         }

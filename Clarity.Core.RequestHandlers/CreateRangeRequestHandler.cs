@@ -3,19 +3,23 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public abstract class CreateRangeRequestHandler<TRequest, TResponse, T> : IRequestHandler<TRequest, TResponse>
-        where TRequest : CreateRangeRequest<TResponse, T>
-        where TResponse : IEnumerable<T>
-        where T : class
+    public abstract class CreateRangeRequestHandler<TRequest, TResponse, TEntity, TModel> : IRequestHandler<TRequest, TResponse>
+        where TRequest : CreateRangeRequest<TResponse, TEntity, TModel>
+        where TResponse : IEnumerable<TModel>
+        where TEntity : class
     {
         protected readonly DbContext Context;
 
-        protected CreateRangeRequestHandler(DbContext context)
+        protected readonly IMapper Mapper;
+
+        protected CreateRangeRequestHandler(DbContext context, IMapper mapper)
         {
             Context = context;
+            Mapper = mapper;
         }
 
         public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
@@ -25,7 +29,7 @@
             await Context
                 .SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
-            return request.Entities;
+            return Mapper.Map<TResponse>(request.Entities);
         }
     }
 }

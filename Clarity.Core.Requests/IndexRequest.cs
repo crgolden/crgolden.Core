@@ -6,7 +6,7 @@
     using MediatR;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-    public abstract class IndexRequest : IRequest<DataSourceResult>
+    public abstract class IndexRequest<TEntity, TModel> : IRequest<DataSourceResult>
     {
         public readonly ModelStateDictionary ModelState;
 

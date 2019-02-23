@@ -3,13 +3,13 @@
     using System.Collections.Generic;
     using MediatR;
 
-    public abstract class CreateRangeRequest<TResponse, T> : IRequest<TResponse>
-        where T : class
-        where TResponse : IEnumerable<T>
+    public abstract class CreateRangeRequest<TResponse, TEntity, TModel> : IRequest<TResponse>
+        where TEntity : class
+        where TResponse : IEnumerable<TModel>
     {
-        public readonly TResponse Entities;
+        public readonly IEnumerable<TEntity> Entities;
 
-        protected CreateRangeRequest(TResponse entities)
+        protected CreateRangeRequest(IEnumerable<TEntity> entities)
         {
             Entities = entities;
         }

@@ -1,9 +1,12 @@
 ﻿namespace Clarity.Core.RequestHandlers.Tests
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Fakes;
     using Kendo.Mvc.UI;
     using Microsoft.EntityFrameworkCore;
@@ -24,6 +27,12 @@
                 new FakeEntity("Name 2"),
                 new FakeEntity("Name 3")
             };
+            var models = new object[]
+            {
+                new { entities[0].Name },
+                new { entities[1].Name },
+                new { entities[2].Name }
+            }.AsQueryable();
             var databaseName = $"{DatabaseNamePrefix}.{nameof(Index)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
@@ -34,20 +43,26 @@
                 await context.SaveChangesAsync();
             }
 
-            var request = new Mock<IndexRequest>(null, null);
+            var request = new Mock<IndexRequest<FakeEntity, object>>(null, new DataSourceRequest());
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(x => x.ProjectTo(
+                    It.IsAny<IQueryable>(),
+                    It.IsAny<object>(),
+                    It.IsAny<Expression<Func<object, object>>[]>()))
+                .Returns(models);
             DataSourceResult index;
 
             // Act
             using (var context = new FakeContext(options))
             {
-                var requestHandler = new FakeIndexRequestHandler(context);
+                var requestHandler = new FakeIndexRequestHandler(context, mapper.Object);
                 index = await requestHandler.Handle(request.Object, CancellationToken.None);
             }
 
             // Assert
             var result = Assert.IsType<DataSourceResult>(index);
-            var data = Assert.IsAssignableFrom<IEnumerable<FakeEntity>>(result.Data);
-            Assert.Equal(entities.Length, data.Count());
+            var data = Assert.IsAssignableFrom<IEnumerable<object>>(result.Data);
+            Assert.Equal(models.AsEnumerable().Count(), data.Count());
         }
     }
 }

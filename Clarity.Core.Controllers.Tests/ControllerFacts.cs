@@ -29,7 +29,7 @@ namespace Clarity.Core.Controllers.Tests
             var request = new DataSourceRequest();
             var dataSourceResult = new DataSourceResult();
             _mediator.Setup(x => x.Send(
-                    It.Is<IndexRequest>(y => y.Request.Equals(request)),
+                    It.Is<IndexRequest<object, object>>(y => y.Request.Equals(request)),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(dataSourceResult);
             var controller = new FakeController(_mediator.Object, Logger);
@@ -49,7 +49,7 @@ namespace Clarity.Core.Controllers.Tests
             var entity = new { Name = "Name", Id = Guid.NewGuid() };
             var keyValues = new object[] { entity.Id };
             _mediator.Setup(x => x.Send(
-                    It.Is<DetailsRequest<object>>(y => y.KeyValues[0].Equals(keyValues[0])),
+                    It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(entity);
             var controller = new FakeController(_mediator.Object, Logger);
@@ -68,7 +68,7 @@ namespace Clarity.Core.Controllers.Tests
             // Arrange
             var keyValues = new object[] { Guid.NewGuid() };
             _mediator.Setup(x => x.Send(
-                    It.Is<DetailsRequest<object>>(y => y.KeyValues[0].Equals(keyValues[0])),
+                    It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object, Logger);
@@ -87,7 +87,7 @@ namespace Clarity.Core.Controllers.Tests
             // Arrange
             var keyValues = new object[] { Guid.NewGuid() };
             _mediator.Setup(x => x.Send(
-                    It.Is<DetailsRequest<object>>(y => y.KeyValues[0].Equals(keyValues[0])),
+                    It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(default(object));
             var controller = new FakeController(_mediator.Object, Logger);
@@ -182,7 +182,7 @@ namespace Clarity.Core.Controllers.Tests
             // Arrange
             var entity = new { Name = "Name" };
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRequest<object>>(y => y.Entity.Equals(entity)),
+                    It.Is<CreateRequest<object, object>>(y => y.Entity.Equals(entity)),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(entity);
             var controller = new FakeController(_mediator.Object, Logger);
@@ -206,7 +206,7 @@ namespace Clarity.Core.Controllers.Tests
                 new { Name = "Name 3" }
             };
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRangeRequest<IEnumerable<object>, object>>(y => y.Entities.Equals(entities)),
+                    It.Is<CreateRangeRequest<IEnumerable<object>, object, object>>(y => y.Entities.Equals(entities)),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(entities);
             var controller = new FakeController(_mediator.Object, Logger);
@@ -225,7 +225,7 @@ namespace Clarity.Core.Controllers.Tests
             // Arrange
             var entity = new { Name = "Name" };
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRequest<object>>(y => y.Entity.Equals(entity)),
+                    It.Is<CreateRequest<object, object>>(y => y.Entity.Equals(entity)),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object, Logger);
@@ -249,7 +249,7 @@ namespace Clarity.Core.Controllers.Tests
                 new { Name = "Name 3" }
             };
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRangeRequest<IEnumerable<object>, object>>(y => y.Entities.Equals(entities)),
+                    It.Is<CreateRangeRequest<IEnumerable<object>, object, object>>(y => y.Entities.Equals(entities)),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object, Logger);

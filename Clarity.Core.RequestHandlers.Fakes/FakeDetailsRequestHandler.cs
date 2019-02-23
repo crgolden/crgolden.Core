@@ -1,10 +1,11 @@
 ﻿namespace Clarity.Core.Fakes
 {
+    using AutoMapper;
     using Microsoft.EntityFrameworkCore;
 
-    internal class FakeDetailsRequestHandler : DetailsRequestHandler<DetailsRequest<FakeEntity>, FakeEntity>
+    internal class FakeDetailsRequestHandler : DetailsRequestHandler<DetailsRequest<FakeEntity, object>, FakeEntity, object>
     {
-        internal FakeDetailsRequestHandler(DbContext context) : base(context)
+        internal FakeDetailsRequestHandler(DbContext context, IMapper mapper) : base(context, mapper)
         {
         }
     }

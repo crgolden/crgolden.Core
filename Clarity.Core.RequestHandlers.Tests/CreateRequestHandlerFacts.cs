@@ -2,6 +2,7 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using Fakes;
     using Microsoft.EntityFrameworkCore;
     using Moq;
@@ -16,26 +17,28 @@
         {
             // Arrange
             var entity = new FakeEntity("Name");
+            var model = new { entity.Name };
             var databaseName = $"{DatabaseNamePrefix}.{nameof(Create)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
                 .Options;
-            var request = new Mock<CreateRequest<FakeEntity>>(entity);
+            var request = new Mock<CreateRequest<FakeEntity, object>>(entity);
+            var mapper = new Mock<IMapper>();
+            mapper.Setup(x => x.Map<object>(It.Is<FakeEntity>(y => y.Name == entity.Name))).Returns(model);
             object create;
 
             // Act
             using (var context = new FakeContext(options))
             {
-                var requestHandler = new FakeCreateRequestHandler(context);
+                var requestHandler = new FakeCreateRequestHandler(context, mapper.Object);
                 create = await requestHandler.Handle(request.Object, CancellationToken.None);
             }
 
             // Assert
-            entity = Assert.IsType<FakeEntity>(create);
+            Assert.Equal(model, create);
             using (var context = new FakeContext(options))
             {
-                entity = await context.Set<FakeEntity>().SingleOrDefaultAsync(x => x.Name.Equals(entity.Name));
-                Assert.NotNull(entity);
+                Assert.NotNull(await context.Set<FakeEntity>().SingleOrDefaultAsync(x => x.Name.Equals(entity.Name)));
             }
         }
     }

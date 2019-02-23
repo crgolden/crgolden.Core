@@ -2,7 +2,8 @@
 {
     using MediatR;
 
-    public abstract class DetailsRequest<TResponse> : IRequest<TResponse> where TResponse : class
+    public abstract class DetailsRequest<TEntity, TModel> : IRequest<TModel>
+        where TEntity : class
     {
         public readonly object[] KeyValues;
 

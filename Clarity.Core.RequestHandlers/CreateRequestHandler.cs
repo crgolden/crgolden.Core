@@ -2,28 +2,32 @@
 {
     using System.Threading;
     using System.Threading.Tasks;
+    using AutoMapper;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public abstract class CreateRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
-        where TRequest : CreateRequest<TResponse>
-        where TResponse : class
+    public abstract class CreateRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest, TModel>
+        where TRequest : CreateRequest<TEntity, TModel>
+        where TEntity : class
     {
         protected readonly DbContext Context;
 
-        protected CreateRequestHandler(DbContext context)
+        protected readonly IMapper Mapper;
+
+        protected CreateRequestHandler(DbContext context, IMapper mapper)
         {
             Context = context;
+            Mapper = mapper;
         }
 
-        public virtual async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
+        public virtual async Task<TModel> Handle(TRequest request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             Context.Add(request.Entity);
             await Context
                 .SaveChangesAsync(cancellationToken)
                 .ConfigureAwait(false);
-            return request.Entity;
+            return Mapper.Map<TModel>(request.Entity);
         }
     }
 }

@@ -9,7 +9,7 @@
     using Microsoft.Extensions.Logging;
     using Moq;
 
-    internal class FakeController : Controller<object, object>
+    internal class FakeController : Controller<object, object, object>
     {
         public FakeController(IMediator mediator, ILogger<FakeController> logger) : base(mediator, logger)
         {
@@ -17,12 +17,12 @@
 
         public override async Task<IActionResult> Index(DataSourceRequest request = null)
         {
-            return await Index(new Mock<IndexRequest>(new ModelStateDictionary(), request).Object);
+            return await Index(new Mock<IndexRequest<object, object>>(new ModelStateDictionary(), request).Object);
         }
 
         public override async Task<IActionResult> Details(object[] keyValues)
         {
-            return await Details(new Mock<DetailsRequest<object>>(new object[] { keyValues }).Object);
+            return await Details(new Mock<DetailsRequest<object, object>>(new object[] { keyValues }).Object);
         }
 
         public override async Task<IActionResult> Edit(object entity)
@@ -37,12 +37,12 @@
 
         public override async Task<IActionResult> Create(object entity)
         {
-            return await Create(new Mock<CreateRequest<object>>(entity).Object);
+            return await Create(new Mock<CreateRequest<object, object>>(entity).Object);
         }
 
         public override async Task<IActionResult> CreateRange(IEnumerable<object> entities)
         {
-            return await CreateRange(new Mock<CreateRangeRequest<IEnumerable<object>, object>>(entities).Object);
+            return await CreateRange(new Mock<CreateRangeRequest<IEnumerable<object>, object, object>>(entities).Object);
         }
 
         public override async Task<IActionResult> Delete(object[] keyValues)

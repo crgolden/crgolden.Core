@@ -1,12 +1,13 @@
 ﻿namespace Clarity.Core.Fakes
 {
     using System.Collections.Generic;
+    using AutoMapper;
     using Microsoft.EntityFrameworkCore;
 
     internal class FakeCreateRangeRequestHandler
-        : CreateRangeRequestHandler<CreateRangeRequest<IEnumerable<FakeEntity>, FakeEntity>, IEnumerable<FakeEntity>, FakeEntity>
+        : CreateRangeRequestHandler<CreateRangeRequest<IEnumerable<object>, FakeEntity, object>, IEnumerable<object>, FakeEntity, object>
     {
-        internal FakeCreateRangeRequestHandler(DbContext context) : base(context)
+        internal FakeCreateRangeRequestHandler(DbContext context, IMapper mapper) : base(context, mapper)
         {
         }
     }

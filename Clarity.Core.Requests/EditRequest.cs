@@ -2,11 +2,12 @@
 {
     using MediatR;
 
-    public abstract class EditRequest<T> : IRequest where T : class
+    public abstract class EditRequest<TEntity> : IRequest
+        where TEntity : class
     {
-        public readonly T Entity;
+        public readonly TEntity Entity;
 
-        protected EditRequest(T entity)
+        protected EditRequest(TEntity entity)
         {
             Entity = entity;
         }
