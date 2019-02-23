@@ -23,6 +23,12 @@
         EditRangeError,
         DeleteStart,
         DeleteEnd,
-        DeleteError
+        DeleteError,
+        UploadStart,
+        UploadEnd,
+        UploadError,
+        ValidateStart,
+        ValidateEnd,
+        ValidateError
     }
 }

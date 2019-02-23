@@ -26,8 +26,8 @@
         {
             cancellationToken.ThrowIfCancellationRequested();
             var entities = Context.Set<TEntity>().AsNoTracking();
-            var models = Mapper.ProjectTo<TModel>(entities);
-            return await models
+            return await Mapper
+                .ProjectTo<TModel>(entities)
                 .ToDataSourceResultAsync(request.Request, request.ModelState)
                 .ConfigureAwait(false);
         }
