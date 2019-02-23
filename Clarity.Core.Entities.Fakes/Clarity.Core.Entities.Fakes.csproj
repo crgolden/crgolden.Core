@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Entities" Version="1.0.0" />
+    <PackageReference Include="Clarity.Core.Entities" Version="1.1.0-CI-20190223-125824" />
   </ItemGroup>
 
 </Project>
