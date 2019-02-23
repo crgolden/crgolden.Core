@@ -104,7 +104,7 @@
             }
         }
 
-        public abstract Task<IActionResult> Edit(TEntity model);
+        public abstract Task<IActionResult> Edit(TModel model);
 
         protected virtual async Task<IActionResult> Edit(EditRequest<TEntity, TModel> request)
         {
@@ -137,7 +137,7 @@
             }
         }
 
-        public abstract Task<IActionResult> EditRange(IEnumerable<TEntity> entities);
+        public abstract Task<IActionResult> EditRange(IEnumerable<TModel> models);
 
         protected virtual async Task<IActionResult> EditRange(EditRangeRequest<TEntity, TModel> request)
         {
@@ -170,7 +170,7 @@
             }
         }
 
-        public abstract Task<IActionResult> Create(TEntity entity);
+        public abstract Task<IActionResult> Create(TModel model);
 
         protected virtual async Task<IActionResult> Create(CreateRequest<TEntity, TModel> request)
         {
@@ -203,7 +203,7 @@
             }
         }
 
-        public abstract Task<IActionResult> CreateRange(IEnumerable<TEntity> entities);
+        public abstract Task<IActionResult> CreateRange(IEnumerable<TModel> models);
 
         protected virtual async Task<IActionResult> CreateRange(CreateRangeRequest<IEnumerable<TModel>, TEntity, TModel> request)
         {
