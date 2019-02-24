@@ -6,16 +6,17 @@
     using MediatR;
     using Microsoft.Extensions.Logging;
 
-    public abstract class IndexNotificationHandler : INotificationHandler<IndexNotification>
+    public abstract class IndexNotificationHandler<TNotification> : INotificationHandler<TNotification>
+        where TNotification : IndexNotification
     {
-        private readonly ILogger<IndexNotificationHandler> _logger;
+        private readonly ILogger<IndexNotificationHandler<TNotification>> _logger;
 
-        protected IndexNotificationHandler(ILogger<IndexNotificationHandler> logger)
+        protected IndexNotificationHandler(ILogger<IndexNotificationHandler<TNotification>> logger)
         {
             _logger = logger;
         }
 
-        public virtual Task Handle(IndexNotification notification, CancellationToken cancellationToken)
+        public virtual Task Handle(TNotification notification, CancellationToken cancellationToken)
         {
             switch (notification.EventId)
             {

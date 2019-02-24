@@ -6,16 +6,17 @@
     using MediatR;
     using Microsoft.Extensions.Logging;
 
-    public abstract class DeleteNotificationHandler : INotificationHandler<DeleteNotification>
+    public abstract class DeleteNotificationHandler<TNotification> : INotificationHandler<TNotification>
+        where TNotification : DeleteNotification
     {
-        private readonly ILogger<DeleteNotificationHandler> _logger;
+        private readonly ILogger<DeleteNotificationHandler<TNotification>> _logger;
 
-        protected DeleteNotificationHandler(ILogger<DeleteNotificationHandler> logger)
+        protected DeleteNotificationHandler(ILogger<DeleteNotificationHandler<TNotification>> logger)
         {
             _logger = logger;
         }
 
-        public virtual Task Handle(DeleteNotification notification, CancellationToken cancellationToken)
+        public virtual Task Handle(TNotification notification, CancellationToken cancellationToken)
         {
             switch (notification.EventId)
             {

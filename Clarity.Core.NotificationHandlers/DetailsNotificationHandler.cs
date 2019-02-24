@@ -6,16 +6,17 @@
     using MediatR;
     using Microsoft.Extensions.Logging;
 
-    public abstract class DetailsNotificationHandler<TModel> : INotificationHandler<DetailsNotification<TModel>>
+    public abstract class DetailsNotificationHandler<TNotification, TModel> : INotificationHandler<TNotification>
+        where TNotification : DetailsNotification<TModel>
     {
-        private readonly ILogger<DetailsNotificationHandler<TModel>> _logger;
+        private readonly ILogger<DetailsNotificationHandler<TNotification, TModel>> _logger;
 
-        protected DetailsNotificationHandler(ILogger<DetailsNotificationHandler<TModel>> logger)
+        protected DetailsNotificationHandler(ILogger<DetailsNotificationHandler<TNotification, TModel>> logger)
         {
             _logger = logger;
         }
 
-        public virtual Task Handle(DetailsNotification<TModel> notification, CancellationToken cancellationToken)
+        public virtual Task Handle(TNotification notification, CancellationToken cancellationToken)
         {
             switch (notification.EventId)
             {

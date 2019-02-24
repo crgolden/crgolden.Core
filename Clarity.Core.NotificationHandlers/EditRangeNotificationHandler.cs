@@ -6,16 +6,17 @@
     using MediatR;
     using Microsoft.Extensions.Logging;
 
-    public abstract class EditRangeNotificationHandler<TModel> : INotificationHandler<EditRangeNotification<TModel>>
+    public abstract class EditRangeNotificationHandler<TNotification, TModel> : INotificationHandler<TNotification>
+        where TNotification : EditRangeNotification<TModel>
     {
-        private readonly ILogger<EditRangeNotificationHandler<TModel>> _logger;
+        private readonly ILogger<EditRangeNotificationHandler<TNotification, TModel>> _logger;
 
-        protected EditRangeNotificationHandler(ILogger<EditRangeNotificationHandler<TModel>> logger)
+        protected EditRangeNotificationHandler(ILogger<EditRangeNotificationHandler<TNotification, TModel>> logger)
         {
             _logger = logger;
         }
 
-        public virtual Task Handle(EditRangeNotification<TModel> notification, CancellationToken cancellationToken)
+        public virtual Task Handle(TNotification notification, CancellationToken cancellationToken)
         {
             switch (notification.EventId)
             {
