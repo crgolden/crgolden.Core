@@ -29,7 +29,7 @@
             UserEmail = User?.FindFirst(JwtClaimTypes.Email)?.Value;
         }
 
-        public abstract Task<IActionResult> Index(DataSourceRequest request = null);
+        public abstract Task<IActionResult> Index(DataSourceRequest request);
 
         protected virtual async Task<IActionResult> Index(IndexRequest<TEntity, TModel> request)
         {

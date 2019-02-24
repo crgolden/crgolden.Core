@@ -10,7 +10,7 @@
 
         Task<Uri> UploadByteArrayToStorageAsync(byte[] buffer, string fileName);
 
-        string GetSharedAccessSignature(string fileName, string uri);
+        string GetSharedAccessSignature(string fileName, string containerName);
 
         Task DeleteAllFromStorageAsync();
     }

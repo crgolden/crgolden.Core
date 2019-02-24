@@ -48,23 +48,8 @@
             return blockBlob.Uri;
         }
 
-        public virtual string GetSharedAccessSignature(string fileName, string uri)
+        public virtual string GetSharedAccessSignature(string fileName, string containerName)
         {
-            string containerName = null;
-            if (uri.Contains(_imagesContainer))
-            {
-                containerName = _imagesContainer;
-            }
-            else if (uri.Contains(_thumbnailsContainer))
-            {
-                containerName = _thumbnailsContainer;
-            }
-
-            if (string.IsNullOrEmpty(containerName))
-            {
-                return null;
-            }
-
             var container = _client.GetContainerReference(containerName);
             var blockBlob = container.GetBlockBlobReference(fileName);
             var policy = new SharedAccessBlobPolicy
