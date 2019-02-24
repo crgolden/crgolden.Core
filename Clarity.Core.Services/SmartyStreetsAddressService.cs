@@ -1,5 +1,6 @@
 ﻿namespace Clarity.Core
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Options;
     using SmartyStreets;
@@ -23,8 +24,11 @@
             _internationalClient = clientBuilder.BuildInternationalStreetApiClient();
         }
 
-        public virtual Task<bool> ValidateUsAddressAsync(Address address)
+        public virtual Task<bool> ValidateUsAddressAsync(
+            Address address,
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var lookup = new UsLookup
             {
                 Street = address.StreetAddress,
@@ -36,8 +40,11 @@
             return Task.FromResult(lookup.Result.Count > 0);
         }
 
-        public virtual Task<bool> ValidateInternationalAddressAsync(Address address)
+        public virtual Task<bool> ValidateInternationalAddressAsync(
+            Address address,
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var lookup = new InternationalLookup
             {
                 Address1 = address.StreetAddress,

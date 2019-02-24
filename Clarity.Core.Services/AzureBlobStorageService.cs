@@ -1,8 +1,8 @@
 ﻿namespace Clarity.Core
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Options;
@@ -29,26 +29,36 @@
             _client = storageAccount.CreateCloudBlobClient();
         }
 
-        public virtual async Task<Uri> UploadFileToStorageAsync(IFormFile file, string fileName)
+        public virtual async Task<Uri> UploadFileToStorageAsync(
+            IFormFile file,
+            string fileName,
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var container = _client.GetContainerReference(_imagesContainer);
             var blockBlob = container.GetBlockBlobReference(fileName);
             using (var stream = file.OpenReadStream())
             {
-                await blockBlob.UploadFromStreamAsync(stream).ConfigureAwait(false);
+                await blockBlob.UploadFromStreamAsync(stream, cancellationToken).ConfigureAwait(false);
                 return blockBlob.Uri;
             }
         }
 
-        public virtual async Task<Uri> UploadByteArrayToStorageAsync(byte[] buffer, string fileName)
+        public virtual async Task<Uri> UploadByteArrayToStorageAsync(
+            byte[] buffer,
+            string fileName,
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var container = _client.GetContainerReference(_imagesContainer);
             var blockBlob = container.GetBlockBlobReference(fileName);
-            await blockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+            await blockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
             return blockBlob.Uri;
         }
 
-        public virtual string GetSharedAccessSignature(string fileName, string containerName)
+        public virtual string GetSharedAccessSignature(
+            string fileName,
+            string containerName)
         {
             var container = _client.GetContainerReference(containerName);
             var blockBlob = container.GetBlockBlobReference(fileName);
@@ -61,23 +71,16 @@
             return blockBlob.GetSharedAccessSignature(policy);
         }
 
-        public virtual async Task DeleteAllFromStorageAsync()
+        public virtual async Task DeleteAllFromStorageAsync(CancellationToken cancellationToken)
         {
-            var containerNames = new List<string>
+            foreach (var containerName in new [] { _imagesContainer, _thumbnailsContainer })
+            foreach (var blob in _client
+                .GetContainerReference(containerName)
+                .ListBlobs(null, true)
+                .Where(x => x.GetType() == typeof(CloudBlob) || x.GetType().BaseType == typeof(CloudBlob)))
             {
-                _imagesContainer,
-                _thumbnailsContainer
-            };
-            foreach (var containerName in containerNames)
-            {
-                foreach (var blob in _client
-                    .GetContainerReference(containerName)
-                    .ListBlobs(null, true)
-                    .Where(x => x.GetType() == typeof(CloudBlob) || x.GetType().BaseType == typeof(CloudBlob)))
-                {
-                    
-                    await ((CloudBlob)blob).DeleteIfExistsAsync().ConfigureAwait(false);
-                }
+                cancellationToken.ThrowIfCancellationRequested();
+                await ((CloudBlob) blob).DeleteIfExistsAsync(cancellationToken).ConfigureAwait(false);
             }
         }
     }

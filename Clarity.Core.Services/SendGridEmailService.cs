@@ -1,5 +1,6 @@
 ﻿namespace Clarity.Core
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Options;
     using SendGrid;
@@ -18,8 +19,13 @@
             _name = options.Value.Name;
         }
 
-        public virtual async Task SendEmailAsync(string email, string subject, string message)
+        public virtual async Task SendEmailAsync(
+            string email,
+            string subject,
+            string message,
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var msg = new SendGridMessage
             {
                 From = new EmailAddress(_email, _name),
@@ -33,7 +39,7 @@
             // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
             msg.SetClickTracking(false, false);
 
-            await _client.SendEmailAsync(msg).ConfigureAwait(false);
+            await _client.SendEmailAsync(msg, cancellationToken).ConfigureAwait(false);
         }
     }
 }
