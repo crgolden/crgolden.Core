@@ -1,9 +1,11 @@
 ﻿namespace Clarity.Core
 {
+    using System.Threading.Tasks;
+
     public interface IAddressService
     {
-        bool ValidateUsAddress(Address address);
+        Task<bool> ValidateUsAddressAsync(Address address);
 
-        bool ValidateInternationalAddress(Address address);
+        Task<bool> ValidateInternationalAddressAsync(Address address);
     }
 }
