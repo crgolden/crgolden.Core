@@ -11,7 +11,6 @@
         where TEntity : class
     {
         protected readonly DbContext Context;
-
         protected readonly IMapper Mapper;
 
         protected DetailsRequestHandler(DbContext context, IMapper mapper)

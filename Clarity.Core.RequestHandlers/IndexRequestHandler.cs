@@ -13,7 +13,6 @@
         where TEntity : class
     {
         protected readonly DbContext Context;
-
         protected readonly IMapper Mapper;
 
         protected IndexRequestHandler(DbContext context, IMapper mapper)

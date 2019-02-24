@@ -17,7 +17,6 @@
 
         public virtual Task Handle(IndexNotification notification, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             switch (notification.EventId)
             {
                 case EventIds.IndexStart:

@@ -62,6 +62,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clarity.Core.Notifications"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clarity.Core.NotificationHandlers", "Clarity.Core.NotificationHandlers\Clarity.Core.NotificationHandlers.csproj", "{DDB1587A-2A27-44DB-8410-11B80FA7D327}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clarity.Core.Messages", "Clarity.Core.Messages\Clarity.Core.Messages.csproj", "{DC403114-E9F2-4B2D-81C7-011402C9EE3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +174,10 @@ Global
 		{DDB1587A-2A27-44DB-8410-11B80FA7D327}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDB1587A-2A27-44DB-8410-11B80FA7D327}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDB1587A-2A27-44DB-8410-11B80FA7D327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC403114-E9F2-4B2D-81C7-011402C9EE3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC403114-E9F2-4B2D-81C7-011402C9EE3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC403114-E9F2-4B2D-81C7-011402C9EE3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC403114-E9F2-4B2D-81C7-011402C9EE3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

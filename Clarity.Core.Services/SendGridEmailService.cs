@@ -1,5 +1,7 @@
 ﻿namespace Clarity.Core
 {
+    using System.Collections.Generic;
+    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Options;
@@ -22,7 +24,7 @@
         public virtual async Task SendEmailAsync(
             string email,
             string subject,
-            string message,
+            string htmlMessage,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -30,8 +32,8 @@
             {
                 From = new EmailAddress(_email, _name),
                 Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
+                PlainTextContent = htmlMessage,
+                HtmlContent = htmlMessage
             };
             msg.AddTo(new EmailAddress(email));
 
@@ -40,6 +42,20 @@
             msg.SetClickTracking(false, false);
 
             await _client.SendEmailAsync(msg, cancellationToken).ConfigureAwait(false);
+        }
+
+        public virtual async Task SendEmailAsync(
+            IDictionary<string, object> userProperties,
+            byte[] body,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!userProperties.ContainsKey("email") || !userProperties.ContainsKey("subject")) return;
+            await SendEmailAsync(
+                email: $"{userProperties["email"]}",
+                subject: $"{userProperties["subject"]}",
+                htmlMessage: Encoding.UTF8.GetString(body),
+                cancellationToken: cancellationToken);
         }
     }
 }
