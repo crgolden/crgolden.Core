@@ -8,14 +8,12 @@ namespace Clarity.Core.Controllers.Tests
     using Kendo.Mvc.UI;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
     using Moq;
     using Xunit;
 
     public class ControllerFacts
     {
         private readonly Mock<IMediator> _mediator;
-        private static ILogger<FakeController> Logger => Mock.Of<ILogger<FakeController>>();
 
         public ControllerFacts()
         {
@@ -32,7 +30,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<IndexRequest<object, object>>(y => y.Request.Equals(request)),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(dataSourceResult);
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var index = await controller.Index(request);
@@ -52,7 +50,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(entity);
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var details = await controller.Details(keyValues);
@@ -71,7 +69,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var details = await controller.Details(keyValues);
@@ -90,7 +88,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(default(object));
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var details = await controller.Details(keyValues);
@@ -105,7 +103,7 @@ namespace Clarity.Core.Controllers.Tests
         {
             // Arrange
             var entity = new { Name = "Name" };
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var edit = await controller.Edit(entity);
@@ -124,7 +122,7 @@ namespace Clarity.Core.Controllers.Tests
                 new { Name = "Name 2" },
                 new { Name = "Name 3" }
             };
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var editRange = await controller.EditRange(entities);
@@ -142,7 +140,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<EditRequest<object, object>>(y => y.Model.Equals(entity)),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var edit = await controller.Edit(entity);
@@ -166,7 +164,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<EditRangeRequest<object, object>>(y => y.Models.Equals(entities)),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var editRange = await controller.EditRange(entities);
@@ -185,7 +183,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<CreateRequest<object, object>>(y => y.Model.Equals(entity)),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(entity);
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var create = await controller.Create(entity);
@@ -209,7 +207,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<CreateRangeRequest<IEnumerable<object>, object, object>>(y => y.Models.Equals(entities)),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(entities);
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var createRange = await controller.CreateRange(entities);
@@ -228,7 +226,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<CreateRequest<object, object>>(y => y.Model.Equals(entity)),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var create = await controller.Create(entity);
@@ -252,7 +250,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<CreateRangeRequest<IEnumerable<object>, object, object>>(y => y.Models.Equals(entities)),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var createRange = await controller.CreateRange(entities);
@@ -267,7 +265,7 @@ namespace Clarity.Core.Controllers.Tests
         {
             // Arrange
             var keyValues = new object[] { Guid.NewGuid() };
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var delete = await controller.Delete(keyValues);
@@ -285,7 +283,7 @@ namespace Clarity.Core.Controllers.Tests
                     It.Is<DeleteRequest>(y => y.KeyValues[0].Equals(keyValues[0])),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
-            var controller = new FakeController(_mediator.Object, Logger);
+            var controller = new FakeController(_mediator.Object);
 
             // Act
             var delete = await controller.Delete(keyValues);

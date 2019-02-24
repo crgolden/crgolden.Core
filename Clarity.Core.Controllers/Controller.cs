@@ -8,7 +8,6 @@
     using Kendo.Mvc.UI;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
 
     [Produces("application/json")]
     [Route("v1/[controller]/[action]")]
@@ -17,46 +16,40 @@
         where TEntity : class
     {
         protected readonly IMediator Mediator;
-        protected readonly ILogger<Controller<TEntity, TModel, TKey>> Logger;
         protected readonly Guid? UserId;
         protected readonly string UserEmail;
 
-        protected Controller(IMediator mediator, ILogger<Controller<TEntity, TModel, TKey>> logger)
+        protected Controller(IMediator mediator)
         {
             Mediator = mediator;
-            Logger = logger;
             if (Guid.TryParse(User?.FindFirst(JwtClaimTypes.Subject)?.Value, out var userId)) UserId = userId;
             UserEmail = User?.FindFirst(JwtClaimTypes.Email)?.Value;
         }
 
         public abstract Task<IActionResult> Index(DataSourceRequest request);
 
-        protected virtual async Task<IActionResult> Index(IndexRequest<TEntity, TModel> request)
+        protected virtual async Task<IActionResult> Index(
+            IndexRequest<TEntity, TModel> request,
+            IndexNotification notification)
         {
-            using (var cancellationTokenSource = new CancellationTokenSource())
+            using (var tokenSource = new CancellationTokenSource())
             {
                 try
                 {
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.IndexStart, $"{EventIds.IndexStart}"),
-                        message: "Searching request {Request} at {Time}",
-                        args: new object[] { request, DateTime.UtcNow });
-                    var result = await Mediator
-                        .Send(request, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.IndexEnd, $"{EventIds.IndexEnd}"),
-                        message: "Searched result {Result} at {Time}",
-                        args: new object[] { result, DateTime.UtcNow });
-                    return Ok(result);
+                    notification.Request = request.Request;
+                    notification.EventId = EventIds.IndexStart;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+
+                    notification.Result = await Mediator.Send(request, tokenSource.Token).ConfigureAwait(false);
+                    notification.EventId = EventIds.IndexEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+                    return Ok(notification.Result);
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(
-                        eventId: new EventId((int)EventIds.IndexError, $"{EventIds.IndexError}"),
-                        exception: e,
-                        message: "Error searching request {Request} at {Time}",
-                        args: new object[] { request, DateTime.UtcNow });
+                    notification.Exception = e;
+                    notification.EventId = EventIds.IndexError;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return BadRequest(request);
                 }
             }
@@ -64,41 +57,35 @@
 
         public abstract Task<IActionResult> Details(TKey[] keyValues);
 
-        protected virtual async Task<IActionResult> Details(DetailsRequest<TEntity, TModel> request)
+        protected virtual async Task<IActionResult> Details(
+            DetailsRequest<TEntity, TModel> request,
+            DetailsNotification<TModel> notification)
         {
-            using (var cancellationTokenSource = new CancellationTokenSource())
+            using (var tokenSource = new CancellationTokenSource())
             {
                 try
                 {
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.DetailsStart, $"{EventIds.DetailsStart}"),
-                        message: "Detailing entity with keys {KeyValues} at {Time}",
-                        args: new object[] { request.KeyValues, DateTime.UtcNow });
-                    var entity = await Mediator
-                        .Send(request, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    if (entity == null)
+                    notification.KeyValues = request.KeyValues;
+                    notification.EventId = EventIds.DetailsStart;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+
+                    notification.Model = await Mediator.Send(request, tokenSource.Token).ConfigureAwait(false);
+                    if (notification.Model == null)
                     {
-                        Logger.LogWarning(
-                            eventId: new EventId((int)EventIds.DetailsNotFound, $"{EventIds.DetailsNotFound}"),
-                            message: "Details not found for keys {KeyValues} at {Time}",
-                            args: new object[] { request.KeyValues, DateTime.UtcNow });
+                        notification.EventId = EventIds.DetailsNotFound;
+                        await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                         return NotFound(request.KeyValues);
                     }
 
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.DetailsEnd, $"{EventIds.DetailsEnd}"),
-                        message: "Detailed entity with keys {KeyValues} at {Time}",
-                        args: new object[] { request.KeyValues, DateTime.UtcNow });
-                    return Ok(entity);
+                    notification.EventId = EventIds.DetailsEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+                    return Ok(notification.Model);
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(
-                        eventId: new EventId((int)EventIds.DetailsError, $"{EventIds.DetailsError}"),
-                        exception: e,
-                        message: "Error detailing entity with keys {KeyValues} at {Time}",
-                        args: new object[] { request.KeyValues, DateTime.UtcNow });
+                    notification.Exception = e;
+                    notification.EventId = EventIds.DetailsError;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return BadRequest(request.KeyValues);
                 }
             }
@@ -106,32 +93,28 @@
 
         public abstract Task<IActionResult> Edit(TModel model);
 
-        protected virtual async Task<IActionResult> Edit(EditRequest<TEntity, TModel> request)
+        protected virtual async Task<IActionResult> Edit(
+            EditRequest<TEntity, TModel> request,
+            EditNotification<TModel> notification)
         {
-            using (var cancellationTokenSource = new CancellationTokenSource())
+            using (var tokenSource = new CancellationTokenSource())
             {
                 try
                 {
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.EditStart, $"{EventIds.EditStart}"),
-                        message: "Editing entity {Entity} at {Time}",
-                        args: new object[] { request.Model, DateTime.UtcNow });
-                    await Mediator
-                        .Send(request, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.EditEnd, $"{EventIds.EditEnd}"),
-                        message: "Edited entity {Entity} at {Time}",
-                        args: new object[] { request.Model, DateTime.UtcNow });
+                    notification.Model = request.Model;
+                    notification.EventId = EventIds.EditStart;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+
+                    await Mediator.Send(request, tokenSource.Token).ConfigureAwait(false);
+                    notification.EventId = EventIds.EditEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return NoContent();
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(
-                        eventId: new EventId((int)EventIds.EditError, $"{EventIds.EditError}"),
-                        exception: e,
-                        message: "Error editing entity {Entity} at {Time}",
-                        args: new object[] { request.Model, DateTime.UtcNow });
+                    notification.Exception = e;
+                    notification.EventId = EventIds.EditError;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return BadRequest(request.Model);
                 }
             }
@@ -139,32 +122,28 @@
 
         public abstract Task<IActionResult> EditRange(IEnumerable<TModel> models);
 
-        protected virtual async Task<IActionResult> EditRange(EditRangeRequest<TEntity, TModel> request)
+        protected virtual async Task<IActionResult> EditRange(
+            EditRangeRequest<TEntity, TModel> request,
+            EditRangeNotification<TModel> notification)
         {
-            using (var cancellationTokenSource = new CancellationTokenSource())
+            using (var tokenSource = new CancellationTokenSource())
             {
                 try
                 {
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.EditRangeStart, $"{EventIds.EditRangeStart}"),
-                        message: "Editing entities {Entities} at {Time}",
-                        args: new object[] { request.Models, DateTime.UtcNow });
-                    await Mediator
-                        .Send(request, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.EditRangeEnd, $"{EventIds.EditRangeEnd}"),
-                        message: "Edited entities {Entities} at {Time}",
-                        args: new object[] { request.Models, DateTime.UtcNow });
+                    notification.Models = request.Models;
+                    notification.EventId = EventIds.EditRangeStart;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+
+                    await Mediator.Send(request, tokenSource.Token).ConfigureAwait(false);
+                    notification.EventId = EventIds.EditRangeEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return NoContent();
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(
-                        eventId: new EventId((int)EventIds.EditRangeError, $"{EventIds.EditRangeError}"),
-                        exception: e,
-                        message: "Error editing entities {Entities} at {Time}",
-                        args: new object[] { request.Models, DateTime.UtcNow });
+                    notification.Exception = e;
+                    notification.EventId = EventIds.EditRangeError;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return BadRequest(request.Models);
                 }
             }
@@ -172,32 +151,28 @@
 
         public abstract Task<IActionResult> Create(TModel model);
 
-        protected virtual async Task<IActionResult> Create(CreateRequest<TEntity, TModel> request)
+        protected virtual async Task<IActionResult> Create(
+            CreateRequest<TEntity, TModel> request,
+            CreateNotification<TModel> notification)
         {
-            using (var cancellationTokenSource = new CancellationTokenSource())
+            using (var tokenSource = new CancellationTokenSource())
             {
                 try
                 {
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.CreateStart, $"{EventIds.CreateStart}"),
-                        message: "Creating entity {Entity} at {Time}",
-                        args: new object[] { request.Model, DateTime.UtcNow });
-                    var entity = await Mediator
-                        .Send(request, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.CreateEnd, $"{EventIds.CreateEnd}"),
-                        message: "Created entity {Entity} at {Time}",
-                        args: new object[] { entity, DateTime.UtcNow });
-                    return Ok(entity);
+                    notification.Model = request.Model;
+                    notification.EventId = EventIds.CreateStart;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+
+                    notification.Model = await Mediator.Send(request, tokenSource.Token).ConfigureAwait(false);
+                    notification.EventId = EventIds.CreateEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+                    return Ok(notification.Model);
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(
-                        eventId: new EventId((int)EventIds.CreateError, $"{EventIds.CreateError}"),
-                        exception: e,
-                        message: "Error creating entity {Entity} at {Time}",
-                        args: new object[] { request.Model, DateTime.UtcNow });
+                    notification.Exception = e;
+                    notification.EventId = EventIds.CreateError;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return BadRequest(request.Model);
                 }
             }
@@ -205,32 +180,28 @@
 
         public abstract Task<IActionResult> CreateRange(IEnumerable<TModel> models);
 
-        protected virtual async Task<IActionResult> CreateRange(CreateRangeRequest<IEnumerable<TModel>, TEntity, TModel> request)
+        protected virtual async Task<IActionResult> CreateRange(
+            CreateRangeRequest<IEnumerable<TModel>, TEntity, TModel> request,
+            CreateRangeNotification<TModel> notification)
         {
-            using (var cancellationTokenSource = new CancellationTokenSource())
+            using (var tokenSource = new CancellationTokenSource())
             {
                 try
                 {
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.CreateRangeStart, $"{EventIds.CreateRangeStart}"),
-                        message: "Creating entities {Entities} at {Time}",
-                        args: new object[] { request.Models, DateTime.UtcNow });
-                    var entities = await Mediator
-                        .Send(request, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.CreateRangeEnd, $"{EventIds.CreateRangeEnd}"),
-                        message: "Created entities {Entities} at {Time}",
-                        args: new object[] { entities, DateTime.UtcNow });
-                    return Ok(entities);
+                    notification.Models = request.Models;
+                    notification.EventId = EventIds.CreateRangeStart;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+
+                    notification.Models = await Mediator.Send(request, tokenSource.Token).ConfigureAwait(false);
+                    notification.EventId = EventIds.CreateRangeEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+                    return Ok(notification.Models);
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(
-                        eventId: new EventId((int)EventIds.CreateRangeError, $"{EventIds.CreateRangeError}"),
-                        exception: e,
-                        message: "Error creating entities {Entities} at {Time}",
-                        args: new object[] { request.Models, DateTime.UtcNow });
+                    notification.Exception = e;
+                    notification.EventId = EventIds.CreateRangeError;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return BadRequest(request.Models);
                 }
             }
@@ -238,32 +209,28 @@
 
         public abstract Task<IActionResult> Delete(TKey[] keyValues);
 
-        protected virtual async Task<IActionResult> Delete(DeleteRequest request)
+        protected virtual async Task<IActionResult> Delete(
+            DeleteRequest request,
+            DeleteNotification notification)
         {
-            using (var cancellationTokenSource = new CancellationTokenSource())
+            using (var tokenSource = new CancellationTokenSource())
             {
                 try
                 {
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.DeleteStart, $"{EventIds.DeleteStart}"),
-                        message: "Deleting entity with keys {KeyValues} at {Time}",
-                        args: new object[] { request.KeyValues, DateTime.UtcNow });
-                    await Mediator
-                        .Send(request, cancellationTokenSource.Token)
-                        .ConfigureAwait(false);
-                    Logger.LogInformation(
-                        eventId: new EventId((int)EventIds.DeleteEnd, $"{EventIds.DeleteEnd}"),
-                        message: "Deleted entity with keys {KeyValues} at {Time}",
-                        args: new object[] { request.KeyValues, DateTime.UtcNow });
+                    notification.KeyValues = request.KeyValues;
+                    notification.EventId = EventIds.DeleteStart;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
+                    
+                    await Mediator.Send(request, tokenSource.Token).ConfigureAwait(false);
+                    notification.EventId = EventIds.DeleteEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return NoContent();
                 }
                 catch (Exception e)
                 {
-                    Logger.LogError(
-                        eventId: new EventId((int)EventIds.DeleteError, $"{EventIds.DeleteError}"),
-                        exception: e,
-                        message: "Error deleting entity with key {KeyValues} at {Time}",
-                        args: new object[] { request.KeyValues, DateTime.UtcNow });
+                    notification.Exception = e;
+                    notification.EventId = EventIds.DeleteEnd;
+                    await Mediator.Publish(notification, tokenSource.Token).ConfigureAwait(false);
                     return BadRequest(request.KeyValues);
                 }
             }

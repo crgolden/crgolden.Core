@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <PackageId>Clarity.Core.Controllers</PackageId>
+    <PackageId>Clarity.Core.Notifications</PackageId>
     <Version>1.0.0</Version>
     <Company>Clarity</Company>
     <Authors>Chris Golden</Authors>
@@ -12,10 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Notifications" Version="1.0.0" />
-    <PackageReference Include="Clarity.Core.Requests" Version="1.2.0" />
-    <PackageReference Include="IdentityModel" Version="3.10.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.2" />
+    <PackageReference Include="Clarity.Core.Enums" Version="1.0.0" />
+    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.220" />
   </ItemGroup>
 
 </Project>
