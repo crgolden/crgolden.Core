@@ -1,4 +1,4 @@
-﻿namespace Clarity.Core.Profiles
+﻿namespace Clarity.Core
 {
     public abstract class Profile : AutoMapper.Profile
     {
