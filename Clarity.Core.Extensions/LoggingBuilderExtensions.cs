@@ -1,4 +1,4 @@
-﻿namespace Clarity.Services.Extensions
+﻿namespace Clarity.Core
 {
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
