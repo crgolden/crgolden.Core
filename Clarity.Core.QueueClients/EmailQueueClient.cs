@@ -4,9 +4,10 @@
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
     using Microsoft.Azure.ServiceBus;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Options;
 
-    public class EmailQueueClient : QueueClient, IEmailQueueClient
+    public class EmailQueueClient : QueueClient, IHostedService
     {
         private readonly IEmailService _emailService;
         private readonly ILogger<EmailQueueClient> _logger;
