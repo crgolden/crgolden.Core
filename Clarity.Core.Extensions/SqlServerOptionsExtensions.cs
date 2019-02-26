@@ -4,7 +4,7 @@
 
     public static class SqlServerOptionsExtensions
     {
-        public static string SqlServerConnectionString(this SqlServerOptions sqlServerOptions)
+        public static string GetConnectionString(this SqlServerOptions sqlServerOptions)
         {
             var builder = new SqlConnectionStringBuilder
             {

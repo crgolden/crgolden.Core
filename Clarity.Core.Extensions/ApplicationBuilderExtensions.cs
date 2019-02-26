@@ -1,25 +1,21 @@
 ﻿namespace Clarity.Core
 {
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.Extensions.Options;
 
     public static class ApplicationBuilderExtensions
     {
-        public static void UseCors(this IApplicationBuilder app, IOptions<CorsOptions> options)
+        public static IApplicationBuilder UseCors(this IApplicationBuilder app, CorsOptions options)
         {
-            if (options.Value?.Origins == null || options.Value.Origins.Length == 0)
-            {
-                return;
-            }
-
+            if (options?.Origins == null || options.Origins.Length == 0) return app;
             app.UseCors(configure => configure
-                .WithOrigins(options.Value.Origins)
+                .WithOrigins(options.Origins)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
+            return app;
         }
 
-        public static void UseSwagger(
+        public static IApplicationBuilder UseSwagger(
             this IApplicationBuilder app,
             string name,
             string url = "/swagger/v1/swagger.json",
@@ -32,6 +28,7 @@
                 setup.RoutePrefix = routePrefix;
                 setup.DocumentTitle = name;
             });
+            return app;
         }
     }
 }

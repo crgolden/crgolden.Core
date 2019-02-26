@@ -2,13 +2,18 @@
 {
     public class DatabaseOptions
     {
+        public string DatabaseType { get; set; }
+
         public bool SeedData { get; set; }
 
         public SqlServerOptions SqlServerOptions { get; set; }
 
-        public SqLiteOptions SqLiteOptions { get; set; }
+        public SqliteOptions SqliteOptions { get; set; }
     }
 
+    /// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlconnectionstringbuilder">
+    /// SqlConnectionStringBuilder Class
+    /// </seealso>
     public class SqlServerOptions
     {
         public int ConnectTimeout { get; set; }
@@ -32,12 +37,15 @@
         public string UserId { get; set; }
     }
 
-    public class SqLiteOptions
+    /// <seealso href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.data.sqlite.sqliteconnectionstringbuilder">
+    /// SqliteConnectionStringBuilder Class
+    /// </seealso>
+    public class SqliteOptions
     {
-        public string Name { get; set; }
+        public string Cache { get; set; } = "Default";
 
-        public string Path { get; set; }
+        public string DataSource { get; set; }
 
-        public string SqLiteConnectionString => $"Data Source={Path}/{Name}.db";
+        public string Mode { get; set; } = "ReadWriteCreate";
     }
 }

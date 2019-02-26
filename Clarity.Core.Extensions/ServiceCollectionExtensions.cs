@@ -8,7 +8,7 @@
 
     public static class ServiceCollectionExtensions
     {
-        public static void AddIdentityServerAuthentication(
+        public static IServiceCollection AddIdentityServerAuthentication(
             this IServiceCollection services,
             IConfiguration configuration,
             string apiName,
@@ -24,9 +24,10 @@
                     options.ApiName = apiName;
                     options.RoleClaimType = ClaimTypes.Role;
                 });
+            return services;
         }
 
-        public static void AddSwagger(
+        public static IServiceCollection AddSwagger(
             this IServiceCollection services,
             string title,
             string version,
@@ -50,6 +51,7 @@
                 setup.AddSecurityDefinition(defaultScheme, securityScheme);
                 setup.OperationFilter<SecurityRequirementsOperationFilter>();
             });
+            return services;
         }
     }
 }
