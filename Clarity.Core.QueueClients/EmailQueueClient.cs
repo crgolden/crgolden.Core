@@ -12,6 +12,7 @@
     {
         private readonly IEmailService _emailService;
         private readonly ILogger<EmailQueueClient> _logger;
+
         private MessageHandlerOptions MessageHandlerOptions =>
             new MessageHandlerOptions(ExceptionReceivedHandler)
             {
@@ -21,7 +22,8 @@
         public EmailQueueClient(
             IOptions<ServiceBusOptions> options,
             IEmailService emailService,
-            ILogger<EmailQueueClient> logger)
+            ILogger<EmailQueueClient> logger,
+            IApplicationLifetime appLifetime)
             : base(new ServiceBusConnectionStringBuilder(
                 options.Value.Endpoint,
                 options.Value.EmailQueueName,
@@ -31,26 +33,37 @@
         {
             _emailService = emailService;
             _logger = logger;
+
+            appLifetime.ApplicationStarted.Register(OnStarted);
+            appLifetime.ApplicationStopping.Register(OnStopping);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            _logger.LogInformation(
-                eventId: new EventId((int)EventIds.QueueClientStart, $"{EventIds.QueueClientStart}"),
-                message: "Queue client {Client} starting at {Time}",
-                args: new object[] { typeof(EmailQueueClient), DateTime.UtcNow });
             RegisterMessageHandler(ProcessMessagesAsync, MessageHandlerOptions);
             return Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
+            await CloseAsync();
+        }
+
+        private void OnStarted()
+        {
+            _logger.LogInformation(
+                eventId: new EventId((int)EventIds.QueueClientStart, $"{EventIds.QueueClientStart}"),
+                message: "Queue client {Client} starting at {Time}",
+                args: new object[] { typeof(EmailQueueClient), DateTime.UtcNow });
+        }
+
+        private void OnStopping()
+        {
             _logger.LogInformation(
                 eventId: new EventId((int)EventIds.QueueClientStop, $"{EventIds.QueueClientStop}"),
                 message: "Queue client {Client} stopping at {Time}",
                 args: new object[] { typeof(EmailQueueClient), DateTime.UtcNow });
-            await CloseAsync();
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
