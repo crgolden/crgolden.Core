@@ -29,6 +29,11 @@
         UploadError,
         ValidateStart,
         ValidateEnd,
-        ValidateError
+        ValidateError,
+        QueueClientStart,
+        QueueClientStop,
+        QueueClientProcessing,
+        QueueClientCompleted,
+        QueueClientError
     }
 }

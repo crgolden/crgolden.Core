@@ -12,8 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Interfaces" Version="1.4.0-CI-20190226-020539" />
-    <PackageReference Include="Clarity.Core.Options" Version="1.3.0" />
+    <PackageReference Include="Clarity.Core.Enums" Version="1.3.0" />
+    <PackageReference Include="Clarity.Core.Interfaces" Version="1.4.0-CI-20190226-024933" />
+    <PackageReference Include="Clarity.Core.Options" Version="1.4.0" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.3.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
