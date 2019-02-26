@@ -6,7 +6,7 @@
     using Microsoft.Azure.ServiceBus;
     using Microsoft.Extensions.Options;
 
-    public class EmailQueueClient : QueueClient
+    public class EmailQueueClient : QueueClient, IEmailQueueClient
     {
         private readonly IEmailService _emailService;
         private readonly ILogger<EmailQueueClient> _logger;
@@ -29,12 +29,23 @@
         {
             _emailService = emailService;
             _logger = logger;
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
             RegisterMessageHandler(ProcessMessagesAsync, MessageHandlerOptions);
+            return Task.CompletedTask;
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await CloseAsync();
         }
 
         private async Task ProcessMessagesAsync(Message message, CancellationToken token)
         {
-            if (token.IsCancellationRequested) return;
+            token.ThrowIfCancellationRequested();
             await _emailService.SendEmailAsync(message.UserProperties, message.Body, token);
             await CompleteAsync(message.SystemProperties.LockToken);
         }
