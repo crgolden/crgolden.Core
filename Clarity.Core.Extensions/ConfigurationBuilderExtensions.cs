@@ -1,6 +1,5 @@
 ﻿namespace Clarity.Core
 {
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Azure.KeyVault;
     using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.Extensions.Configuration;
@@ -8,9 +7,7 @@
 
     public static class ConfigurationBuilderExtensions
     {
-        public static IConfigurationBuilder AddAzureKeyVault(
-            this IConfigurationBuilder configBuilder,
-            WebHostBuilderContext context)
+        public static IConfigurationBuilder AddAzureKeyVault(this IConfigurationBuilder configBuilder)
         {
             var configRoot = configBuilder.Build();
             var keyVaultName = configRoot.GetValue<string>("KeyVaultName");
