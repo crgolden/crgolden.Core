@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Data" Version="1.2.0-CI-20190303-155636" />
+    <PackageReference Include="Clarity.Core.Data" Version="1.2.0-CI-20190303-201245" />
   </ItemGroup>
 
   <ItemGroup>
