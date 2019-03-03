@@ -21,9 +21,8 @@
             Mapper = mapper;
         }
 
-        public virtual async Task<DataSourceResult> Handle(TRequest request, CancellationToken cancellationToken)
+        public virtual async Task<DataSourceResult> Handle(TRequest request, CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             var entities = Context.Set<TEntity>().AsNoTracking();
             return await Mapper
                 .ProjectTo<TModel>(entities)

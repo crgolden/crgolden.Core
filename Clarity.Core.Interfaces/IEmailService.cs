@@ -10,11 +10,11 @@
             string email,
             string subject,
             string htmlMessage,
-            CancellationToken cancellationToken);
+            CancellationToken token);
 
         Task SendEmailAsync(
             IDictionary<string, object> userProperties,
             byte[] body,
-            CancellationToken cancellationToken);
+            CancellationToken token);
     }
 }

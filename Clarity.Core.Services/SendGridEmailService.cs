@@ -25,9 +25,9 @@
             string email,
             string subject,
             string htmlMessage,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var msg = new SendGridMessage
             {
                 From = new EmailAddress(_email, _name),
@@ -41,21 +41,21 @@
             // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
             msg.SetClickTracking(false, false);
 
-            await _client.SendEmailAsync(msg, cancellationToken).ConfigureAwait(false);
+            await _client.SendEmailAsync(msg, token).ConfigureAwait(false);
         }
 
         public virtual async Task SendEmailAsync(
             IDictionary<string, object> userProperties,
             byte[] body,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             if (!userProperties.ContainsKey("email") || !userProperties.ContainsKey("subject")) return;
             await SendEmailAsync(
                 email: $"{userProperties["email"]}",
                 subject: $"{userProperties["subject"]}",
                 htmlMessage: Encoding.UTF8.GetString(body),
-                cancellationToken: cancellationToken);
+                token: token);
         }
     }
 }

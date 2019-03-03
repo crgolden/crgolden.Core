@@ -20,10 +20,10 @@
 
         public override async Task<int> SaveChangesAsync(
             bool acceptAllChangesOnSuccess,
-            CancellationToken cancellationToken = default)
+            CancellationToken token = default)
         {
             AddTimestamp(DateTime.UtcNow);
-            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, token);
         }
 
         protected virtual void AddTimestamp(DateTime timestamp)

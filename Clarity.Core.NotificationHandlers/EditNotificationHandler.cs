@@ -16,25 +16,28 @@
             _logger = logger;
         }
 
-        public virtual Task Handle(TNotification notification, CancellationToken cancellationToken)
+        public virtual Task Handle(TNotification notification, CancellationToken token)
         {
+            var eventId = new EventId((int)notification.EventId, $"{notification.EventId}");
             switch (notification.EventId)
             {
                 case EventIds.EditStart:
+                    token.ThrowIfCancellationRequested();
                     _logger.LogInformation(
-                        eventId: new EventId((int)EventIds.EditStart, $"{EventIds.EditStart}"),
+                        eventId: eventId,
                         message: "Editing model {Model} at {Time}",
                         args: new object[] { notification.Model, DateTime.UtcNow });
                     break;
                 case EventIds.EditEnd:
+                    token.ThrowIfCancellationRequested();
                     _logger.LogInformation(
-                        eventId: new EventId((int)EventIds.EditEnd, $"{EventIds.EditEnd}"),
+                        eventId: eventId,
                         message: "Edited model {Model} at {Time}",
                         args: new object[] { notification.Model, DateTime.UtcNow });
                     break;
                 case EventIds.EditError:
                     _logger.LogError(
-                        eventId: new EventId((int)EventIds.EditError, $"{EventIds.EditError}"),
+                        eventId: eventId,
                         exception: notification.Exception,
                         message: "Error editing model {Model} at {Time}",
                         args: new object[] { notification.Model, DateTime.UtcNow });

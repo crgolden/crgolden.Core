@@ -5,16 +5,22 @@
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <PackageId>Clarity.Core.Notifications</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <Company>Clarity</Company>
     <Authors>Chris Golden</Authors>
     <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Enums" Version="1.3.0" />
+    <PackageReference Include="Clarity.Core.Enums" Version="1.4.1" />
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.220" />
+    <PackageReference Include="Microsoft.SourceLink.Vsts.Git" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

@@ -13,28 +13,27 @@
         public StripePaymentService(IOptions<PaymentOptions> options)
         {
             var secretKey = options.Value.StripeOptions.SecretKey;
-
             _customerService = new CustomerService(secretKey);
             _chargeService = new ChargeService(secretKey);
         }
 
         public async Task<string> GetCustomerAsync(
             string customerId,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var customer = await _customerService.GetAsync(
                 customerId,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
+                cancellationToken: token).ConfigureAwait(false);
             return customer.Id;
         }
 
         public virtual async Task<string> CreateCustomerAsync(
             string email,
             string tokenId,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var customerCreateOptions = new CustomerCreateOptions
             {
                 Email = email,
@@ -42,7 +41,7 @@
             };
             var customer = await _customerService.CreateAsync(
                 customerCreateOptions,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
+                cancellationToken: token).ConfigureAwait(false);
             return customer.Id;
         }
 
@@ -50,10 +49,10 @@
             string customerId,
             decimal amount,
             string currency,
-            CancellationToken cancellationToken,
+            CancellationToken token,
             string description = null)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var chargeCreateOptions = new ChargeCreateOptions
             {
                 Amount = (long?) amount * 100,
@@ -64,7 +63,7 @@
             };
             var charge = await _chargeService.CreateAsync(
                 chargeCreateOptions,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
+                cancellationToken: token).ConfigureAwait(false);
             return charge.Id;
         }
 
@@ -72,10 +71,10 @@
             string customerId,
             decimal amount,
             string currency,
-            CancellationToken cancellationToken,
+            CancellationToken token,
             string description = null)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var chargeCreateOptions = new ChargeCreateOptions
             {
                 Amount = (long?)amount * 100,
@@ -86,16 +85,16 @@
             };
             var charge = await _chargeService.CreateAsync(
                 chargeCreateOptions,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
+                cancellationToken: token).ConfigureAwait(false);
             return charge.Id;
         }
 
         public virtual async Task UpdateAsync(
             string chargeId,
             string description,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var chargeUpdateOptions = new ChargeUpdateOptions
             {
                 Description = description
@@ -103,7 +102,7 @@
             await _chargeService.UpdateAsync(
                 chargeId,
                 chargeUpdateOptions,
-                cancellationToken: cancellationToken).ConfigureAwait(false);
+                cancellationToken: token).ConfigureAwait(false);
         }
     }
 }

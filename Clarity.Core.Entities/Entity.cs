@@ -10,7 +10,7 @@
 
         protected Entity()
         {
-            Created = DateTime.Now;
+            Created = DateTime.UtcNow;
         }
     }
 }

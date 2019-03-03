@@ -10,17 +10,17 @@
         Task<Uri> UploadFileToStorageAsync(
             IFormFile file,
             string fileName,
-            CancellationToken cancellationToken);
+            CancellationToken token);
 
         Task<Uri> UploadByteArrayToStorageAsync(
             byte[] buffer,
             string fileName,
-            CancellationToken cancellationToken);
+            CancellationToken token);
 
         string GetSharedAccessSignature(
             string fileName,
             string containerName);
 
-        Task DeleteAllFromStorageAsync(CancellationToken cancellationToken);
+        Task DeleteAllFromStorageAsync(CancellationToken token);
     }
 }

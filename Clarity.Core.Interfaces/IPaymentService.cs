@@ -7,30 +7,30 @@
     {
         Task<string> GetCustomerAsync(
             string customerId,
-            CancellationToken cancellationToken);
+            CancellationToken token);
 
         Task<string> CreateCustomerAsync(
             string email,
             string tokenId,
-            CancellationToken cancellationToken);
+            CancellationToken token);
 
         Task<string> AuthorizeAsync(
             string customerId,
             decimal amount,
             string currency,
-            CancellationToken cancellationToken,
+            CancellationToken token,
             string description = null);
 
         Task<string> CaptureAsync(
             string customerId,
             decimal amount,
             string currency,
-            CancellationToken cancellationToken,
+            CancellationToken token,
             string description = null);
 
         Task UpdateAsync(
             string chargeId,
             string description,
-            CancellationToken cancellationToken);
+            CancellationToken token);
     }
 }

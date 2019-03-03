@@ -32,14 +32,14 @@
         public virtual async Task<Uri> UploadFileToStorageAsync(
             IFormFile file,
             string fileName,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var container = _client.GetContainerReference(_imagesContainer);
             var blockBlob = container.GetBlockBlobReference(fileName);
             using (var stream = file.OpenReadStream())
             {
-                await blockBlob.UploadFromStreamAsync(stream, cancellationToken).ConfigureAwait(false);
+                await blockBlob.UploadFromStreamAsync(stream, token).ConfigureAwait(false);
                 return blockBlob.Uri;
             }
         }
@@ -47,12 +47,12 @@
         public virtual async Task<Uri> UploadByteArrayToStorageAsync(
             byte[] buffer,
             string fileName,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var container = _client.GetContainerReference(_imagesContainer);
             var blockBlob = container.GetBlockBlobReference(fileName);
-            await blockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false);
+            await blockBlob.UploadFromByteArrayAsync(buffer, 0, buffer.Length, token).ConfigureAwait(false);
             return blockBlob.Uri;
         }
 
@@ -71,7 +71,7 @@
             return blockBlob.GetSharedAccessSignature(policy);
         }
 
-        public virtual async Task DeleteAllFromStorageAsync(CancellationToken cancellationToken)
+        public virtual async Task DeleteAllFromStorageAsync(CancellationToken token)
         {
             foreach (var containerName in new [] { _imagesContainer, _thumbnailsContainer })
             foreach (var blob in _client
@@ -79,8 +79,8 @@
                 .ListBlobs(null, true)
                 .Where(x => x.GetType() == typeof(CloudBlob) || x.GetType().BaseType == typeof(CloudBlob)))
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                await ((CloudBlob) blob).DeleteIfExistsAsync(cancellationToken).ConfigureAwait(false);
+                token.ThrowIfCancellationRequested();
+                await ((CloudBlob) blob).DeleteIfExistsAsync(token).ConfigureAwait(false);
             }
         }
     }

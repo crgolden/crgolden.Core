@@ -7,10 +7,10 @@
     {
         Task<bool> ValidateUsAddressAsync(
             Address address,
-            CancellationToken cancellationToken);
+            CancellationToken token);
 
         Task<bool> ValidateInternationalAddressAsync(
             Address address,
-            CancellationToken cancellationToken);
+            CancellationToken token);
     }
 }

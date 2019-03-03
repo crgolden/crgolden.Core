@@ -16,25 +16,28 @@
             _logger = logger;
         }
 
-        public virtual Task Handle(TNotification notification, CancellationToken cancellationToken)
+        public virtual Task Handle(TNotification notification, CancellationToken token)
         {
+            var eventId = new EventId((int)notification.EventId, $"{notification.EventId}");
             switch (notification.EventId)
             {
                 case EventIds.DeleteStart:
+                    token.ThrowIfCancellationRequested();
                     _logger.LogInformation(
-                        eventId: new EventId((int)EventIds.DeleteStart, $"{EventIds.DeleteStart}"),
+                        eventId: eventId,
                         message: "Deleting entity with key values {KeyValues} at {Time}",
                         args: new object[] { notification.KeyValues, DateTime.UtcNow });
                     break;
                 case EventIds.DeleteEnd:
+                    token.ThrowIfCancellationRequested();
                     _logger.LogInformation(
-                        eventId: new EventId((int)EventIds.DeleteEnd, $"{EventIds.DeleteEnd}"),
+                        eventId: eventId,
                         message: "Deleted entity with key values {KeyValues} at {Time}",
                         args: new object[] { notification.KeyValues, DateTime.UtcNow });
                     break;
                 case EventIds.DeleteError:
                     _logger.LogError(
-                        eventId: new EventId((int)EventIds.DeleteError, $"{EventIds.DeleteError}"),
+                        eventId: eventId,
                         exception: notification.Exception,
                         message: "Error deleting entity with key values {KeyValues} at {Time}",
                         args: new object[] { notification.KeyValues, DateTime.UtcNow });

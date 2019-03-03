@@ -19,14 +19,11 @@
             Mapper = mapper;
         }
 
-        public virtual async Task<TModel> Handle(TRequest request, CancellationToken cancellationToken)
+        public virtual async Task<TModel> Handle(TRequest request, CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
             var entity = Mapper.Map<TEntity>(request.Model);
             Context.Add(entity);
-            await Context
-                .SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
+            await Context.SaveChangesAsync(token).ConfigureAwait(false);
             return Mapper.Map<TModel>(entity);
         }
     }

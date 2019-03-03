@@ -38,14 +38,14 @@
             appLifetime.ApplicationStopping.Register(OnStopping);
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             RegisterMessageHandler(ProcessMessagesAsync, MessageHandlerOptions);
             return Task.CompletedTask;
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken token)
         {
             await CloseAsync();
         }

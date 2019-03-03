@@ -26,9 +26,9 @@
 
         public virtual Task<bool> ValidateUsAddressAsync(
             Address address,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var lookup = new UsLookup
             {
                 Street = address.StreetAddress,
@@ -42,9 +42,9 @@
 
         public virtual Task<bool> ValidateInternationalAddressAsync(
             Address address,
-            CancellationToken cancellationToken)
+            CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
             var lookup = new InternationalLookup
             {
                 Address1 = address.StreetAddress,

@@ -16,25 +16,28 @@
             _logger = logger;
         }
 
-        public virtual Task Handle(TNotification notification, CancellationToken cancellationToken)
+        public virtual Task Handle(TNotification notification, CancellationToken token)
         {
+            var eventId = new EventId((int)notification.EventId, $"{notification.EventId}");
             switch (notification.EventId)
             {
                 case EventIds.CreateStart:
+                    token.ThrowIfCancellationRequested();
                     _logger.LogInformation(
-                        eventId: new EventId((int)EventIds.CreateStart, $"{EventIds.CreateStart}"),
+                        eventId: eventId,
                         message: "Creating model {Model} at {Time}",
                         args: new object[] { notification.Model, DateTime.UtcNow });
                     break;
                 case EventIds.CreateEnd:
+                    token.ThrowIfCancellationRequested();
                     _logger.LogInformation(
-                        eventId: new EventId((int)EventIds.CreateEnd, $"{EventIds.CreateEnd}"),
+                        eventId: eventId,
                         message: "Created model {Model} at {Time}",
                         args: new object[] { notification.Model, DateTime.UtcNow });
                     break;
                 case EventIds.CreateError:
                     _logger.LogError(
-                        eventId: new EventId((int)EventIds.CreateError, $"{EventIds.CreateError}"),
+                        eventId: eventId,
                         exception: notification.Exception,
                         message: "Error creating model {Model} at {Time}",
                         args: new object[] { notification.Model, DateTime.UtcNow });

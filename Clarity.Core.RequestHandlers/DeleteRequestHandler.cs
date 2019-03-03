@@ -16,16 +16,11 @@
             Context = context;
         }
 
-        public virtual async Task<Unit> Handle(TRequest request, CancellationToken cancellationToken)
+        public virtual async Task<Unit> Handle(TRequest request, CancellationToken token)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var entity = await Context
-                .FindAsync<TEntity>(request.KeyValues, cancellationToken)
-                .ConfigureAwait(false);
+            var entity = await Context.FindAsync<TEntity>(request.KeyValues, token).ConfigureAwait(false);
             Context.Remove(entity);
-            await Context
-                .SaveChangesAsync(cancellationToken)
-                .ConfigureAwait(false);
+            await Context.SaveChangesAsync(token).ConfigureAwait(false);
             return Unit.Value;
         }
     }
