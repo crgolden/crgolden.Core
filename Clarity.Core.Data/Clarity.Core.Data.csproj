@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Entities" Version="1.1.1" />
+    <PackageReference Include="Clarity.Core.Entities" Version="1.2.0-CI-20190303-200150" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.2" />
     <PackageReference Include="Microsoft.SourceLink.Vsts.Git" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
   </ItemGroup>

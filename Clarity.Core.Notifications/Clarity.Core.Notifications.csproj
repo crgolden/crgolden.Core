@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Enums" Version="1.4.1" />
+    <PackageReference Include="Clarity.Core.Enums" Version="1.5.0-CI-20190303-155941" />
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2019.1.220" />
     <PackageReference Include="Microsoft.SourceLink.Vsts.Git" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
