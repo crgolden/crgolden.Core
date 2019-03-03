@@ -4,13 +4,8 @@
 
     public abstract class Entity
     {
-        public DateTime Created { get; private set; }
+        public DateTime Created { get; }
 
         public DateTime? Updated { get; set; }
-
-        protected Entity()
-        {
-            Created = DateTime.UtcNow;
-        }
     }
 }
