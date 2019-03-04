@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
-    using IdentityModel;
     using Kendo.Mvc.UI;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
@@ -16,14 +15,10 @@
         where TEntity : class
     {
         protected readonly IMediator Mediator;
-        protected readonly Guid? UserId;
-        protected readonly string UserEmail;
 
         protected Controller(IMediator mediator)
         {
             Mediator = mediator;
-            if (Guid.TryParse(User?.FindFirst(JwtClaimTypes.Subject)?.Value, out var userId)) UserId = userId;
-            UserEmail = User?.FindFirst(JwtClaimTypes.Email)?.Value;
         }
 
         public abstract Task<IActionResult> Index(DataSourceRequest request);
