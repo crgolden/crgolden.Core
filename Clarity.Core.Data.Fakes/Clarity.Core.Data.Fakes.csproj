@@ -8,10 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Data" Version="1.2.0-CI-20190303-221951" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Clarity.Core.Data\Clarity.Core.Data.csproj" />
     <ProjectReference Include="..\Clarity.Core.Entities.Fakes\Clarity.Core.Entities.Fakes.csproj" />
   </ItemGroup>
 
