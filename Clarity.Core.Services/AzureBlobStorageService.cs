@@ -13,13 +13,11 @@
     public class AzureBlobStorageService : IStorageService
     {
         private readonly string _imagesContainer;
-        private readonly string _thumbnailsContainer;
         private readonly CloudBlobClient _client;
 
         public AzureBlobStorageService(IOptions<StorageOptions> options)
         {
             _imagesContainer = options.Value.ImageContainer;
-            _thumbnailsContainer = options.Value.ThumbnailContainer;
             var storageCredentials = new StorageCredentials(
                 accountName: options.Value.AzureBlobStorageOptions.AccountName,
                 keyValue: options.Value.AzureBlobStorageOptions.AccountKey);
@@ -71,9 +69,14 @@
             return blockBlob.GetSharedAccessSignature(policy);
         }
 
-        public virtual async Task DeleteAllFromStorageAsync(CancellationToken token)
+        public virtual async Task<bool> DeleteFileFromStorageAsync(CancellationToken token, Uri blobUri)
         {
-            foreach (var containerName in new [] { _imagesContainer, _thumbnailsContainer })
+            var blob = await _client.GetBlobReferenceFromServerAsync(blobUri, token).ConfigureAwait(false);
+            return blob is CloudBlob clodBlob && await clodBlob.DeleteIfExistsAsync(token).ConfigureAwait(false);
+        }
+
+        public virtual async Task DeleteAllFromStorageAsync(CancellationToken token, string containerName)
+        {
             foreach (var blob in _client
                 .GetContainerReference(containerName)
                 .ListBlobs(null, true)
