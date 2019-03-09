@@ -21,8 +21,8 @@
             string fileName,
             string containerName);
 
-        Task<bool> DeleteFileFromStorageAsync(CancellationToken token, Uri blobUri);
+        Task<bool> DeleteFileFromStorageAsync(Uri blobUri, CancellationToken token);
 
-        Task DeleteAllFromStorageAsync(CancellationToken token, string containerName);
+        Task DeleteAllFromStorageAsync(string containerName, CancellationToken token);
     }
 }

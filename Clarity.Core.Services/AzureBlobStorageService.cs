@@ -69,13 +69,13 @@
             return blockBlob.GetSharedAccessSignature(policy);
         }
 
-        public virtual async Task<bool> DeleteFileFromStorageAsync(CancellationToken token, Uri blobUri)
+        public virtual async Task<bool> DeleteFileFromStorageAsync(Uri blobUri, CancellationToken token)
         {
             var blob = await _client.GetBlobReferenceFromServerAsync(blobUri, token).ConfigureAwait(false);
             return blob is CloudBlob clodBlob && await clodBlob.DeleteIfExistsAsync(token).ConfigureAwait(false);
         }
 
-        public virtual async Task DeleteAllFromStorageAsync(CancellationToken token, string containerName)
+        public virtual async Task DeleteAllFromStorageAsync(string containerName, CancellationToken token)
         {
             foreach (var blob in _client
                 .GetContainerReference(containerName)
