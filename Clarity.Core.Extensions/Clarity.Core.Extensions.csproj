@@ -5,7 +5,7 @@
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <PackageId>Clarity.Core.Extensions</PackageId>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <Company>Clarity</Company>
     <Authors>Chris Golden</Authors>
     <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
@@ -17,7 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Core.Filters" Version="1.2.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.2" />
@@ -31,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Clarity.Core.Enums\Clarity.Core.Enums.csproj" />
+    <ProjectReference Include="..\Clarity.Core.Filters\Clarity.Core.Filters.csproj" />
     <ProjectReference Include="..\Clarity.Core.Options\Clarity.Core.Options.csproj" />
   </ItemGroup>
 
