@@ -1,5 +1,7 @@
 ﻿namespace Clarity.Core
 {
+    using System.Linq;
+
     public static class FileExtensions
     {
         public static string GetImageFileUri(
@@ -12,8 +14,7 @@
             var uri = thumbnail
                 ? file.Uri.Replace($"{options.ImageContainer}/", $"{options.ThumbnailContainer}/")
                 : file.Uri;
-            var parts = file.Uri.Split('.');
-            var fileName = $"{parts[parts.Length - 2]}{file.Extension}";
+            var fileName = file.Uri.Split('/').Last();
             var sharedAccessSignature = storageService.GetSharedAccessSignature(fileName, containerName);
             return $"{uri}{sharedAccessSignature}";
         }
