@@ -11,17 +11,12 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
 
-    [Route("v1/[controller]/[action]")]
-    [ApiController]
-    public abstract class FilesController<TEntity, TModel, TKey> : ControllerBase
+    public abstract class FilesController<TEntity, TModel, TKey> : EntitiesController<TEntity, TModel, TKey>
         where TEntity : File
         where TModel : FileModel
     {
-        protected readonly IMediator Mediator;
-
-        protected FilesController(IMediator mediator)
+        protected FilesController(IMediator mediator) : base(mediator)
         {
-            Mediator = mediator;
         }
 
         public abstract Task<IActionResult> Upload(IFormFileCollection files);
