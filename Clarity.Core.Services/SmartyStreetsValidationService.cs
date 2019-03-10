@@ -1,5 +1,6 @@
 ﻿namespace Clarity.Core
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Options;
@@ -9,12 +10,12 @@
     using InternationalLookup = SmartyStreets.InternationalStreetApi.Lookup;
     using InternationalClient = SmartyStreets.InternationalStreetApi.Client;
 
-    public class SmartyStreetsAddressService : IAddressService
+    public class SmartyStreetsValidationService : IValidationService<Address>
     {
         private readonly UsClient _usClient;
         private readonly InternationalClient _internationalClient;
 
-        public SmartyStreetsAddressService(IOptions<AddressOptions> options)
+        public SmartyStreetsValidationService(IOptions<AddressOptions> options)
         {
             var authId = options.Value.SmartyStreetsOptions.AuthId;
             var authToken = options.Value.SmartyStreetsOptions.AuthToken;
@@ -24,11 +25,17 @@
             _internationalClient = clientBuilder.BuildInternationalStreetApiClient();
         }
 
-        public virtual Task<bool> ValidateUsAddressAsync(
+        public virtual Task<bool> ValidateAsync(Address address, CancellationToken token)
+        {
+            return new [] { "US", "USA", "CA", "CAN" }.Contains(address.Country)
+                ? ValidateUsAddressAsync(address, token)
+                : ValidateInternationalAddressAsync(address, token);
+        }
+
+        private Task<bool> ValidateUsAddressAsync(
             Address address,
             CancellationToken token)
         {
-            token.ThrowIfCancellationRequested();
             var lookup = new UsLookup
             {
                 Street = address.StreetAddress,
@@ -40,11 +47,10 @@
             return Task.FromResult(lookup.Result.Count > 0);
         }
 
-        public virtual Task<bool> ValidateInternationalAddressAsync(
+        private Task<bool> ValidateInternationalAddressAsync(
             Address address,
             CancellationToken token)
         {
-            token.ThrowIfCancellationRequested();
             var lookup = new InternationalLookup
             {
                 Address1 = address.StreetAddress,

@@ -4,6 +4,7 @@
     using MediatR;
 
     public abstract class DetailsNotification<TModel> : INotification
+        where TModel : Model
     {
         public EventIds EventId { get; set; }
 

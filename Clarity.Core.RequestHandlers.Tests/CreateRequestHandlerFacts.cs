@@ -17,15 +17,15 @@
         {
             // Arrange
             var entity = new FakeEntity("Name");
-            var model = new { entity.Name };
+            var model = Mock.Of<Model>();
             var databaseName = $"{DatabaseNamePrefix}.{nameof(Create)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
                 .Options;
-            var request = new Mock<CreateRequest<FakeEntity, object>>(model);
+            var request = new Mock<CreateRequest<FakeEntity, Model>>(model);
             var mapper = new Mock<IMapper>();
             mapper.Setup(x => x.Map<FakeEntity>(model)).Returns(entity);
-            mapper.Setup(x => x.Map<object>(It.Is<FakeEntity>(y => y.Name == entity.Name))).Returns(model);
+            mapper.Setup(x => x.Map<Model>(It.Is<FakeEntity>(y => y.Name == entity.Name))).Returns(model);
             object create;
 
             // Act

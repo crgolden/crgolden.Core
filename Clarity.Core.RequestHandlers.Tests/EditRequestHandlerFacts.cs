@@ -31,9 +31,9 @@
 
             entity.Name = newName;
             var keyValues = new object[] { entity.Id };
-            var request = new Mock<EditRequest<FakeEntity, object>>(new {});
+            var request = new Mock<EditRequest<FakeEntity, Model>>(Mock.Of<Model>());
             var mapper = new Mock<IMapper>();
-            mapper.Setup(x => x.Map<FakeEntity>(It.IsAny<object>())).Returns(entity);
+            mapper.Setup(x => x.Map<FakeEntity>(It.IsAny<Model>())).Returns(entity);
 
             // Act
             using (var context = new FakeContext(options))

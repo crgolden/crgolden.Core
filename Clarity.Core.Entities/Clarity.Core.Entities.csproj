@@ -5,7 +5,7 @@
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <PackageId>Clarity.Core.Entities</PackageId>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
     <Company>Clarity</Company>
     <Authors>Chris Golden</Authors>
     <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>

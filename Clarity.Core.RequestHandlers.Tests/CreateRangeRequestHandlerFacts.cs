@@ -27,20 +27,20 @@
                 entity2,
                 entity3
             };
-            var models = new object[]
+            var models = new []
             {
-                new { entity1.Name },
-                new { entity2.Name },
-                new { entity3.Name }
+                Mock.Of<Model>(),
+                Mock.Of<Model>(),
+                Mock.Of<Model>()
             };
             var databaseName = $"{DatabaseNamePrefix}.{nameof(CreateRange)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
                 .Options;
-            var request = new Mock<CreateRangeRequest<IEnumerable<object>, FakeEntity, object>>(models.AsEnumerable());
+            var request = new Mock<CreateRangeRequest<IEnumerable<Model>, FakeEntity, Model>>(models.AsEnumerable());
             var mapper = new Mock<IMapper>();
-            mapper.Setup(x => x.Map<IEnumerable<FakeEntity>>(It.IsAny<IEnumerable<object>>())).Returns(entities);
-            mapper.Setup(x => x.Map<IEnumerable<object>>(It.IsAny<IEnumerable<FakeEntity>>())).Returns(models);
+            mapper.Setup(x => x.Map<IEnumerable<FakeEntity>>(It.IsAny<IEnumerable<Model>>())).Returns(entities);
+            mapper.Setup(x => x.Map<IEnumerable<Model>>(It.IsAny<IEnumerable<FakeEntity>>())).Returns(models.AsEnumerable());
             IEnumerable<object> createRange;
 
             // Act

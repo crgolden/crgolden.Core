@@ -9,7 +9,8 @@
 
     public abstract class EditRangeRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest>
         where TRequest : EditRangeRequest<TEntity, TModel>
-        where TEntity : class
+        where TEntity : Entity
+        where TModel : Model
     {
         protected readonly DbContext Context;
         protected readonly IMapper Mapper;

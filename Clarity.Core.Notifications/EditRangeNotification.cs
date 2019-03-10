@@ -5,6 +5,7 @@
     using MediatR;
 
     public abstract class EditRangeNotification<TModel> : INotification
+        where TModel : Model
     {
         public EventIds EventId { get; set; }
 

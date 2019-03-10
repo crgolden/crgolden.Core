@@ -8,7 +8,8 @@
 
     public abstract class DetailsRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest, TModel>
         where TRequest : DetailsRequest<TEntity, TModel>
-        where TEntity : class
+        where TEntity : Entity
+        where TModel : Model
     {
         protected readonly DbContext Context;
         protected readonly IMapper Mapper;

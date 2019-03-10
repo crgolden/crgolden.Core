@@ -8,6 +8,7 @@
 
     public abstract class CreateNotificationHandler<TNotification, TModel> : INotificationHandler<TNotification>
         where TNotification : CreateNotification<TModel>
+        where TModel : Model
     {
         private readonly ILogger<CreateNotificationHandler<TNotification, TModel>> _logger;
 

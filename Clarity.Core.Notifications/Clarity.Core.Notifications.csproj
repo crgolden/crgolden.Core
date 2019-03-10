@@ -5,7 +5,7 @@
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <PackageId>Clarity.Core.Notifications</PackageId>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <Company>Clarity</Company>
     <Authors>Chris Golden</Authors>
     <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Clarity.Core.Enums\Clarity.Core.Enums.csproj" />
+    <ProjectReference Include="..\Clarity.Core.Models\Clarity.Core.Models.csproj" />
   </ItemGroup>
 
 </Project>

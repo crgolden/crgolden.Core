@@ -27,11 +27,11 @@
                 new FakeEntity("Name 2"),
                 new FakeEntity("Name 3")
             };
-            var models = new object[]
+            var models = new []
             {
-                new { entities[0].Name },
-                new { entities[1].Name },
-                new { entities[2].Name }
+                Mock.Of<Model>(),
+                Mock.Of<Model>(),
+                Mock.Of<Model>()
             }.AsQueryable();
             var databaseName = $"{DatabaseNamePrefix}.{nameof(Index)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
@@ -43,12 +43,12 @@
                 await context.SaveChangesAsync();
             }
 
-            var request = new Mock<IndexRequest<FakeEntity, object>>(null, new DataSourceRequest());
+            var request = new Mock<IndexRequest<FakeEntity, Model>>(null, new DataSourceRequest());
             var mapper = new Mock<IMapper>();
             mapper.Setup(x => x.ProjectTo(
                     It.IsAny<IQueryable>(),
                     It.IsAny<object>(),
-                    It.IsAny<Expression<Func<object, object>>[]>()))
+                    It.IsAny<Expression<Func<Model, object>>[] > ()))
                 .Returns(models);
             DataSourceResult index;
 
@@ -61,7 +61,7 @@
 
             // Assert
             var result = Assert.IsType<DataSourceResult>(index);
-            var data = Assert.IsAssignableFrom<IEnumerable<object>>(result.Data);
+            var data = Assert.IsAssignableFrom<IEnumerable<Model>>(result.Data);
             Assert.Equal(models.AsEnumerable().Count(), data.Count());
         }
     }

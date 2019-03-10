@@ -10,7 +10,8 @@
     public abstract class CreateRangeRequestHandler<TRequest, TResponse, TEntity, TModel> : IRequestHandler<TRequest, TResponse>
         where TRequest : CreateRangeRequest<TResponse, TEntity, TModel>
         where TResponse : IEnumerable<TModel>
-        where TEntity : class
+        where TEntity : Entity
+        where TModel : Model
     {
         protected readonly DbContext Context;
         protected readonly IMapper Mapper;

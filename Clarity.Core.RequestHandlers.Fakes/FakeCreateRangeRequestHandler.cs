@@ -5,7 +5,7 @@
     using Microsoft.EntityFrameworkCore;
 
     internal class FakeCreateRangeRequestHandler
-        : CreateRangeRequestHandler<CreateRangeRequest<IEnumerable<object>, FakeEntity, object>, IEnumerable<object>, FakeEntity, object>
+        : CreateRangeRequestHandler<CreateRangeRequest<IEnumerable<Model>, FakeEntity, Model>, IEnumerable<Model>, FakeEntity, Model>
     {
         internal FakeCreateRangeRequestHandler(DbContext context, IMapper mapper) : base(context, mapper)
         {

@@ -3,7 +3,8 @@
     using MediatR;
 
     public abstract class CreateRequest<TEntity, TModel> : IRequest<TModel>
-        where TEntity : class
+        where TEntity : Entity
+        where TModel : Model
     {
         public readonly TModel Model;
 

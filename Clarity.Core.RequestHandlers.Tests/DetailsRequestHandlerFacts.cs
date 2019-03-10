@@ -17,7 +17,7 @@
         {
             // Arrange
             var entity = new FakeEntity("Name");
-            var model = new { entity.Name };
+            var model = Mock.Of<Model>();
             var databaseName = $"{DatabaseNamePrefix}.{nameof(Details)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
                 .UseInMemoryDatabase(databaseName)
@@ -29,10 +29,10 @@
             }
 
             var keyValues = new object[] { entity.Id };
-            var request = new Mock<DetailsRequest<FakeEntity, object>>(new object[] { keyValues });
+            var request = new Mock<DetailsRequest<FakeEntity, Model>>(new object[] { keyValues });
             var mapper = new Mock<IMapper>();
-            mapper.Setup(x => x.Map<object>(It.Is<FakeEntity>(y => y.Name == entity.Name))).Returns(model);
-            object details;
+            mapper.Setup(x => x.Map<Model>(It.Is<FakeEntity>(y => y.Name == entity.Name))).Returns(model);
+            Model details;
 
             // Act
             using (var context = new FakeContext(options))

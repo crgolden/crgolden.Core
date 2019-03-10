@@ -10,7 +10,8 @@
 
     public abstract class IndexRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest, DataSourceResult>
         where TRequest : IndexRequest<TEntity, TModel>
-        where TEntity : class
+        where TEntity : Entity
+        where TModel : Model
     {
         protected readonly DbContext Context;
         protected readonly IMapper Mapper;

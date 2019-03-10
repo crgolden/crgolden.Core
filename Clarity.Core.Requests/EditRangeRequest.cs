@@ -4,7 +4,8 @@
     using MediatR;
 
     public abstract class EditRangeRequest<TEntity, TModel> : IRequest
-        where TEntity : class
+        where TEntity : Entity
+        where TModel : Model
     {
         public readonly IEnumerable<TModel> Models;
 

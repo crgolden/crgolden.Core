@@ -24,11 +24,11 @@
                 new FakeEntity("Name 2"),
                 new FakeEntity("Name 3")
             };
-            var models = new object[]
+            var models = new []
             {
-                new { entities[0].Name },
-                new { entities[1].Name },
-                new { entities[2].Name }
+                Mock.Of<Model>(),
+                Mock.Of<Model>(),
+                Mock.Of<Model>()
             }.AsEnumerable();
             var databaseName = $"{DatabaseNamePrefix}.{nameof(EditRange)}";
             var options = new DbContextOptionsBuilder<FakeContext>()
@@ -46,9 +46,9 @@
                 entities[i].Name = $"New Name {i}";
             }
 
-            var request = new Mock<EditRangeRequest<FakeEntity, object>>(models);
+            var request = new Mock<EditRangeRequest<FakeEntity, Model>>(models);
             var mapper = new Mock<IMapper>();
-            mapper.Setup(x => x.Map<IEnumerable<FakeEntity>>(It.IsAny<IEnumerable<object>>())).Returns(entities);
+            mapper.Setup(x => x.Map<IEnumerable<FakeEntity>>(It.IsAny<IEnumerable<Model>>())).Returns(entities);
 
             // Act
             using (var context = new FakeContext(options))

@@ -8,6 +8,7 @@
 
     public abstract class EditRangeNotificationHandler<TNotification, TModel> : INotificationHandler<TNotification>
         where TNotification : EditRangeNotification<TModel>
+        where TModel : Model
     {
         private readonly ILogger<EditRangeNotificationHandler<TNotification, TModel>> _logger;
 

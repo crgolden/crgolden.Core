@@ -7,7 +7,7 @@
 
     public abstract class DeleteRequestHandler<TRequest, TEntity> : IRequestHandler<TRequest>
         where TRequest : DeleteRequest
-        where TEntity : class
+        where TEntity : Entity
     {
         protected readonly DbContext Context;
 

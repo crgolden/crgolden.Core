@@ -27,7 +27,7 @@ namespace Clarity.Core.Controllers.Tests
             var request = new DataSourceRequest();
             var dataSourceResult = new DataSourceResult();
             _mediator.Setup(x => x.Send(
-                    It.Is<IndexRequest<object, object>>(y => y.Request.Equals(request)),
+                    It.Is<IndexRequest<Entity, Model>>(y => y.Request.Equals(request)),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(dataSourceResult);
             var controller = new FakeController(_mediator.Object);
@@ -44,20 +44,19 @@ namespace Clarity.Core.Controllers.Tests
         public async Task Details_Ok()
         {
             // Arrange
-            var entity = new { Name = "Name", Id = Guid.NewGuid() };
-            var keyValues = new object[] { entity.Id };
+            var model = Mock.Of<Model>();
             _mediator.Setup(x => x.Send(
-                    It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
+                    It.IsAny<DetailsRequest<Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(entity);
+                .ReturnsAsync(model);
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var details = await controller.Details(keyValues);
+            var details = await controller.Details(new object[] {});
 
             // Assert
             var result = Assert.IsType<OkObjectResult>(details);
-            Assert.Equal(entity, result.Value);
+            Assert.Equal(model, result.Value);
         }
 
         [Fact]
@@ -66,7 +65,7 @@ namespace Clarity.Core.Controllers.Tests
             // Arrange
             var keyValues = new object[] { Guid.NewGuid() };
             _mediator.Setup(x => x.Send(
-                    It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
+                    It.IsAny<DetailsRequest<Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object);
@@ -85,9 +84,9 @@ namespace Clarity.Core.Controllers.Tests
             // Arrange
             var keyValues = new object[] { Guid.NewGuid() };
             _mediator.Setup(x => x.Send(
-                    It.Is<DetailsRequest<object, object>>(y => y.KeyValues[0].Equals(keyValues[0])),
+                    It.IsAny<DetailsRequest<Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(default(object));
+                .ReturnsAsync(default(Model));
             var controller = new FakeController(_mediator.Object);
 
             // Act
@@ -102,11 +101,10 @@ namespace Clarity.Core.Controllers.Tests
         public async Task Edit_No_Content()
         {
             // Arrange
-            var entity = new { Name = "Name" };
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var edit = await controller.Edit(entity);
+            var edit = await controller.Edit(Mock.Of<Model>());
 
             // Assert
             Assert.IsType<NoContentResult>(edit);
@@ -116,16 +114,11 @@ namespace Clarity.Core.Controllers.Tests
         public async Task EditRange_No_Content()
         {
             // Arrange
-            var entities = new object[]
-            {
-                new { Name = "Name 1" },
-                new { Name = "Name 2" },
-                new { Name = "Name 3" }
-            };
+            var models = Mock.Of<IEnumerable<Model>>();
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var editRange = await controller.EditRange(entities);
+            var editRange = await controller.EditRange(models);
 
             // Assert
             Assert.IsType<NoContentResult>(editRange);
@@ -135,129 +128,114 @@ namespace Clarity.Core.Controllers.Tests
         public async Task Edit_Bad_Request_Object()
         {
             // Arrange
-            var entity = new { Name = "Name" };
+            var model = Mock.Of<Model>();
             _mediator.Setup(x => x.Send(
-                    It.Is<EditRequest<object, object>>(y => y.Model.Equals(entity)),
+                    It.IsAny<EditRequest<Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var edit = await controller.Edit(entity);
+            var edit = await controller.Edit(model);
 
             // Assert
             var result = Assert.IsType<BadRequestObjectResult>(edit);
-            Assert.Equal(entity, result.Value);
+            Assert.Equal(model, result.Value);
         }
 
         [Fact]
         public async Task EditRange_Bad_Request_Object()
         {
             // Arrange
-            var entities = new object[]
-            {
-                new { Name = "Name 1" },
-                new { Name = "Name 2" },
-                new { Name = "Name 3" }
-            };
+            var models = new Model[0];
             _mediator.Setup(x => x.Send(
-                    It.Is<EditRangeRequest<object, object>>(y => y.Models.Equals(entities)),
+                    It.IsAny<EditRangeRequest<Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var editRange = await controller.EditRange(entities);
+            var editRange = await controller.EditRange(models);
 
             // Assert
             var result = Assert.IsType<BadRequestObjectResult>(editRange);
-            Assert.Equal(entities, result.Value);
+            Assert.Equal(models, result.Value);
         }
 
         [Fact]
         public async Task Create_Ok()
         {
             // Arrange
-            var entity = new { Name = "Name" };
+            var model = Mock.Of<Model>();
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRequest<object, object>>(y => y.Model.Equals(entity)),
+                    It.Is<CreateRequest<Entity, Model>>(y => y.Model.Equals(model)),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(entity);
+                .ReturnsAsync(model);
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var create = await controller.Create(entity);
+            var create = await controller.Create(model);
 
             // Assert
             var result = Assert.IsType<OkObjectResult>(create);
-            Assert.Equal(entity, result.Value);
+            Assert.Equal(model, result.Value);
         }
 
         [Fact]
         public async Task CreateRange_Ok()
         {
             // Arrange
-            var entities = new object[]
-            {
-                new { Name = "Name 1" },
-                new { Name = "Name 2" },
-                new { Name = "Name 3" }
-            };
+            var models = new Model[0];
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRangeRequest<IEnumerable<object>, object, object>>(y => y.Models.Equals(entities)),
+                    It.IsAny<CreateRangeRequest<IEnumerable<Model>, Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(entities);
+                .ReturnsAsync(models);
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var createRange = await controller.CreateRange(entities);
+            var createRange = await controller.CreateRange(models);
 
             // Assert
             var result = Assert.IsType<OkObjectResult>(createRange);
-            Assert.Equal(entities, result.Value);
+            Assert.Equal(models, result.Value);
         }
 
         [Fact]
         public async Task Create_Bad_Request_Object()
         {
             // Arrange
-            var entity = new { Name = "Name" };
+            var model = Mock.Of<Model>();
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRequest<object, object>>(y => y.Model.Equals(entity)),
+                    It.IsAny<CreateRequest<Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var create = await controller.Create(entity);
+            var create = await controller.Create(model);
 
             // Assert
             var result = Assert.IsType<BadRequestObjectResult>(create);
-            Assert.Equal(entity, result.Value);
+            Assert.Equal(model, result.Value);
         }
 
         [Fact]
         public async Task CreateRange_Bad_Request_Object()
         {
             // Arrange
-            var entities = new object[]
-            {
-                new { Name = "Name 1" },
-                new { Name = "Name 2" },
-                new { Name = "Name 3" }
-            };
+            var models = new Model[0];
             _mediator.Setup(x => x.Send(
-                    It.Is<CreateRangeRequest<IEnumerable<object>, object, object>>(y => y.Models.Equals(entities)),
+                    It.IsAny<CreateRangeRequest<IEnumerable<Model>, Entity, Model>>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object);
 
             // Act
-            var createRange = await controller.CreateRange(entities);
+            var createRange = await controller.CreateRange(models);
 
             // Assert
             var result = Assert.IsType<BadRequestObjectResult>(createRange);
-            Assert.Equal(entities, result.Value);
+            Assert.Equal(models, result.Value);
         }
 
         [Fact]
@@ -280,7 +258,7 @@ namespace Clarity.Core.Controllers.Tests
             // Arrange
             var keyValues = new object[] { Guid.NewGuid() };
             _mediator.Setup(x => x.Send(
-                    It.Is<DeleteRequest>(y => y.KeyValues[0].Equals(keyValues[0])),
+                    It.IsAny<DeleteRequest>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception());
             var controller = new FakeController(_mediator.Object);

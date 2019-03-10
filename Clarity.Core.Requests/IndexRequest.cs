@@ -5,6 +5,8 @@
     using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     public abstract class IndexRequest<TEntity, TModel> : IRequest<DataSourceResult>
+        where TEntity : Entity
+        where TModel : Model
     {
         public readonly ModelStateDictionary ModelState;
 

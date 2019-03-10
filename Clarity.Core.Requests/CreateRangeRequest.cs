@@ -4,7 +4,8 @@
     using MediatR;
 
     public abstract class CreateRangeRequest<TResponse, TEntity, TModel> : IRequest<TResponse>
-        where TEntity : class
+        where TEntity : Entity
+        where TModel : Model
         where TResponse : IEnumerable<TModel>
     {
         public readonly IEnumerable<TModel> Models;

@@ -11,12 +11,13 @@
     [Produces("application/json")]
     [Route("v1/[controller]/[action]")]
     [ApiController]
-    public abstract class Controller<TEntity, TModel, TKey> : ControllerBase
-        where TEntity : class
+    public abstract class EntitiesController<TEntity, TModel, TKey> : ControllerBase
+        where TEntity : Entity
+        where TModel : Model
     {
         protected readonly IMediator Mediator;
 
-        protected Controller(IMediator mediator)
+        protected EntitiesController(IMediator mediator)
         {
             Mediator = mediator;
         }
