@@ -6,16 +6,17 @@
     using MediatR;
     using Microsoft.Extensions.Logging;
 
-    public abstract class UploadNotificationHandler<TModel> : INotificationHandler<UploadNotification<TModel>>
+    public abstract class UploadNotificationHandler<TNotification, TModel> : INotificationHandler<TNotification>
+        where TNotification : UploadNotification<TModel>
     {
-        protected readonly ILogger<UploadNotificationHandler<TModel>> Logger;
+        protected readonly ILogger<UploadNotificationHandler<TNotification, TModel>> Logger;
 
-        protected UploadNotificationHandler(ILogger<UploadNotificationHandler<TModel>> logger)
+        protected UploadNotificationHandler(ILogger<UploadNotificationHandler<TNotification, TModel>> logger)
         {
             Logger = logger;
         }
 
-        public virtual Task Handle(UploadNotification<TModel> notification, CancellationToken token)
+        public virtual Task Handle(TNotification notification, CancellationToken token)
         {
             var eventId = new EventId((int)notification.EventId, $"{notification.EventId}");
             switch (notification.EventId)

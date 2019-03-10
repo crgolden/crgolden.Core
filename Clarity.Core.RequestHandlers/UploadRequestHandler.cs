@@ -8,7 +8,8 @@
     using MediatR;
     using Microsoft.EntityFrameworkCore;
 
-    public abstract class UploadRequestHandler<TEntity, TModel> : IRequestHandler<UploadRequest<TEntity, TModel>, TModel[]>
+    public abstract class UploadRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest, TModel[]>
+        where TRequest : UploadRequest<TEntity, TModel>
         where TEntity : File, new()
         where TModel : FileModel
     {
@@ -23,7 +24,7 @@
             StorageService = storageService;
         }
 
-        public virtual async Task<TModel[]> Handle(UploadRequest<TEntity, TModel> request, CancellationToken token)
+        public virtual async Task<TModel[]> Handle(TRequest request, CancellationToken token)
         {
             if (request.Files.Count == 0) return new TModel[0];
             var tasks = request.Files.Select(async (x, i) =>

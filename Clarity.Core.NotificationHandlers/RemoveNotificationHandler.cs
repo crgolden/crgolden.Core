@@ -6,16 +6,17 @@
     using MediatR;
     using Microsoft.Extensions.Logging;
 
-    public abstract class RemoveNotificationHandler<TKey> : INotificationHandler<RemoveNotification<TKey>>
+    public abstract class RemoveNotificationHandler<TNotification, TKey> : INotificationHandler<TNotification>
+        where TNotification : RemoveNotification<TKey>
     {
-        protected readonly ILogger<RemoveNotificationHandler<TKey>> Logger;
+        protected readonly ILogger<RemoveNotificationHandler<TNotification, TKey>> Logger;
 
-        protected RemoveNotificationHandler(ILogger<RemoveNotificationHandler<TKey>> logger)
+        protected RemoveNotificationHandler(ILogger<RemoveNotificationHandler<TNotification, TKey>> logger)
         {
             Logger = logger;
         }
 
-        public virtual Task Handle(RemoveNotification<TKey> notification, CancellationToken token)
+        public virtual Task Handle(TNotification notification, CancellationToken token)
         {
             var eventId = new EventId((int)notification.EventId, $"{notification.EventId}");
             switch (notification.EventId)

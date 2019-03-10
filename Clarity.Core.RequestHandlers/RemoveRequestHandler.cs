@@ -8,7 +8,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
 
-    public abstract class RemoveRequestHandler<TEntity, TKey> : IRequestHandler<RemoveRequest<TKey>>
+    public abstract class RemoveRequestHandler<TRequest, TEntity, TKey> : IRequestHandler<TRequest>
+        where TRequest : RemoveRequest<TKey>
         where TEntity : File
     {
         protected readonly DbContext Context;
@@ -27,7 +28,7 @@
             Thumbnails = storageOptions.Value.ThumbnailContainer;
         }
 
-        public virtual async Task<Unit> Handle(RemoveRequest<TKey> request, CancellationToken token)
+        public virtual async Task<Unit> Handle(TRequest request, CancellationToken token)
         {
             if (request.FileNames.Length == 0) return Unit.Value;
             for (var i = 0; i < request.FileNames.Length; i++)

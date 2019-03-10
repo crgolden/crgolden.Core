@@ -4,7 +4,8 @@
     using System.Threading.Tasks;
     using MediatR;
 
-    public abstract class ValidationRequestHandler<TModel> : IRequestHandler<ValidationRequest<TModel>, bool>
+    public abstract class ValidationRequestHandler<TRequest, TModel> : IRequestHandler<TRequest, bool>
+        where TRequest : ValidationRequest<TModel>
     {
         protected readonly IValidationService<TModel> ValidationService;
 
@@ -13,7 +14,7 @@
             ValidationService = validationService;
         }
 
-        public virtual async Task<bool> Handle(ValidationRequest<TModel> request, CancellationToken token)
+        public virtual async Task<bool> Handle(TRequest request, CancellationToken token)
         {
             return await ValidationService.ValidateAsync(request.Model, token).ConfigureAwait(false);
         }
