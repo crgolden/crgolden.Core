@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>Clarity.Core</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <PackageId>Clarity.Core.Controllers</PackageId>
+    <Version>1.6.0</Version>
+    <Company>Clarity</Company>
+    <Authors>Chris Golden</Authors>
+    <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\Clarity.Core.snk</AssemblyOriginatorKeyFile>
+    <PackageIconUrl>https://clarity-ui.azurewebsites.net/favicon.ico</PackageIconUrl>
+    <PackageProjectUrl>https://crgolden.visualstudio.com/Clarity</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Clarity.Abstractions.Controllers" Version="1.6.1" />
+    <PackageReference Include="Microsoft.SourceLink.Vsts.Git" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Notifications\Core.Notifications.csproj" />
+    <ProjectReference Include="..\Requests\Core.Requests.csproj" />
+  </ItemGroup>
+
+</Project>
