@@ -23,9 +23,8 @@
 
         public virtual async Task<Unit> Handle(TRequest request, CancellationToken token)
         {
-            if (!request.FileNames.Any()) return Unit.Value;
-            var fileNames = request.FileNames.ToArray();
-            for (var i = 0; i < fileNames.Length; i++)
+            if (request.FileNames.Length == 0) return Unit.Value;
+            for (var i = 0; i < request.FileNames.Length; i++)
             {
                 if (request.Keys.Length > i)
                 {
@@ -38,7 +37,7 @@
                 else
                 {
                     await RemoveByName(
-                        fileNames[i],
+                        request.FileNames[i],
                         request.ContainerName,
                         request.ThumbnailContainerName,
                         token).ConfigureAwait(false);

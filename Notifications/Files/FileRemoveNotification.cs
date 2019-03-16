@@ -1,14 +1,14 @@
 ﻿namespace Clarity.Core.Files
 {
     using System;
-    using System.Collections.Generic;
     using MediatR;
+    using Shared;
 
     public abstract class FileRemoveNotification<TKey> : INotification
     {
         public EventIds EventId { get; set; }
 
-        public IEnumerable<string> FileNames { get; set; }
+        public string[] FileNames { get; set; }
 
         public TKey[][] KeyValues { get; set; }
 

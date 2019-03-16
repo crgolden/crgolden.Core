@@ -7,9 +7,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    [Produces("application/json")]
-    [Route("v1/[controller]/[action]")]
-    [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class AddressesController : ValidationController<Address>
     {

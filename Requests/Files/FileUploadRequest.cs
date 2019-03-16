@@ -1,10 +1,9 @@
 ﻿namespace Clarity.Core.Files
 {
-    using System.Collections.Generic;
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
-    public abstract class FileUploadRequest<TEntity, TModel> : IRequest<IEnumerable<TModel>>
+    public abstract class FileUploadRequest<TEntity, TModel> : IRequest<TModel[]>
         where TEntity : File, new()
         where TModel : FileModel
     {

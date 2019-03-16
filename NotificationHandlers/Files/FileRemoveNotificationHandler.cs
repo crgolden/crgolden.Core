@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.Extensions.Logging;
+    using Shared;
 
     public abstract class FileRemoveNotificationHandler<TNotification, TKey> : INotificationHandler<TNotification>
         where TNotification : FileRemoveNotification<TKey>

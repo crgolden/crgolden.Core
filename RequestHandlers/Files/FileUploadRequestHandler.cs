@@ -1,6 +1,5 @@
 ﻿namespace Clarity.Core.Files
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -9,7 +8,7 @@
     using Microsoft.EntityFrameworkCore;
     using Shared;
 
-    public abstract class FileUploadRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest, IEnumerable<TModel>>
+    public abstract class FileUploadRequestHandler<TRequest, TEntity, TModel> : IRequestHandler<TRequest, TModel[]>
         where TRequest : FileUploadRequest<TEntity, TModel>
         where TEntity : File, new()
         where TModel : FileModel
@@ -25,7 +24,7 @@
             StorageService = storageService;
         }
 
-        public virtual async Task<IEnumerable<TModel>> Handle(TRequest request, CancellationToken token)
+        public virtual async Task<TModel[]> Handle(TRequest request, CancellationToken token)
         {
             if (request.Files.Count == 0) return new TModel[0];
             var tasks = request.Files.Select(async formFile =>

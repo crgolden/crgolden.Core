@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using MediatR;
     using Microsoft.Extensions.Logging;
+    using Shared;
 
     public abstract class FileUploadNotificationHandler<TNotification, TModel> : INotificationHandler<TNotification>
         where TNotification : FileUploadNotification<TModel>
@@ -30,7 +31,7 @@
                 case EventIds.UploadEnd:
                     Logger.LogInformation(
                         eventId: eventId,
-                        message: "Uploaded models {Models} at {Time}",
+                        message: "Uploaded files {Files} at {Time}",
                         args: new object[] { notification.Models, DateTime.UtcNow });
                     break;
                 case EventIds.UploadError:

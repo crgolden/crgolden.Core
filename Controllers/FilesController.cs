@@ -12,8 +12,9 @@
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using Shared;
 
-    public abstract class FilesController<TEntity, TModel, TKey> : Controller<TEntity, TModel, TKey>
+    public abstract class FilesController<TEntity, TModel, TKey> : ClassController<TEntity, TModel, TKey>
         where TEntity : File, new()
         where TModel : FileModel
     {
@@ -59,7 +60,7 @@
             }
         }
 
-        public abstract Task<IActionResult> Remove(IEnumerable<string> fileNames, TKey[][] keys = null);
+        public abstract Task<IActionResult> Remove(string[] fileNames, TKey[][] keys = null);
 
         protected virtual async Task<IActionResult> Remove<TRequest, TNotification>(
             TRequest request,
@@ -67,8 +68,8 @@
             where TRequest : FileRemoveRequest<TKey>
             where TNotification : FileRemoveNotification<TKey>
         {
-            if (!request.FileNames.Any()) return BadRequest(request.FileNames);
-            if (request.Keys != null && request.FileNames.Count() != request.Keys.Length) return BadRequest(new
+            if (request.FileNames.Length == 0) return BadRequest(request.FileNames);
+            if (request.Keys != null && request.FileNames.Length != request.Keys.Length) return BadRequest(new
             {
                 request.FileNames,
                 request.Keys

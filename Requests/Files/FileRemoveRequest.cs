@@ -1,11 +1,10 @@
 ﻿namespace Clarity.Core.Files
 {
-    using System.Collections.Generic;
     using MediatR;
 
     public abstract class FileRemoveRequest<TKey> : IRequest
     {
-        public readonly IEnumerable<string> FileNames;
+        public readonly string[] FileNames;
 
         public readonly TKey[][] Keys;
 
@@ -14,7 +13,7 @@
         public readonly string ThumbnailContainerName;
 
         protected FileRemoveRequest(
-            IEnumerable<string> fileNames,
+            string[] fileNames,
             string containerName,
             string thumbnailContainerName = null,
             TKey[][] keys = null)
