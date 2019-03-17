@@ -11,9 +11,10 @@
 
         public string ContainerName { get; set; }
 
-        protected FileUploadRequest(IFormFileCollection files)
+        protected FileUploadRequest(IFormFileCollection files, string containerName)
         {
             Files = files;
+            ContainerName = containerName;
         }
     }
 }
