@@ -25,20 +25,20 @@
                 case EventIds.RemoveStart:
                     Logger.LogInformation(
                         eventId: eventId,
-                        message: "Removing files {FileNames} with keyValues {KeyValues} at {Time}",
+                        message: "Removing files {@FileNames} with keyValues {@KeyValues} at {@Time}",
                         args: new object[] { notification.FileNames, notification.KeyValues, DateTime.UtcNow });
                     break;
                 case EventIds.RemoveEnd:
                     Logger.LogInformation(
                         eventId: eventId,
-                        message: "Removed files {FileNames} with keyValues {KeyValues} at {Time}",
+                        message: "Removed files {@FileNames} with keyValues {@KeyValues} at {@Time}",
                         args: new object[] { notification.FileNames, notification.KeyValues, DateTime.UtcNow });
                     break;
                 case EventIds.RemoveError:
                     Logger.LogError(
                         eventId: eventId,
                         exception: notification.Exception,
-                        message: "Error removing files {FileNames} with keyValues {KeyValues} at {Time}",
+                        message: "Error removing files {@FileNames} with keyValues {@KeyValues} at {@Time}",
                         args: new object[] { notification.FileNames, notification.KeyValues, DateTime.UtcNow });
                     break;
             }
