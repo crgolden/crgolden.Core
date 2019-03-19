@@ -29,7 +29,8 @@
                     options: new ElasticsearchSinkOptions(context.Configuration.GetLogNodes())
                 {
                     AutoRegisterTemplate = true,
-                    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6
+                    AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
+                    IndexFormat = $"{appName}-logs-index"
                 }));
             return webHostBuilder;
         }
