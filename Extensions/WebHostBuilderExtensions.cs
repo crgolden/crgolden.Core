@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Hosting;
     using Serilog;
     using Serilog.Events;
+    using Serilog.Formatting.Elasticsearch;
     using Serilog.Sinks.Elasticsearch;
 
     public static class WebHostBuilderExtensions
@@ -30,7 +31,8 @@
                 {
                     AutoRegisterTemplate = true,
                     AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                    IndexFormat = $"{appName}-logs-index"
+                    IndexFormat = $"{appName}-logs-index",
+                    CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true)
                 }));
             return webHostBuilder;
         }
