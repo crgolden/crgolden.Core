@@ -25,20 +25,20 @@
                 case EventIds.UploadStart:
                     Logger.LogInformation(
                         eventId: eventId,
-                        message: "Uploading files {@Files} at {@Time}",
+                        message: "Uploading file(s) {@Models}",
                         args: new object[] { notification.Files, DateTime.UtcNow });
                     break;
                 case EventIds.UploadEnd:
                     Logger.LogInformation(
                         eventId: eventId,
-                        message: "Uploaded files {@Files} at {@Time}",
+                        message: "Uploaded file(s) {@Models}",
                         args: new object[] { notification.Models, DateTime.UtcNow });
                     break;
                 case EventIds.UploadError:
                     Logger.LogError(
                         eventId: eventId,
                         exception: notification.Exception,
-                        message: "Error uploading files {@Files} at {@Time}",
+                        message: "Error uploading file(s) {@Models}",
                         args: new object[] { notification.Files, DateTime.UtcNow });
                     break;
             }
