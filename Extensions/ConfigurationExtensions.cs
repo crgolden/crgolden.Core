@@ -1,6 +1,8 @@
 ﻿namespace Clarity.Core
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Shared;
@@ -47,6 +49,18 @@
                 default:
                     return null;
             }
+        }
+
+        public static IEnumerable<Uri> GetLogNodes(this IConfiguration configuration)
+        {
+            var logNodes = new Uri[0];
+            var section = configuration.GetSection(nameof(StorageOptions));
+            if (!section.Exists()) return logNodes;
+
+            var options = section.Get<StorageOptions>();
+            return options.ElasticsearchOptions?.LogNodes == null
+                ? logNodes
+                : options.ElasticsearchOptions.LogNodes.Select(x => new Uri(x));
         }
     }
 }
