@@ -21,7 +21,7 @@
                     telemetryConfiguration: TelemetryConfiguration.Active,
                     telemetryConverter: TelemetryConverter.Traces)
                 .WriteTo.File(
-                    path: $"D:\\home\\LogFiles\\Application\\${appName}.txt",
+                    path: $"D:\\home\\LogFiles\\Application\\{appName}.txt",
                     fileSizeLimitBytes: 1_000_000,
                     shared: true,
                     flushToDiskInterval: TimeSpan.FromSeconds(1),
@@ -31,7 +31,7 @@
                 {
                     AutoRegisterTemplate = true,
                     AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                    IndexFormat = $"{appName}-logs-{{0:yyyy.MM.dd}}",
+                    IndexFormat = $"{appName.ToLowerInvariant().Replace('.', '-')}-logs",
                     CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
                     ModifyConnectionSettings = x => x.ServerCertificateValidationCallback(
                         (o, certificate, arg3, arg4) => true)
