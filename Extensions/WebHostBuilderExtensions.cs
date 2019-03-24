@@ -32,7 +32,9 @@
                     AutoRegisterTemplate = true,
                     AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
                     IndexFormat = $"{appName}-logs-index",
-                    CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true)
+                    CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
+                    ModifyConnectionSettings = x => x.ServerCertificateValidationCallback(
+                        (o, certificate, arg3, arg4) => true)
                 }));
             return webHostBuilder;
         }
