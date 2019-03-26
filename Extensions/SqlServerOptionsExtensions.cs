@@ -1,6 +1,7 @@
 ﻿namespace Clarity.Core
 {
     using System.Data.SqlClient;
+    using Shared;
 
     public static class SqlServerOptionsExtensions
     {

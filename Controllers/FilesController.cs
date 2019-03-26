@@ -10,6 +10,8 @@
     using MediatR;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Memory;
+    using Microsoft.Extensions.Options;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using Shared;
@@ -18,7 +20,8 @@
         where TEntity : File, new()
         where TModel : FileModel
     {
-        protected FilesController(IMediator mediator) : base(mediator)
+        protected FilesController(IMediator mediator, IMemoryCache cache, IOptions<CacheOptions> cacheOptions)
+            : base(mediator, cache, cacheOptions)
         {
         }
 

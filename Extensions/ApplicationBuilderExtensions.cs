@@ -1,6 +1,7 @@
 ﻿namespace Clarity.Core
 {
     using Microsoft.AspNetCore.Builder;
+    using Shared;
 
     public static class ApplicationBuilderExtensions
     {

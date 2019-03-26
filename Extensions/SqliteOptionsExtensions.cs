@@ -2,6 +2,7 @@
 {
     using System;
     using Microsoft.Data.Sqlite;
+    using Shared;
 
     public static class SqliteOptionsExtensions
     {

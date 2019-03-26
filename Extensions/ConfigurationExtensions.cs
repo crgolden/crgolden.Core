@@ -54,10 +54,10 @@
         public static IEnumerable<Uri> GetLogNodes(this IConfiguration configuration)
         {
             var logNodes = new Uri[0];
-            var section = configuration.GetSection(nameof(StorageOptions));
+            var section = configuration.GetSection(nameof(IndexOptions));
             if (!section.Exists()) return logNodes;
 
-            var options = section.Get<StorageOptions>();
+            var options = section.Get<IndexOptions>();
             return options.ElasticsearchOptions?.LogNodes == null
                 ? logNodes
                 : options.ElasticsearchOptions.LogNodes.Select(x => new Uri(x));

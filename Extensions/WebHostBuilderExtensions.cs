@@ -1,6 +1,7 @@
 ﻿namespace Clarity.Core
 {
     using System;
+    using System.Net.Security;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Hosting;
     using Serilog;
@@ -10,11 +11,14 @@
 
     public static class WebHostBuilderExtensions
     {
-        public static IWebHostBuilder UseSerilog(this IWebHostBuilder webHostBuilder, string appName)
+        public static IWebHostBuilder UseSerilog(
+            this IWebHostBuilder webHostBuilder,
+            string appName,
+            bool? serverCertificateValidationOverride = null)
         {
             webHostBuilder.UseSerilog((context, loggerConfiguration) => loggerConfiguration
                 .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.ApplicationInsights(
@@ -34,7 +38,7 @@
                     IndexFormat = $"{appName.ToLowerInvariant().Replace('.', '-')}-logs",
                     CustomFormatter = new ExceptionAsObjectJsonFormatter(renderMessage: true),
                     ModifyConnectionSettings = x => x.ServerCertificateValidationCallback(
-                        (o, certificate, arg3, arg4) => true)
+                        (o, certificate, arg3, arg4) => serverCertificateValidationOverride ?? arg4 == SslPolicyErrors.None)
                 }));
             return webHostBuilder;
         }

@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Filters", "Filters\Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Filters.Tests", "Filters.Tests\Core.Filters.Tests.csproj", "{3BFFECCF-B8B2-4EC0-BD19-05C450F63B74}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Options", "Options\Core.Options.csproj", "{A68C5AF4-C4DE-4019-8B00-FDC2D8972C2F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Factories", "Factories\Core.Factories.csproj", "{AB13D6FB-DD8C-4B54-8C31-27AA79BE5622}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Transformers", "Transformers\Core.Transformers.csproj", "{6C28040A-B609-4E81-BE32-CE43EEFF9628}"
@@ -75,10 +73,6 @@ Global
 		{3BFFECCF-B8B2-4EC0-BD19-05C450F63B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BFFECCF-B8B2-4EC0-BD19-05C450F63B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BFFECCF-B8B2-4EC0-BD19-05C450F63B74}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A68C5AF4-C4DE-4019-8B00-FDC2D8972C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A68C5AF4-C4DE-4019-8B00-FDC2D8972C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A68C5AF4-C4DE-4019-8B00-FDC2D8972C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A68C5AF4-C4DE-4019-8B00-FDC2D8972C2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB13D6FB-DD8C-4B54-8C31-27AA79BE5622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB13D6FB-DD8C-4B54-8C31-27AA79BE5622}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB13D6FB-DD8C-4B54-8C31-27AA79BE5622}.Release|Any CPU.ActiveCfg = Release|Any CPU

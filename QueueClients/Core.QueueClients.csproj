@@ -5,7 +5,7 @@
     <RootNamespace>Clarity.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <PackageId>Clarity.Core.QueueClients</PackageId>
-    <Version>1.7.1</Version>
+    <Version>1.7.2</Version>
     <Company>Clarity</Company>
     <Authors>Chris Golden</Authors>
     <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
@@ -24,15 +24,12 @@
   <ItemGroup>
     <PackageReference Include="Clarity.Shared.Enums" Version="1.2.0" />
     <PackageReference Include="Clarity.Shared.Interfaces" Version="1.0.0" />
+    <PackageReference Include="Clarity.Shared.Options" Version="1.2.1" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.3.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Microsoft.SourceLink.Vsts.Git" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Options\Core.Options.csproj" />
   </ItemGroup>
 
 </Project>
