@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using Newtonsoft.Json;
 
     /// <include file='docs.xml' path='docs/members[@name="address"]/Address/*'/>
+    [ExcludeFromCodeCoverage]
     public class Address
     {
         /// <include file='docs.xml' path='docs/members[@name="address"]/Formatted/*'/>

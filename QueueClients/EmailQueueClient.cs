@@ -1,6 +1,7 @@
 ﻿namespace Clarity.Core
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@
     using Microsoft.Extensions.Options;
     using Shared;
 
+    [ExcludeFromCodeCoverage]
     public class EmailQueueClient : QueueClient, IHostedService
     {
         private readonly IEmailService _emailService;

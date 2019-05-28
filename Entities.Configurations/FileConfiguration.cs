@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using Abstractions;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+    [ExcludeFromCodeCoverage]
     public abstract class FileConfiguration<TEntity> : EntityConfiguration<TEntity>
         where TEntity : File
     {

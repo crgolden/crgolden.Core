@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.AspNetCore.Builder;
     using Shared;
 
+    [ExcludeFromCodeCoverage]
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseCors(this IApplicationBuilder app, CorsOptions options)

@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core
 {
     using System.Data.SqlClient;
+    using System.Diagnostics.CodeAnalysis;
     using Shared;
 
+    [ExcludeFromCodeCoverage]
     public static class SqlServerOptionsExtensions
     {
         public static string GetConnectionString(this SqlServerOptions sqlServerOptions)

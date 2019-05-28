@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Text.RegularExpressions;
     using Microsoft.AspNetCore.Routing;
 
+    [ExcludeFromCodeCoverage]
     public class SlugifyParameterTransformer : IOutboundParameterTransformer
     {
         public string TransformOutbound(object value)

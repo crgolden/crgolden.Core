@@ -1,7 +1,9 @@
 ﻿namespace Clarity.Core.Files
 {
+    using System.Diagnostics.CodeAnalysis;
     using MediatR;
 
+    [ExcludeFromCodeCoverage]
     public abstract class FileRemoveRequest<TKey> : IRequest
     {
         public readonly string[] FileNames;

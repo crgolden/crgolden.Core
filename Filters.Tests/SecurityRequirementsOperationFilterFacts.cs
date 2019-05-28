@@ -2,6 +2,7 @@ namespace Clarity.Core.Filters.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Reflection;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -9,6 +10,7 @@ namespace Clarity.Core.Filters.Tests
     using Swashbuckle.AspNetCore.SwaggerGen;
     using Xunit;
 
+    [ExcludeFromCodeCoverage]
     public class SecurityRequirementsOperationFilterFacts
     {
         private readonly Operation _operation;
@@ -140,16 +142,14 @@ namespace Clarity.Core.Filters.Tests
             Assert.Collection(_operation.Responses,
                 response1 =>
                 {
-                    var (key, value) = response1;
-                    Assert.Equal("401", key);
-                    var response = Assert.IsType<Response>(value);
+                    Assert.Equal("401", response1.Key);
+                    var response = Assert.IsType<Response>(response1.Value);
                     Assert.Equal("Unauthorized", response.Description);
                 },
                 response2 =>
                 {
-                    var (key, value) = response2;
-                    Assert.Equal("403", key);
-                    var response = Assert.IsType<Response>(value);
+                    Assert.Equal("403", response2.Key);
+                    var response = Assert.IsType<Response>(response2.Value);
                     Assert.Equal("Forbidden", response.Description);
                 });
         }

@@ -1,10 +1,12 @@
 ﻿namespace Clarity.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.Azure.KeyVault;
     using Microsoft.Azure.Services.AppAuthentication;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Configuration.AzureKeyVault;
 
+    [ExcludeFromCodeCoverage]
     public static class ConfigurationBuilderExtensions
     {
         public static IConfigurationBuilder AddAzureKeyVault(this IConfigurationBuilder configBuilder)

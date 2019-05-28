@@ -1,7 +1,9 @@
 ﻿namespace Clarity.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using Abstractions;
 
+    [ExcludeFromCodeCoverage]
     public abstract class File : Entity
     {
         public string ContentType { get; set; }

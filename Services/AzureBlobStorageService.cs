@@ -5,10 +5,10 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.Azure.Storage;
+    using Microsoft.Azure.Storage.Auth;
+    using Microsoft.Azure.Storage.Blob;
     using Microsoft.Extensions.Options;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Auth;
-    using Microsoft.WindowsAzure.Storage.Blob;
     using Shared;
 
     public class AzureBlobStorageService : IStorageService

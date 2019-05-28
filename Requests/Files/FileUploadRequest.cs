@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core.Files
 {
+    using System.Diagnostics.CodeAnalysis;
     using MediatR;
     using Microsoft.AspNetCore.Http;
 
+    [ExcludeFromCodeCoverage]
     public abstract class FileUploadRequest<TEntity, TModel> : IRequest<TModel[]>
         where TEntity : File, new()
         where TModel : FileModel

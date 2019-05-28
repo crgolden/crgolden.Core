@@ -1,8 +1,10 @@
 ﻿namespace Clarity.Core
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Shared;
 
+    [ExcludeFromCodeCoverage]
     public static class FileExtensions
     {
         public static string GetImageFileUri(

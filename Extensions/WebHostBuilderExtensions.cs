@@ -1,6 +1,7 @@
 ﻿namespace Clarity.Core
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Net.Security;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@
     using Serilog.Formatting.Elasticsearch;
     using Serilog.Sinks.Elasticsearch;
 
+    [ExcludeFromCodeCoverage]
     public static class WebHostBuilderExtensions
     {
         public static IWebHostBuilder UseSerilog(
@@ -18,7 +20,7 @@
         {
             webHostBuilder.UseSerilog((context, loggerConfiguration) => loggerConfiguration
                 .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .WriteTo.ApplicationInsights(

@@ -1,6 +1,7 @@
 namespace Clarity.Core.Filters.Tests
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -9,6 +10,7 @@ namespace Clarity.Core.Filters.Tests
     using Microsoft.AspNetCore.Routing;
     using Xunit;
 
+    [ExcludeFromCodeCoverage]
     public class ModelStateActionFilterFacts
     {
         private readonly ModelStateActionFilter _filter;
@@ -64,11 +66,9 @@ namespace Clarity.Core.Filters.Tests
             var error = Assert.IsType<SerializableError>(result.Value);
             Assert.Collection(error, collection =>
             {
-                var (key, values) = collection;
-                var messages = Assert.IsType<string[]>(values);
-
+                var messages = Assert.IsType<string[]>(collection.Value);
                 Assert.Single(messages);
-                Assert.Equal(errorKey, key);
+                Assert.Equal(errorKey, collection.Key);
                 Assert.Equal(errorMessage, messages[0]);
             });
         }
