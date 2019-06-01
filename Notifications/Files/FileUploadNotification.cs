@@ -1,4 +1,4 @@
-﻿namespace Clarity.Core.Files
+﻿namespace crgolden.Core.Files
 {
     using System;
     using MediatR;

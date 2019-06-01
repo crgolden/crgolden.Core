@@ -1,4 +1,4 @@
-namespace Clarity.Core.Filters.Tests
+namespace crgolden.Core.Filters.Tests
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;

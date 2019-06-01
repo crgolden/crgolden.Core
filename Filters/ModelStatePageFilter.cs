@@ -1,4 +1,4 @@
-﻿namespace Clarity.Core
+﻿namespace crgolden.Core
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;

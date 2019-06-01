@@ -1,4 +1,4 @@
-﻿namespace Clarity.Core
+﻿namespace crgolden.Core
 {
     using System.Threading;
     using System.Threading.Tasks;

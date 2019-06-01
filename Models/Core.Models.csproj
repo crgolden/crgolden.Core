@@ -2,28 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Clarity.Core</RootNamespace>
+    <RootNamespace>crgolden.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <PackageId>Clarity.Core.Models</PackageId>
-    <Version>1.4.0</Version>
-    <Company>Clarity</Company>
+    <PackageId>crgolden.Core.Models</PackageId>
+    <Version>1.0.0</Version>
+    <Company>crgolden</Company>
     <Authors>Chris Golden</Authors>
-    <RepositoryUrl>https://crgolden.visualstudio.com/Clarity/_git/Clarity.Core</RepositoryUrl>
+    <RepositoryUrl>https://github.com/crgolden/crgolden.Core</RepositoryUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\Clarity.Core.snk</AssemblyOriginatorKeyFile>
-    <PackageIconUrl>https://clarity-ui.azurewebsites.net/favicon.ico</PackageIconUrl>
-    <PackageProjectUrl>https://crgolden.visualstudio.com/Clarity</PackageProjectUrl>
+    <AssemblyOriginatorKeyFile>..\crgolden.Core.snk</AssemblyOriginatorKeyFile>
+    <PackageIconUrl>https://crgolden-ui.azurewebsites.net/favicon.ico</PackageIconUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Clarity.Abstractions.Models" Version="1.3.1" />
-    <PackageReference Include="Microsoft.SourceLink.Vsts.Git" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
+    <PackageReference Include="crgolden.Abstractions.Models" Version="1.0.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace Clarity.Core.Addresses
+﻿namespace crgolden.Core.Addresses
 {
     using Abstractions;
     using Microsoft.Extensions.Logging;

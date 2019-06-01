@@ -1,4 +1,4 @@
-﻿namespace Clarity.Core
+﻿namespace crgolden.Core
 {
     using System;
     using System.Collections.Generic;
