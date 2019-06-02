@@ -19,7 +19,7 @@
         {
             var storageCredentials = new StorageCredentials(
                 accountName: options.Value.AzureBlobStorageOptions.AccountName,
-                keyValue: options.Value.AzureBlobStorageOptions.AccountKey);
+                keyValue: options.Value.AzureBlobStorageOptions.AccountKey1);
             var storageAccount = new CloudStorageAccount(
                 storageCredentials: storageCredentials,
                 useHttps: true);
