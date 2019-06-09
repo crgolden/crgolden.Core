@@ -13,9 +13,10 @@
 
         public StripePaymentService(IOptions<PaymentOptions> options)
         {
-            var secretKey = options.Value.StripeOptions.SecretKey;
-            _customerService = new CustomerService(secretKey);
-            _chargeService = new ChargeService(secretKey);
+            var secretKey = options.Value.StripeOptions?.SecretKey;
+            var stripeClient = new StripeClient(secretKey);
+            _customerService = new CustomerService(stripeClient);
+            _chargeService = new ChargeService(stripeClient);
         }
 
         public async Task<string> GetCustomerAsync(
@@ -36,7 +37,7 @@
             var customerCreateOptions = new CustomerCreateOptions
             {
                 Email = email,
-                SourceToken = tokenId
+                Source = tokenId
             };
             var customer = await _customerService.CreateAsync(
                 customerCreateOptions,
