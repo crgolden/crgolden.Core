@@ -1,10 +1,10 @@
 ﻿namespace crgolden.Core
 {
     using System;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.Azure.Storage;
     using Microsoft.Azure.Storage.Auth;
     using Microsoft.Azure.Storage.Blob;
@@ -26,18 +26,16 @@
             _client = storageAccount.CreateCloudBlobClient();
         }
 
-        public virtual async Task<Uri> UploadFileToStorageAsync(
-            IFormFile file,
+        public virtual async Task<Uri> UploadStreamToStorageAsync(
+            Stream stream,
+            string fileName,
             string containerName,
             CancellationToken token)
         {
             var container = _client.GetContainerReference(containerName);
-            var blockBlob = container.GetBlockBlobReference(file.FileName);
-            using (var stream = file.OpenReadStream())
-            {
-                await blockBlob.UploadFromStreamAsync(stream, token).ConfigureAwait(false);
-                return blockBlob.Uri;
-            }
+            var blockBlob = container.GetBlockBlobReference(fileName);
+            await blockBlob.UploadFromStreamAsync(stream, token).ConfigureAwait(false);
+            return blockBlob.Uri;
         }
 
         public virtual async Task<Uri> UploadByteArrayToStorageAsync(
