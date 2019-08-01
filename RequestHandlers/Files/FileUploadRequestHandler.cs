@@ -1,5 +1,6 @@
 ﻿namespace crgolden.Core.Files
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -29,10 +30,16 @@
             if (request.Files.Count == 0) return new TModel[0];
             var tasks = request.Files.Select(async formFile =>
             {
-                var uri = await StorageService.UploadFileToStorageAsync(
-                    file: formFile,
-                    containerName: request.ContainerName,
-                    token: token).ConfigureAwait(false);
+                Uri uri;
+                using (var stream = formFile.OpenReadStream())
+                {
+                    uri = await StorageService.UploadStreamToStorageAsync(
+                        stream: stream,
+                        fileName: formFile.FileName,
+                        containerName: request.ContainerName,
+                        token: token).ConfigureAwait(false);
+                }
+
                 var index = formFile.FileName.LastIndexOf('.');
                 return new TEntity
                 {
