@@ -5,7 +5,7 @@
     <RootNamespace>crgolden.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <PackageId>crgolden.Core.Extensions</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Company>crgolden</Company>
     <Authors>Chris Golden</Authors>
     <RepositoryUrl>https://github.com/crgolden/crgolden.Core</RepositoryUrl>
@@ -33,7 +33,7 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="serilog.formatting.elasticsearch" Version="8.0.0" />
-    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.3" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="serilog.sinks.elasticsearch" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
