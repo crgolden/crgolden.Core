@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.RequestHandlers.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Claims", "Claims\Core.Claims.csproj", "{DDCDE8A7-EABC-4D56-8CFD-6F59E6DA8A0F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Options.Configurations", "Options.Configurations\Core.Options.Configurations.csproj", "{F163076F-B28B-4C00-A448-EBF795C7B574}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,10 @@ Global
 		{DDCDE8A7-EABC-4D56-8CFD-6F59E6DA8A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDCDE8A7-EABC-4D56-8CFD-6F59E6DA8A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDCDE8A7-EABC-4D56-8CFD-6F59E6DA8A0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F163076F-B28B-4C00-A448-EBF795C7B574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F163076F-B28B-4C00-A448-EBF795C7B574}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F163076F-B28B-4C00-A448-EBF795C7B574}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F163076F-B28B-4C00-A448-EBF795C7B574}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

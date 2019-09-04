@@ -2,6 +2,8 @@
 {
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Mvc.ApiExplorer;
+    using Microsoft.Extensions.Options;
     using Shared;
 
     [ExcludeFromCodeCoverage]
@@ -20,16 +22,21 @@
 
         public static IApplicationBuilder UseSwagger(
             this IApplicationBuilder app,
-            string name,
-            string url = "/swagger/v1/swagger.json",
+            IApiVersionDescriptionProvider provider,
+            IOptions<Shared.ApiExplorerOptions> apiExplorerOptions,
             string routePrefix = "")
         {
             app.UseSwagger();
-            app.UseSwaggerUI(setup =>
+            app.UseSwaggerUI(options =>
             {
-                setup.SwaggerEndpoint(url, name);
-                setup.RoutePrefix = routePrefix;
-                setup.DocumentTitle = name;
+                foreach (var description in provider.ApiVersionDescriptions)
+                {
+                    options.SwaggerEndpoint(
+                        url: $"/swagger/{description.GroupName}/swagger.json",
+                        name: description.GroupName.ToUpperInvariant());
+                }
+                options.RoutePrefix = routePrefix;
+                options.DocumentTitle = $"{apiExplorerOptions.Value?.Title} {apiExplorerOptions.Value?.Description}";
             });
             return app;
         }

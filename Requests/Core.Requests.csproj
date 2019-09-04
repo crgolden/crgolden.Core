@@ -21,11 +21,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="crgolden.Abstractions.Requests" Version="1.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\crgolden.Abstractions\Requests\Abstractions.Requests.csproj" />
     <ProjectReference Include="..\Claims\Core.Claims.csproj" />
     <ProjectReference Include="..\Entities\Core.Entities.csproj" />
     <ProjectReference Include="..\Models\Core.Models.csproj" />

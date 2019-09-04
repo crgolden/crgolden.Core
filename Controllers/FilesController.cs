@@ -16,7 +16,7 @@
     using Newtonsoft.Json.Serialization;
     using Shared;
 
-    public abstract class FilesController<TEntity, TModel, TKey> : ClassController<TEntity, TModel, TKey>
+    public abstract class FilesController<TEntity, TModel, TKey> : ControllerBase<TEntity, TModel, TKey>
         where TEntity : File, new()
         where TModel : FileModel
     {

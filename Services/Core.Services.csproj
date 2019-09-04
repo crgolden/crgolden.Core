@@ -19,18 +19,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="crgolden.Shared.Interfaces" Version="1.0.1" />
-    <PackageReference Include="crgolden.Shared.Options" Version="1.0.1" />
     <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="3.0.4" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
     <PackageReference Include="Sendgrid" Version="9.12.0" />
     <PackageReference Include="smartystreets-dotnet-sdk" Version="8.2.0" />
-    <PackageReference Include="Stripe.net" Version="28.5.0" />
+    <PackageReference Include="Stripe.net" Version="28.6.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\crgolden.Shared\Interfaces\Shared.Interfaces.csproj" />
+    <ProjectReference Include="..\..\crgolden.Shared\Options\Shared.Options.csproj" />
     <ProjectReference Include="..\Claims\Core.Claims.csproj" />
   </ItemGroup>
 

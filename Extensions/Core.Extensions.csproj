@@ -5,7 +5,7 @@
     <RootNamespace>crgolden.Core</RootNamespace>
     <LangVersion>latest</LangVersion>
     <PackageId>crgolden.Core.Extensions</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
     <Company>crgolden</Company>
     <Authors>Chris Golden</Authors>
     <RepositoryUrl>https://github.com/crgolden/crgolden.Core</RepositoryUrl>
@@ -19,9 +19,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="crgolden.Shared.Enums" Version="1.0.1" />
-    <PackageReference Include="crgolden.Shared.Interfaces" Version="1.0.1" />
-    <PackageReference Include="crgolden.Shared.Options" Version="1.0.1" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.6" />
@@ -31,7 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.10.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.5" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
-    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.0.0" />
     <PackageReference Include="serilog.formatting.elasticsearch" Version="8.0.0" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
@@ -41,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\crgolden.Shared\Enums\Shared.Enums.csproj" />
+    <ProjectReference Include="..\..\crgolden.Shared\Interfaces\Shared.Interfaces.csproj" />
+    <ProjectReference Include="..\..\crgolden.Shared\Options\Shared.Options.csproj" />
     <ProjectReference Include="..\Entities\Core.Entities.csproj" />
     <ProjectReference Include="..\Filters\Core.Filters.csproj" />
   </ItemGroup>

@@ -21,8 +21,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="crgolden.Abstractions.Models" Version="1.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\crgolden.Abstractions\Models\Abstractions.Models.csproj" />
   </ItemGroup>
 
 </Project>

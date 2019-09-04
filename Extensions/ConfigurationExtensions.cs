@@ -20,9 +20,10 @@
             if (!section.Exists()) return null;
 
             var options = section.Get<DatabaseOptions>();
-            if (options == null ||
-                !Enum.TryParse<DatabaseTypes>(options.DatabaseType, true,
-                out var databaseType)) return null;
+            if (options == null || !Enum.TryParse<DatabaseTypes>(
+                    value: options.DatabaseType,
+                    ignoreCase: true,
+                    result: out var databaseType)) return null;
             switch (databaseType)
             {
                 case DatabaseTypes.SqlServer:
